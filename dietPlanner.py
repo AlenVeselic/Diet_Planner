@@ -1,5 +1,5 @@
 
-import shelve, pprint
+import shelve, pprint, random
 from pathlib import Path
 
 def getShelve():
@@ -78,6 +78,9 @@ def modifyShelve(mode, categoryList, itemList):
                     print('item already exists')
                 else:
                     foods[listCats[categoryList[0].lower()]][subCategory].append(itemList)
+            else:
+                foods[listCats[categoryList[0].lower()]][categoryList[1]] = []
+                foods[listCats[categoryList[0].lower()]][categoryList[1]].append(itemList)
 
 
         elif categoryList == "recipes":
@@ -132,15 +135,49 @@ def modifyShelve(mode, categoryList, itemList):
                 
 
 
-def createPlan():
-    print()
+def createPlan(length, recipeNum, takeOutNum):
+    plan = {}
+    food = getShelve()
+    recipeCount = 0
+    takeOutCount = 0
+    for day in range(length):
+        plan["Day " + str(day)] = {}
+        for meal in range(3):
+            while True:
+                category = random.choice(list(food.keys()))
+                if category.lower() == 'takeout' and takeOutCount > takeOutNum or category.lower() == 'recipes' and recipeCount > recipeNum:
+                    continue
+                else:
+                    break
+            if category == "recipes":
+                plan["Day " + str(day)]["Meal " + str(meal)] = {}
+                foodChoice = random.choice(list(food[category].keys()))
+                plan["Day " + str(day)]["Meal " + str(meal)][foodChoice] = food[category][foodChoice]
+                recipeCount += 1
+            else:
+                subcategory = random.choice(list(food[category].keys()))
+                foodChoice = random.choice(list(food[category][subcategory]))
+                if category.lower() == 'saddition':
+                    plan["Day " + str(day)]["Meal " + str(meal)] = category + "\\" + foodChoice
+                else:
+                    plan["Day " + str(day)]["Meal " + str(meal)] = subcategory + "\\" + foodChoice
+                    if category.lower() == 'takeout':
+                        takeOutCount += 1
+
+    return plan
 
 
-modifyShelve("add", ("takeout", "mango"), ('Meat platter'))
+
+
+
+
+modifyShelve("add", ("takeout", "Astoria"), ('Mexico Pizza'))
 
 data = shelve.open("dietData\\dietPlannerData")
 
-print()
+mealPlan = createPlan(10, 2, 3)
+
+pprint.pprint(mealPlan)
 
 pprint.pprint(data['foods'])
 
