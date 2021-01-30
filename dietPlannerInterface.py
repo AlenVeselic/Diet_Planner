@@ -16,28 +16,31 @@ root = Tk()
 
 def getSubcategories(*args):
 
-    ttk.Label(foodFrame, text = "Subcategories").grid(column = 1, row = 0)
+    if root.focus_get() == mainCategoryBox:
 
-    chosenCategory =  mainCategoryBox.get(mainCategoryBox.curselection())
-    subcategories = list(foodData[chosenCategory].keys())
-    subcategoryVar = StringVar(value = subcategories)
-    subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar, height = 5)
-    subcategoryBox.grid(column = 1, row = 1)
-    subcategoryBox.bind('<<ListboxSelect>>', lambda chosenCategory: getItems(chosenCategory))
+        subcategoryVar.set("")
+        curMainCat.set(mainCategoryBox.get(mainCategoryBox.curselection())) 
+        subcategoryVar.set(list(foodData[curMainCat.get()].keys()))
+        curSubCat.set("")
+        itemVar.set("")
+            
 
-def getItems(currentCategory):
-    ttk.Label(foodFrame, text = "Items").grid(column = 2, row = 0)
     
-    information = subcategoryBox.curselection()
 
-    logging.debug("\n" + str(list(selectedSubcategory)) + str(currentCategory) + str(currentSubcategory) + "\n")
+def getItems(*args):
 
-    chosenSubcategory = foodData[currentCategory][selectedSubcategory]
-    items = list(chosenSubcategory)
-    itemVar = StringVar(value = items)
-    itemBox = Listbox(foodFrame, listvariable = itemVar, height = 5)
-    itemBox.grid(column = 2, row = 1)
+    if root.focus_get() == subcategoryBox:
+        print(curMainCat.get())
+        curSubCat.set(subcategoryBox.get(subcategoryBox.curselection()))
 
+        logging.debug("\n" + str(curMainCat.get()) + "\n ")
+
+        logging.debug("\n" + str(curSubCat.get()) + "\n")    
+
+        itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
+    
+curMainCat = StringVar()
+curSubCat = StringVar()
 
 
 foodFrame = ttk.Frame(root, padding = "5" )
@@ -51,6 +54,28 @@ categoryVar = StringVar(value = categories)
 mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar, height = 5)
 mainCategoryBox.grid(column = 0, row = 1)
 
+ttk.Label(foodFrame, text = "Subcategories").grid(column = 1, row = 0)
+
+subcategoryVar = StringVar()
+subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar, height = 5)
+subcategoryBox.grid(column = 1, row = 1)
+
+
+ttk.Label(foodFrame, text = "Items").grid(column = 2, row = 0)
+    
+itemVar = StringVar()
+itemBox = Listbox(foodFrame, listvariable = itemVar, height = 5)
+itemBox.grid(column = 2, row = 1)
+
+addButton = ttk.Button()
+
+removeButton = ttk.Button()
+
+
 mainCategoryBox.bind('<<ListboxSelect>>', getSubcategories)
+
+subcategoryBox.bind('<<ListboxSelect>>', getItems)
+
+
 
 root.mainloop()
