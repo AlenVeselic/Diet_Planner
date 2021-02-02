@@ -24,14 +24,15 @@ root = Tk()
 
 def getSubcategories(*args):
 
-    refreshData()
+    refreshData() # refreshes the displayed dictionary
 
     if root.focus_get() == mainCategoryBox: # checks wether the correct listbox is in focus
 
-        subcategoryVar.set("")
-        curMainCat.set(mainCategoryBox.get(mainCategoryBox.curselection())) 
-        subcategoryVar.set(list(foodData[curMainCat.get()].keys()))
-        curSubCat.set("")
+        subcategoryVar.set("") # clears the displayed subcategory listbox
+        curMainCat.set(mainCategoryBox.get(mainCategoryBox.curselection()))  # sets the new main chosen category
+        subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
+        # clears the preceeding listboxes
+        curSubCat.set("") 
         itemVar.set("")
         
 # refreshes the global food database  
@@ -43,13 +44,13 @@ def refreshData(*args):
 def getItems(*args):
 
     if root.focus_get() == subcategoryBox:
-        print(curMainCat.get())
+        # sets the newly choosen subcategory
         curSubCat.set(subcategoryBox.get(subcategoryBox.curselection()))
 
         logging.debug("\n" + str(curMainCat.get()) + "\n ")
 
         logging.debug("\n" + str(curSubCat.get()) + "\n")    
-
+        # sets the items the item listbox needs to display
         itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
 
 # variables which will store the currently selected category and subcategory since listboxes do not save selected items when out of focus    
