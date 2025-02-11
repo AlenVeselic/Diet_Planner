@@ -34,6 +34,8 @@ def getSubcategories(*args):
         # clears the preceeding listboxes
         curSubCat.set("") 
         itemVar.set("")
+
+        root.update()
         
 # refreshes the global food database  
 def refreshData(*args):
