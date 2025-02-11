@@ -8,18 +8,6 @@ from tkinter import ttk
 
 import dietPlanner, logging
 
-# logging basic configuration initialization
-
-logging.basicConfig(level= logging.DEBUG, format=(" %(levelname)s - %(asctime)s - %(message)s"))
-
-# initial food retrieval
-
-foodData = dietPlanner.getShelve()
-
-# gui initialization
-
-root = Tk()
-
 # getSubcategories - refreshes data and retrieves subcategories for the currently selected category
 
 def getSubcategories(*args):
@@ -55,54 +43,68 @@ def getItems(*args):
         # sets the items the item listbox needs to display
         itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
 
-# variables which will store the currently selected category and subcategory since listboxes do not save selected items when out of focus    
-curMainCat = StringVar()
-curSubCat = StringVar()
+if __name__ == "__main__":
 
-# frame that will hold then food input programs 
-foodFrame = ttk.Frame(root, padding = "5" )
-foodFrame.grid(column = 0, row = 0, sticky = (N, W, E, S))
+    # logging basic configuration initialization
 
-# main category select section
-ttk.Label(foodFrame,text = "Main categories").grid(column = 0, row = 0)
+    logging.basicConfig(level= logging.DEBUG, format=(" %(levelname)s - %(asctime)s - %(message)s"))
 
-categories = list(foodData.keys())
-categoryVar = StringVar(value = categories)
-mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar, height = 5)
-mainCategoryBox.grid(column = 0, row = 1, rowspan = 2)
+    # initial food retrieval
 
-# subcategory selection section
-ttk.Label(foodFrame, text = "Subcategories").grid(column = 1, row = 0)
+    foodData = dietPlanner.getShelve()
 
-subcategoryVar = StringVar()
-subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar, height = 5)
-subcategoryBox.grid(column = 1, row = 1, rowspan = 2)
+    # gui initialization
+
+    root = Tk()
+
+    # variables which will store the currently selected category and subcategory since listboxes do not save selected items when out of focus    
+    curMainCat = StringVar()
+    curSubCat = StringVar()
+
+    # frame that will hold then food input programs 
+    foodFrame = ttk.Frame(root, padding = "5" )
+    foodFrame.grid(column = 0, row = 0, sticky = (N, W, E, S))
+
+    # main category select section
+    ttk.Label(foodFrame,text = "Main categories").grid(column = 0, row = 0)
+
+    categories = list(foodData.keys())
+    categoryVar = StringVar(value = categories)
+    mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar, height = 5)
+    mainCategoryBox.grid(column = 0, row = 1, rowspan = 2)
+
+    # subcategory selection section
+    ttk.Label(foodFrame, text = "Subcategories").grid(column = 1, row = 0)
+
+    subcategoryVar = StringVar()
+    subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar, height = 5)
+    subcategoryBox.grid(column = 1, row = 1, rowspan = 2)
 
 
-# item display section
-ttk.Label(foodFrame, text = "Items").grid(column = 2, row = 0)
-    
-itemVar = StringVar()
-itemBox = Listbox(foodFrame, listvariable = itemVar, height = 5)
-itemBox.grid(column = 2, row = 1, rowspan = 2)
+    # item display section
+    ttk.Label(foodFrame, text = "Items").grid(column = 2, row = 0)
+        
+    itemVar = StringVar()
+    itemBox = Listbox(foodFrame, listvariable = itemVar, height = 5)
+    itemBox.grid(column = 2, row = 1, rowspan = 2)
 
-# item entry section
-ttk.Label(foodFrame, text = "Item name entry").grid(column = 3, row = 0)
-inputVar = StringVar()
-inputEntry = ttk.Entry(foodFrame, textvariable = inputVar)
-inputEntry.grid(column = 3, row = 1)
+    # item entry section
+    ttk.Label(foodFrame, text = "Item name entry").grid(column = 3, row = 0)
+    inputVar = StringVar()
+    inputEntry = ttk.Entry(foodFrame, textvariable = inputVar)
+    inputEntry.grid(column = 3, row = 1)
 
-# addition and removal button 
-addButton = ttk.Button(foodFrame, text = "+", command = lambda: dietPlanner.modifyShelve("add", (curMainCat.get(), curSubCat.get()), inputVar.get()))
-addButton.grid(column = 4, row = 1, sticky = S)
+    # addition and removal button 
+    addButton = ttk.Button(foodFrame, text = "+", command = lambda: dietPlanner.modifyShelve("add", (curMainCat.get(), curSubCat.get()), inputVar.get()))
+    addButton.grid(column = 4, row = 1, sticky = S)
 
-removeButton = ttk.Button(foodFrame, text = "-", command = lambda: dietPlanner.modifyShelve("del", (curMainCat.get(), curSubCat.get()), inputVar.get()))
-removeButton.grid(column = 4, row = 2, sticky = N)
+    removeButton = ttk.Button(foodFrame, text = "-", command = lambda: dietPlanner.modifyShelve("del", (curMainCat.get(), curSubCat.get()), inputVar.get()))
+    removeButton.grid(column = 4, row = 2, sticky = N)
 
-# listbox selection bindings
-mainCategoryBox.bind('<<ListboxSelect>>', getSubcategories)
+    # listbox selection bindings
+    mainCategoryBox.bind('<<ListboxSelect>>', getSubcategories)
 
-subcategoryBox.bind('<<ListboxSelect>>', getItems)
+    subcategoryBox.bind('<<ListboxSelect>>', getItems)
 
-#  mainloop initiation
-root.mainloop()
+    #  mainloop initiation
+    root.mainloop()
