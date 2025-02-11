@@ -61,45 +61,57 @@ if __name__ == "__main__":
     curMainCat = StringVar()
     curSubCat = StringVar()
 
+    root.grid_rowconfigure(0, weight=1)
+    root.grid_columnconfigure(0, weight=1)
+
     # frame that will hold then food input programs 
     foodFrame = ttk.Frame(root, padding = "5" )
-    foodFrame.grid(column = 0, row = 0, sticky = (N, W, E, S))
+    foodFrame.grid(column = 1, row = 1, sticky = (N, W, E, S))
 
     # main category select section
-    ttk.Label(foodFrame,text = "Main categories").grid(column = 0, row = 0)
+    ttk.Label(foodFrame,text = "Main categories").grid(column = 1, row = 1)
 
     categories = list(foodData.keys())
     categoryVar = StringVar(value = categories)
     mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar, height = 5)
-    mainCategoryBox.grid(column = 0, row = 1, rowspan = 2)
+    mainCategoryBox.grid(column = 1, row = 2, rowspan = 2)
 
     # subcategory selection section
-    ttk.Label(foodFrame, text = "Subcategories").grid(column = 1, row = 0)
+    ttk.Label(foodFrame, text = "Subcategories").grid(column = 2, row = 1)
 
     subcategoryVar = StringVar()
     subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar, height = 5)
-    subcategoryBox.grid(column = 1, row = 1, rowspan = 2)
+    subcategoryBox.grid(column = 2, row = 2, rowspan = 2)
 
 
     # item display section
-    ttk.Label(foodFrame, text = "Items").grid(column = 2, row = 0)
+    ttk.Label(foodFrame, text = "Items").grid(column = 3, row = 1)
         
     itemVar = StringVar()
     itemBox = Listbox(foodFrame, listvariable = itemVar, height = 5)
-    itemBox.grid(column = 2, row = 1, rowspan = 2)
+    itemBox.grid(column = 3, row = 2, rowspan = 2)
 
     # item entry section
-    ttk.Label(foodFrame, text = "Item name entry").grid(column = 3, row = 0)
+    ttk.Label(foodFrame, text = "Item name entry").grid(column = 4, row = 1)
     inputVar = StringVar()
     inputEntry = ttk.Entry(foodFrame, textvariable = inputVar)
-    inputEntry.grid(column = 3, row = 1)
+    inputEntry.grid(column = 4, row = 2)
 
     # addition and removal button 
     addButton = ttk.Button(foodFrame, text = "+", command = lambda: dietPlanner.modifyShelve("add", (curMainCat.get(), curSubCat.get()), inputVar.get()))
-    addButton.grid(column = 4, row = 1, sticky = S)
+    addButton.grid(column = 5, row = 2, sticky = S)
 
     removeButton = ttk.Button(foodFrame, text = "-", command = lambda: dietPlanner.modifyShelve("del", (curMainCat.get(), curSubCat.get()), inputVar.get()))
-    removeButton.grid(column = 4, row = 2, sticky = N)
+    removeButton.grid(column = 5, row = 3, sticky = N)
+
+    
+    foodFrame.grid_rowconfigure(0, weight=1)
+    foodFrame.grid_columnconfigure(0, weight=1)
+    foodFrame.grid_rowconfigure(4, weight=1)
+    foodFrame.grid_columnconfigure(6, weight=1)
+
+    root.grid_rowconfigure(2, weight=1)
+    root.grid_columnconfigure(2, weight=1)
 
     # listbox selection bindings
     mainCategoryBox.bind('<<ListboxSelect>>', getSubcategories)
