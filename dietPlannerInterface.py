@@ -64,32 +64,46 @@ if __name__ == "__main__":
     root.grid_rowconfigure(0, weight=1)
     root.grid_columnconfigure(0, weight=1)
 
+    test = ttk.Style()
+    test.configure("TFrame", background = "orange")
+
     # frame that will hold then food input programs 
-    foodFrame = ttk.Frame(root, padding = "5" )
+    foodFrame = ttk.Frame(root, padding = "5", style="TFrame")
     foodFrame.grid(column = 1, row = 1, sticky = (N, W, E, S))
+
+    
 
     # main category select section
     ttk.Label(foodFrame,text = "Main categories").grid(column = 1, row = 1)
 
     categories = list(foodData.keys())
     categoryVar = StringVar(value = categories)
-    mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar, height = 5)
-    mainCategoryBox.grid(column = 1, row = 2, rowspan = 2)
+    mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar)
+    # mainCategoryBox.pack(fill=BOTH, expand = True)
+    mainCategoryBox.grid(column = 1, row = 2, rowspan = 2, sticky=(N, W, E, S))
+    
+    mainCategoryBox["bg"] = "white"
+
+    foodFrame.grid_columnconfigure(1, weight=1)
+    foodFrame.grid_rowconfigure(2, weight=1)
+
+    foodFrame.grid_columnconfigure(2, weight=1)
+    foodFrame.grid_columnconfigure(3, weight=1)
 
     # subcategory selection section
     ttk.Label(foodFrame, text = "Subcategories").grid(column = 2, row = 1)
 
     subcategoryVar = StringVar()
-    subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar, height = 5)
-    subcategoryBox.grid(column = 2, row = 2, rowspan = 2)
+    subcategoryBox = Listbox(foodFrame, listvariable = subcategoryVar)
+    subcategoryBox.grid(column = 2, row = 2, rowspan = 2, sticky=(N, W, E, S))
 
 
     # item display section
     ttk.Label(foodFrame, text = "Items").grid(column = 3, row = 1)
         
     itemVar = StringVar()
-    itemBox = Listbox(foodFrame, listvariable = itemVar, height = 5)
-    itemBox.grid(column = 3, row = 2, rowspan = 2)
+    itemBox = Listbox(foodFrame, listvariable = itemVar)
+    itemBox.grid(column = 3, row = 2, rowspan = 2, sticky=(N, W, E, S))
 
     # item entry section
     ttk.Label(foodFrame, text = "Item name entry").grid(column = 4, row = 1)
@@ -109,6 +123,9 @@ if __name__ == "__main__":
     foodFrame.grid_columnconfigure(0, weight=1)
     foodFrame.grid_rowconfigure(4, weight=1)
     foodFrame.grid_columnconfigure(6, weight=1)
+
+    root.grid_rowconfigure(1, weight=2)
+    root.grid_columnconfigure(1, weight=1)
 
     root.grid_rowconfigure(2, weight=1)
     root.grid_columnconfigure(2, weight=1)
