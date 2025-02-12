@@ -12,18 +12,24 @@ import dietPlanner, logging
 
 def getSubcategories(*args):
 
+    logging.debug("\n Get subcategories \n ")
     refreshData() # refreshes the displayed dictionary
 
-    if root.focus_get() == mainCategoryBox: # checks wether the correct listbox is in focus
+    #if root.focus_get() == mainCategoryBox: # checks wether the correct listbox is in focus
 
-        subcategoryVar.set("") # clears the displayed subcategory listbox
-        curMainCat.set(mainCategoryBox.get(mainCategoryBox.curselection()))  # sets the new main chosen category
-        subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
-        # clears the preceeding listboxes
-        curSubCat.set("") 
-        itemVar.set("")
+    #subcategoryVar.set("") # clears the displayed subcategory listbox
+    currentlySelected = mainCategoryBox.curselection() # gets the currently selected category
+    if currentlySelected:
+        nextCategory = mainCategoryBox.get(mainCategoryBox.curselection()) # gets the newly selected category
+        if nextCategory:
+            curMainCat.set(nextCategory)  # sets the new main chosen category
+            subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
+            # clears the preceeding listboxes
+            curSubCat.set(0)
+            #curSubCat.set("") 
+            itemVar.set(0)
 
-        root.update()
+            root.update()
         
 # refreshes the global food database  
 def refreshData(*args):
@@ -33,15 +39,21 @@ def refreshData(*args):
 # retrieves the items for the currently selected category and subcategory
 def getItems(*args):
 
-    if root.focus_get() == subcategoryBox:
-        # sets the newly choosen subcategory
-        curSubCat.set(subcategoryBox.get(subcategoryBox.curselection()))
+    logging.debug("\n Get items \n ")
 
-        logging.debug("\n" + str(curMainCat.get()) + "\n ")
+    currentlySelected = subcategoryBox.curselection()
+    if currentlySelected:
+        nextSubCategory = subcategoryBox.get(subcategoryBox.curselection())
+        if nextSubCategory:
+            # sets the newly choosen subcategory
+            if nextSubCategory:
+                curSubCat.set(nextSubCategory)
 
-        logging.debug("\n" + str(curSubCat.get()) + "\n")    
-        # sets the items the item listbox needs to display
-        itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
+                logging.debug("\n" + str(curMainCat.get()) + "\n ")
+
+                logging.debug("\n" + str(curSubCat.get()) + "\n")    
+                # sets the items the item listbox needs to display
+                itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
 
 if __name__ == "__main__":
 
