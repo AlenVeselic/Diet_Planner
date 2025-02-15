@@ -25,8 +25,7 @@ def getShelve():
         data["foods"] = initShelve()
         dataVar = data["foods"]
     data.close()    # close the shelve file, we got from it what we needed
-
-                
+  
     return dataVar  # return the data gotten from the shelve
 
 # initShelve - Initializes a fresh food data shelve file, with all the needed categories and their respective subcategories
@@ -41,18 +40,29 @@ def initShelve():
     #           these being: "preparationType", "ingredients", "instructions" and "timeToPrepare". 
     #           These are subject to change since I haven't gotten any testing done on this yet.
     #           The point of this is to give you all the information you need in order to prepare said recipe.
-    #   "readyMade": would hold prepared, usually frozen, instant, or just readily eatable refrigeratable items that can be bought in stores
-    #   "sAddition": are minor additions to a meal, this one is very experimental and subject to change.
+    #   "readyMade": would hold prepared, usually frozen, instant, or just readily eatable refrigeratable items that can be bought in stores and prepared in a short amount of time.
+    #   "smallAddition": are minor additions to a meal, this one is very experimental and subject to change.
 
     mainCategories = {"takeOut":["McDonalds", "Mango", "Astoria", "Takos"],
                       "recipes":["simple Roast", "Pork, Tallegio and Broccoli Lasagne",
                                  "Pork Sarnie", "Hot and Sour Chicken Broth"],
                       "readyMade":["Lidl", "Hofer", "Spar", "Tus"],
-                      "sAddition":["Fruit", "Veggies", "Sauces", "Dairy"]
+                      "smallAddition":["Fruit", "Veggies", "Sauces", "Dairy"]
                     }
                 
     recipeItemCats = ["preparationType", "ingredients", "instructions", "timeToPrepare"] # a list of attributes for the recipe item dictionaries
                                                                                          # TODO: have all items have at least some attributes (prices, timeworth, foodType)?
+
+    # Below are the new data structures that will be used to fill out the shelve file replacing mainCategories above
+    # After some brainstorming, I've realised that getting all items and configuring then in the GUI would be a hassle, as well as showing all items a list would be a hassle,
+    # forcing you to essentially traverse and join all the dictionaries every time you try to work with items separately.
+
+    item = { "item_id": 0, "name": "", "category_id": "", "subcategory_id": "", "recipe_id": None, "preparationType": "", "ingredients": "", "instructions": "", "timeToPrepare": ""}
+
+    category = { "category_id": 0, "name": "" , "parent_id": 0, "time_weight": 0}
+
+    # Main categories will currently be hardcoded, but in the future they could be added through the GUI
+    # Take out: time_weight 1, readyMade: time_weight 2, smallAddition: time_weight 1, recipes: time_weight 3
 
 
     # Generates the structure of the main dictionary, with the recipe category as an exception, because it's not a list
@@ -225,7 +235,7 @@ def createPlan(length, recipeNum, takeOutNum):
             else:
                 subcategory = random.choice(list(food[category].keys()))
                 foodChoice = random.choice(list(food[category][subcategory]))
-                if category.lower() == 'saddition':
+                if category.lower() == 'smallAddition':
                     plan["Day " + str(day)]["Meal " + str(meal)] = category + "\\" + foodChoice
                 else:
                     plan["Day " + str(day)]["Meal " + str(meal)] = subcategory + "\\" + foodChoice
