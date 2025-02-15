@@ -57,9 +57,229 @@ def initShelve():
     # After some brainstorming, I've realised that getting all items and configuring then in the GUI would be a hassle, as well as showing all items a list would be a hassle,
     # forcing you to essentially traverse and join all the dictionaries every time you try to work with items separately.
 
-    item = { "item_id": 0, "name": "", "category_id": "", "subcategory_id": "", "recipe_id": None, "preparationType": "", "ingredients": "", "instructions": "", "timeToPrepare": ""}
+    item = { "item_id": 0, "name": "", "category_id": "", "subcategory_id": "", "preparationType": "", "ingredients": "", "instructions": "", "timeToPrepare": ""}
 
     category = { "category_id": 0, "name": "" , "parent_id": 0, "time_weight": 0}
+
+    categories = [
+        {
+            "category_id": 0,
+            "name": "takeOut",
+            "parent_id": None,
+            "time_weight": 1
+        },
+        {
+            "category_id": 1,
+            "name": "recipes",
+            "parent_id": None,
+            "time_weight": 3
+        },
+        {
+            "category_id": 2,
+            "name": "readyMade",
+            "parent_id": None,
+            "time_weight": 2
+        },
+        {
+            "category_id": 3,
+            "name": "smallAddition",
+            "parent_id": None,
+            "time_weight": 1
+        },
+        {
+            "category_id": 4,
+            "name": "McDonalds",
+            "parent_id": 0,
+            "time_weight": 1
+        },
+        {
+            "category_id": 5,
+            "name": "Mango",
+            "parent_id": 0,
+            "time_weight": 1
+        },
+        {
+            "category_id": 6,
+            "name": "Astoria",
+            "parent_id": 0,
+            "time_weight": 1
+        },
+        {
+            "category_id": 7,
+            "name": "Takos",
+            "parent_id": 0,
+            "time_weight": 1
+        },
+        {
+            "category_id": 8,
+            "name": "Quick",
+            "parent_id": 1,
+            "time_weight": 1,
+        },
+        {
+            "category_id": 9,
+            "name": "Low",
+            "parent_id": 1,
+            "time_weight": 2
+        },
+        {
+            "category_id": 10,
+            "name": "Medium",
+            "parent_id": 1,
+            "time_weight": 3
+        },
+        {
+            "category_id": 11,
+            "name": "Hard",
+            "parent_id": 1,
+            "time_weight": 4
+        },
+        {
+            "category_id": 12,
+            "name": "Lidl",
+            "parent_id": 2,
+            "time_weight": 1
+        },
+        {
+            "category_id": 13,
+            "name": "Hofer",
+            "parent_id": 2,
+            "time_weight": 1,
+        },
+        {
+            "category_id": 14,
+            "name": "Spar",
+            "parent_id": 2,
+            "time_weight": 1,
+        },
+        {
+            "category_id": 15,
+            "name": "Tuš",
+            "parent_id": 2,
+            "time_weight": 1,
+        },
+        {
+            "category_id": 16,
+            "name": "Fruit",
+            "parent_id": 3,
+            "time_weight": 1
+        },
+        {
+            "category_id": 17,
+            "name": "Veggies",
+            "parent_id": 3,
+            "time_weight": 1
+        },
+        {
+            "category_id": 18,
+            "name": "Sauces",
+            "parent_id": 3,
+            "time_weight": 1,
+        },
+        {
+            "category_id": 19,
+            "name": "Dairy",
+            "parent_id": 3,
+            "time_weight": 1
+        },
+        {
+            "category_id": 20,
+            "name": "Bootl's",
+            "parent_id": 0,
+            "time_weight": 1
+        }
+    ]
+
+    items = [
+        {
+            "item_id": 0,
+            "name": "BigMac",
+            "category_id": 4,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Bread, Meat, Cheese, Lettuce, Sauce",
+            "instructions": "Put the meat in the bread, add cheese, lettuce and sauce",
+            "timeToPrepare": "15"
+        },
+        {
+            "item_id": 1,
+            "name": "Cheeseburger",
+            "category_id": 4,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Bread, Meat, Cheese, Sauce",
+            "instructions": "Put the meat in the bread, add cheese and sauce",
+            "timeToPrepare": "10"
+        },
+        {
+            "item_id": 2,
+            "name": "Chicken Nuggets",
+            "category_id": 4,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Chicken, Breading, Sauce",
+            "instructions": "Fry the chicken, add breading and sauce",
+            "timeToPrepare": "20"
+        },
+        {
+            "item_id": 3,
+            "name": "Vegetarian Burger",
+            "category_id": 4,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Bread, Vegetables, Cheese, Sauce",
+            "instructions": "Put the vegetables in the bread, add cheese and sauce",
+            "timeToPrepare": "10"
+        },
+        {
+            "item_id": 4,
+            "name": "Pasta",
+            "category_id": 5,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Pasta, Sauce, Cheese",
+            "instructions": "Boil the pasta, add sauce and cheese",
+            "timeToPrepare": "15"
+        },
+        {
+            "item_id": 5,
+            "name": "Pizza",
+            "category_id": 5,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Dough, Sauce, Cheese, Toppings",
+            "instructions": "Put the sauce on the dough, add cheese and toppings",
+            "timeToPrepare": "20"
+        },
+        {
+            "item_id": 6,
+            "name": "Pasta Carbonara",
+            "category_id": 5,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Pasta, Eggs, Cheese, Bacon",
+            "instructions": "Boil the pasta, add eggs, cheese and bacon",
+            "timeToPrepare": "15"
+        },
+        {
+            "item_id": 7,
+            "name": "Pasta Bolognese",
+            "category_id": 5,
+            "subcategory_id": 8,
+            
+            "preparationType": "Quick",
+            "ingredients": "Pasta, Meat, Sauce, Cheese",
+            "instructions": "Boil the pasta, add meat, sauce and cheese",
+            "timeToPrepare": "15"
+        },
+    ]
 
     # Main categories will currently be hardcoded, but in the future they could be added through the GUI
     # A main category is a category with no parent_id, it's the highest level of categorization
@@ -67,16 +287,8 @@ def initShelve():
 
 
     # Generates the structure of the main dictionary, with the recipe category as an exception, because it's not a list
-    for cat in mainCategories.keys():
-        emptyDict[cat] = {}
-        for subCat in mainCategories[cat]:
-            if cat == "recipes":
-                emptyDict[cat][subCat] = {}
-                
-                for itemCat in recipeItemCats:
-                    emptyDict[cat][subCat][itemCat] = ""
-            else:
-               emptyDict[cat][subCat] = [] 
+    emptyDict["categories"] = categories
+    emptyDict["items"] = items
 
 
     return emptyDict

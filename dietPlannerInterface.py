@@ -24,7 +24,9 @@ def getSubcategories(*args):
         nextCategory = mainCategoryBox.get(mainCategoryBox.curselection()) # gets the newly selected category
         if nextCategory:
             curMainCat.set(nextCategory)  # sets the new main chosen category
-            subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
+            nextCategoryObject = getCategoryFromName(foodData["categories"], nextCategory)
+            # subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
+            subcategoryVar.set(list(getSubcategoriesFromCategories(foodData["categories"], nextCategoryObject))) # freshly sets the subcategory display
             # clears the preceeding listboxes
             curSubCat.set(0)
             #curSubCat.set("") 
@@ -55,6 +57,24 @@ def getItems(*args):
                 logging.debug("\n" + str(curSubCat.get()) + "\n")    
                 # sets the items the item listbox needs to display
                 itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
+
+def getMainCategoriesFromCategories(allCategories):
+    mainCategories = []
+    for category in allCategories:
+        if category["parent_id"] == None:
+            mainCategories.append(category["name"])
+    return mainCategories
+
+def getSubcategoriesFromCategories(allCategories, mainCategory):
+    subCategories = []
+    for category in allCategories:
+        if category["parent_id"] == mainCategory["category_id"]:
+            subCategories.append(category["name"])
+    return subCategories
+def getCategoryFromName(allCategories, categoryName):
+    for category in allCategories:
+        if category["name"] == categoryName:
+            return category
 
 if __name__ == "__main__":
 
@@ -87,7 +107,7 @@ if __name__ == "__main__":
     # main category select section
     ttk.Label(foodFrame,text = "Main categories").grid(column = 1, row = 1)
 
-    categories = list(foodData.keys())
+    categories = list(getMainCategoriesFromCategories(foodData["categories"]))
     categoryVar = StringVar(value = categories)
     mainCategoryBox = Listbox(foodFrame, listvariable = categoryVar)
     # mainCategoryBox.pack(fill=BOTH, expand = True)
@@ -135,13 +155,9 @@ if __name__ == "__main__":
     
     ttk.Label(allFoodList, text = "All food items").pack()
 
-    for category in foodData:
-        for subcategory in foodData[category]:
-            if category == "recipes":
-                ttk.Label(allFoodList, text = subcategory).pack()
-                continue
-            for item in foodData[category][subcategory]:
-                ttk.Label(allFoodList, text = item).pack()
+
+    for item in foodData["items"]:
+        ttk.Label(allFoodList, text = item["name"]).pack()
 
 
     
