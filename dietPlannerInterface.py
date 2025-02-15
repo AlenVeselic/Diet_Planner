@@ -4,7 +4,8 @@
 
 # import all needed things: tkinter for gui generationm, dietPlanner for backend operations, logginf for debug
 from tkinter import *
-from tkinter import ttk
+#from tkinter import ttk
+import ttkbootstrap as ttk
 
 import dietPlanner, logging
 
@@ -67,7 +68,7 @@ if __name__ == "__main__":
 
     # gui initialization
 
-    root = Tk()
+    root = ttk.Window( themename="journal")
 
     # variables which will store the currently selected category and subcategory since listboxes do not save selected items when out of focus    
     curMainCat = StringVar()
@@ -77,13 +78,11 @@ if __name__ == "__main__":
     root.grid_columnconfigure(0, weight=1)
 
     test = ttk.Style()
-    test.configure("TFrame", background = "orange")
+    test.configure("TestFrame", background = "light-gray")
 
     # frame that will hold then food input programs 
-    foodFrame = ttk.Frame(root, padding = "5", style="TFrame")
+    foodFrame = ttk.Frame(root, padding = "5")
     foodFrame.grid(column = 1, row = 1, sticky = (N, W, E, S))
-
-    
 
     # main category select section
     ttk.Label(foodFrame,text = "Main categories").grid(column = 1, row = 1)
@@ -94,7 +93,7 @@ if __name__ == "__main__":
     # mainCategoryBox.pack(fill=BOTH, expand = True)
     mainCategoryBox.grid(column = 1, row = 2, rowspan = 2, sticky=(N, W, E, S))
     
-    mainCategoryBox["bg"] = "white"
+    #mainCategoryBox["bg"] = "white"
 
     foodFrame.grid_columnconfigure(1, weight=1)
     foodFrame.grid_rowconfigure(2, weight=1)
@@ -129,6 +128,21 @@ if __name__ == "__main__":
 
     removeButton = ttk.Button(foodFrame, text = "-", command = lambda: dietPlanner.modifyShelve("del", (curMainCat.get(), curSubCat.get()), inputVar.get()))
     removeButton.grid(column = 5, row = 3, sticky = N)
+
+    allFoodList = ttk.Frame(foodFrame, padding = "5")
+    allFoodList.grid(column = 1, row = 4, rowspan = 4, sticky = (N, W, E, S))
+
+    
+    ttk.Label(allFoodList, text = "All food items").pack()
+
+    for category in foodData:
+        for subcategory in foodData[category]:
+            if category == "recipes":
+                ttk.Label(allFoodList, text = subcategory).pack()
+                continue
+            for item in foodData[category][subcategory]:
+                ttk.Label(allFoodList, text = item).pack()
+
 
     
     foodFrame.grid_rowconfigure(0, weight=1)
