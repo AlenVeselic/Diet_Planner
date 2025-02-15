@@ -62,7 +62,8 @@ def initShelve():
     category = { "category_id": 0, "name": "" , "parent_id": 0, "time_weight": 0}
 
     # Main categories will currently be hardcoded, but in the future they could be added through the GUI
-    # Take out: time_weight 1, readyMade: time_weight 2, smallAddition: time_weight 1, recipes: time_weight 3
+    # A main category is a category with no parent_id, it's the highest level of categorization
+    # Main Categories: Take out: time_weight 1, readyMade: time_weight 2, smallAddition: time_weight 1, recipes: time_weight 3
 
 
     # Generates the structure of the main dictionary, with the recipe category as an exception, because it's not a list
