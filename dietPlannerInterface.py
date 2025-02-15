@@ -24,7 +24,7 @@ def getSubcategories(*args):
         nextCategory = mainCategoryBox.get(mainCategoryBox.curselection()) # gets the newly selected category
         if nextCategory:
             curMainCat.set(nextCategory)  # sets the new main chosen category
-            nextCategoryObject = getCategoryFromName(foodData["categories"], nextCategory)
+            nextCategoryObject = dietPlanner.getCategoryFromName(foodData["categories"], nextCategory)
             # subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
             subcategoryVar.set(list(getSubcategoriesFromCategories(foodData["categories"], nextCategoryObject))) # freshly sets the subcategory display
             # clears the preceeding listboxes
@@ -56,7 +56,11 @@ def getItems(*args):
 
                 logging.debug("\n" + str(curSubCat.get()) + "\n")    
                 # sets the items the item listbox needs to display
-                itemVar.set(foodData[curMainCat.get()][curSubCat.get()])
+                allItems = foodData['items']
+                selectedSubCategory = dietPlanner.getCategoryFromName(foodData["categories"], curSubCat.get())
+                filteredItems = (item for item in allItems if item["subcategory_id"] == selectedSubCategory["category_id"])
+                filteredItemNames = [item["name"] for item in filteredItems]
+                itemVar.set(filteredItemNames)
 
 def getMainCategoriesFromCategories(allCategories):
     mainCategories = []
@@ -71,10 +75,6 @@ def getSubcategoriesFromCategories(allCategories, mainCategory):
         if category["parent_id"] == mainCategory["category_id"]:
             subCategories.append(category["name"])
     return subCategories
-def getCategoryFromName(allCategories, categoryName):
-    for category in allCategories:
-        if category["name"] == categoryName:
-            return category
 
 if __name__ == "__main__":
 
@@ -143,10 +143,10 @@ if __name__ == "__main__":
     inputEntry.grid(column = 4, row = 2)
 
     # addition and removal button 
-    addButton = ttk.Button(foodFrame, text = "+", command = lambda: dietPlanner.modifyShelve("add", (curMainCat.get(), curSubCat.get()), inputVar.get()))
+    addButton = ttk.Button(foodFrame, text = "+", command = lambda: [dietPlanner.modifyShelve("add", curMainCat.get(), curSubCat.get(), inputVar.get()), refreshData(), getItems(), root.update()])
     addButton.grid(column = 5, row = 2, sticky = S)
 
-    removeButton = ttk.Button(foodFrame, text = "-", command = lambda: dietPlanner.modifyShelve("del", (curMainCat.get(), curSubCat.get()), inputVar.get()))
+    removeButton = ttk.Button(foodFrame, text = "-", command = lambda: [dietPlanner.modifyShelve("del", curMainCat.get(), curSubCat.get(), inputVar.get()), refreshData(), getItems(), root.update()])
     removeButton.grid(column = 5, row = 3, sticky = N)
 
     allFoodList = ttk.Frame(foodFrame, padding = "5")

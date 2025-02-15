@@ -57,7 +57,7 @@ def initShelve():
     # After some brainstorming, I've realised that getting all items and configuring then in the GUI would be a hassle, as well as showing all items a list would be a hassle,
     # forcing you to essentially traverse and join all the dictionaries every time you try to work with items separately.
 
-    item = { "item_id": 0, "name": "", "category_id": "", "subcategory_id": "", "preparationType": "", "ingredients": "", "instructions": "", "timeToPrepare": ""}
+    item = { "item_id": 0, "name": "", "category_id": None, "subcategory_id": None, "preparationType": "", "ingredients": "", "instructions": "", "timeToPrepare": ""}
 
     category = { "category_id": 0, "name": "" , "parent_id": 0, "time_weight": 0}
 
@@ -301,8 +301,12 @@ def initShelve():
     #                           categoryList - list of categories in which to append or remove the given item
     #                           itemList - the first value is the items name while the remaining values are the item's attribute values
     #                           )
+def getCategoryFromName(allCategories, categoryName):
+    for category in allCategories:
+        if category["name"] == categoryName:
+            return category
 
-def modifyShelve(mode, categoryList, itemList):
+def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList):
 
     # gets all of the currently stored food data
 
@@ -318,88 +322,33 @@ def modifyShelve(mode, categoryList, itemList):
     # This part takes every category that has list type items and saves their lowered key values for easier comparation purposes
 
     listCats = {}
+
+    latestItemId = 0
+
+    items = foods["items"]
+    latestItemId = items[-1]["item_id"]
+
+    selectedCategory = getCategoryFromName(foods["categories"], selectedCategoryName) 
+
+    selectedSubcategory = getCategoryFromName(foods["categories"], selectedSubCategoryName)
     
-    for category in foods.keys():
-
-        subcategories = list(foods[category].keys())
-        if type(foods[category][subcategories[0]]) is list:
-            listCats[category.lower()] = category
-    
-
-    if mode == "add":
-
-        # This mode goes category by category and if they all align and the item doesn't exist yet, a new item is created
-        # The comparation is all done with lowered values while the value later saved is in normal caps,
-        # this nullifies people mistyping capital letters and duplicating values by accident
-
-        if categoryList[0].lower() in listCats.keys():
-
-            loweredSubcats = {}
-            for item in foods[listCats[categoryList[0].lower()]].keys():
-                loweredSubcats[item.lower()] = item
-
-            if categoryList[1].lower() in loweredSubcats:
-                subCategory = loweredSubcats[categoryList[1].lower()]
-                if itemList in foods[listCats[categoryList[0].lower()]][subCategory]:
-                    print('item already exists')
-                else:
-                    foods[listCats[categoryList[0].lower()]][subCategory].append(itemList)
-            else:
-                foods[listCats[categoryList[0].lower()]][categoryList[1]] = []
-                foods[listCats[categoryList[0].lower()]][categoryList[1]].append(itemList)
-
-        # "recipes" has a different approach since it's only one category and going by indexes would only return a letter from the word,
-        #  eventually causing bugs if a letter type workaround was made with the advent of other main categories starting with the letter r. 
-        #  Its itemList variable holds more than one value, having its name in the first spot and sharing the rest of the space with attribute values
-        elif categoryList == "recipes":
-
-            # same as list categories we lower recipe names in order to avoid duplicates
-            loweredRecipes = []
-            for item in foods[categoryList].keys():
-                loweredRecipes.append(item.lower())
-
-            if itemList[0].lower() in loweredRecipes:
-                print("Recipe already exists")
-            else:
-                foods[categoryList][itemList[0]] = {
-                    "preparationType": itemList[1],
-                    "ingredients": itemList[2],
-                    "instructions": itemList[3],
-                    "timeToPrepare": itemList[4]
-                }
-
+    foundItem = next((item for item in foods['items'] if item['name'] == itemList), None)
+    if mode == "add":    
+        if foundItem :
+            print("Item already exists")
+            return
         else:
-            # in case someone puts in an invalid main category, they are greeted with this message
-            print("Not a category")
+            foods['items'].append({"item_id": latestItemId + 1, "name": itemList, "category_id": selectedCategory["category_id"], "subcategory_id": selectedSubcategory["category_id"], "preparationType": "", "ingredients": "", "instructions": "", "timeToPrepare": ""})
 
     elif mode == "del":
         # deletion goes through the same motions as addition only that instead of adding it deletes the given item
         # for deletion we only take the item's name
 
-        if categoryList[0].lower() in listCats:
-
-            loweredSubcats = []
-            for item in foods[categoryList[0]].keys():
-                loweredSubcats.append(item.lower())
-
-            if categoryList[1].lower() in loweredSubcats:
-                if itemList in foods[categoryList[0]][categoryList[1]]:
-                    foods[categoryList[0]][categoryList[1]].remove(itemList)
-                    print("Item removed.")
-                else:
-                    print("item doesn't exist")
-                    
-
-        elif categoryList == "recipes":
-            loweredRecipes = []
-            for item in foods[categoryList].keys():
-                loweredRecipes.append(item.lower())
-
-            if itemList.lower() in loweredRecipes:
-                foods[categoryList].pop(itemList)
-                print("Recipe removed.")
-            else:
-                print("Recipe doesn't exist")
+        if not foundItem:
+            print("Item doesn't exist")
+            return
+        else:
+            foods['items'].remove(foundItem)
 
     # in the end whatever changes have been made are saved to the shelve
     # TODO: check whether any values have actually changed to decide if it's even worth saving 
