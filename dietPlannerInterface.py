@@ -59,12 +59,12 @@ class Page3(Page):
 
 
 class DietPlannerList(Page):
-    mainCategoryBox = None
-    subcategoryBox = None
-    curMainCat = None
-    subcategoryVar = None
-    curSubCat = None
-    itemVar = None
+    mainCategoryBox: Listbox = None
+    subcategoryBox: Listbox = None
+    curMainCat: StringVar = None
+    subcategoryVar: StringVar = None
+    curSubCat: StringVar = None
+    itemVar: StringVar = None
 
     def getSubcategories(self, *args):
 
@@ -141,8 +141,8 @@ class DietPlannerList(Page):
         super().__init__(*args, **kwargs)
 
         # variables which will store the currently selected category and subcategory since listboxes do not save selected items when out of focus
-        curMainCat = StringVar()
-        curSubCat = StringVar()
+        self.curMainCat = StringVar()
+        self.curSubCat = StringVar()
 
         test = ttk.Style()
         test.configure("TestFrame", background="light-gray")
@@ -171,15 +171,15 @@ class DietPlannerList(Page):
         # subcategory selection section
         ttk.Label(foodFrame, text="Subcategories").grid(column=2, row=1)
 
-        subcategoryVar = StringVar()
-        self.subcategoryBox = Listbox(foodFrame, listvariable=subcategoryVar)
+        self.subcategoryVar = StringVar()
+        self.subcategoryBox = Listbox(foodFrame, listvariable=self.subcategoryVar)
         self.subcategoryBox.grid(column=2, row=2, rowspan=2, sticky=(N, W, E, S))
 
         # item display section
         ttk.Label(foodFrame, text="Items").grid(column=3, row=1)
 
-        itemVar = StringVar()
-        itemBox = Listbox(foodFrame, listvariable=itemVar)
+        self.itemVar = StringVar()
+        itemBox = Listbox(foodFrame, listvariable=self.itemVar)
         itemBox.grid(column=3, row=2, rowspan=2, sticky=(N, W, E, S))
 
         # item entry section
@@ -194,7 +194,7 @@ class DietPlannerList(Page):
             text="+",
             command=lambda: [
                 dietPlanner.modifyShelve(
-                    "add", curMainCat.get(), curSubCat.get(), inputVar.get()
+                    "add", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
                 ),
                 self.refreshData(),
                 self.getItems(),
@@ -208,7 +208,7 @@ class DietPlannerList(Page):
             text="-",
             command=lambda: [
                 dietPlanner.modifyShelve(
-                    "del", curMainCat.get(), curSubCat.get(), inputVar.get()
+                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
                 ),
                 self.refreshData(),
                 self.getItems(),
@@ -303,5 +303,5 @@ if __name__ == "__main__":
     main = MainView(root)
     main.pack(side="top", fill="both", expand=True)
 
-    # root.wm_geometry("400x400")
+    root.wm_geometry("400x400")
     root.mainloop()
