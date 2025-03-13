@@ -54,8 +54,33 @@ class Page2(Page):
 class Page3(Page):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
-        label = Label(self, text="This is page 3")
-        label.pack(side="top", fill="both", expand=True)
+        # label = Label(self, text="This is page 3")
+        # label.pack(side="top", fill="both", expand=True)
+
+        foodFrame = ttk.Frame(self, padding="5")
+        foodFrame.pack(side="top", fill="both", expand=True)
+        # foodFrame.grid(column=1, row=1, sticky=(N, W, E, S))
+
+        # mainCategoryBox["bg"] = "white"
+
+        foodFrame.grid_columnconfigure(1, weight=1)
+        foodFrame.grid_rowconfigure(2, weight=1)
+
+        foodFrame.grid_columnconfigure(2, weight=1)
+        foodFrame.grid_columnconfigure(3, weight=1)
+
+        allFoodList = ttk.Frame(foodFrame, padding="5")
+        allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
+
+        ttk.Label(allFoodList, text="All food items").pack()
+
+        for item in foodData["items"]:
+            ttk.Label(allFoodList, text=item["name"]).pack()
+
+        foodFrame.grid_rowconfigure(0, weight=1)
+        foodFrame.grid_columnconfigure(0, weight=1)
+        foodFrame.grid_rowconfigure(4, weight=1)
+        foodFrame.grid_columnconfigure(6, weight=1)
 
 
 class DietPlannerList(Page):
@@ -75,23 +100,20 @@ class DietPlannerList(Page):
 
         # subcategoryVar.set("") # clears the displayed subcategory listbox
         currentlySelected = (
-            self.mainCategoryBox.curselection()
+            self.mainCategoryBox.selection_get()
         )  # gets the currently selected category
         if currentlySelected:
-            nextCategory = self.mainCategoryBox.get(
-                self.mainCategoryBox.curselection()
-            )  # gets the newly selected category
+            nextCategory = self.mainCategoryBox.selection_get()
+            # gets the newly selected category
             if nextCategory:
                 self.curMainCat.set(nextCategory)  # sets the new main chosen category
                 nextCategoryObject = dietPlanner.getCategoryFromName(
                     foodData["categories"], nextCategory
                 )
                 # subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
-                self.subcategoryVar.set(
-                    list(
-                        getSubcategoriesFromCategories(
-                            foodData["categories"], nextCategoryObject
-                        )
+                self.subcategoryBox["values"] = list(
+                    getSubcategoriesFromCategories(
+                        foodData["categories"], nextCategoryObject
                     )
                 )  # freshly sets the subcategory display
                 # clears the preceeding listboxes
@@ -111,11 +133,9 @@ class DietPlannerList(Page):
 
         logging.debug("\n Get items \n ")
 
-        currentlySelected = self.subcategoryBox.curselection()
+        currentlySelected = self.subcategoryBox.selection_get()
         if currentlySelected:
-            nextSubCategory = self.subcategoryBox.get(
-                self.subcategoryBox.curselection()
-            )
+            nextSubCategory = self.subcategoryBox.selection_get()
             if nextSubCategory:
                 # sets the newly choosen subcategory
                 if nextSubCategory:
@@ -156,7 +176,9 @@ class DietPlannerList(Page):
 
         categories = list(getMainCategoriesFromCategories(foodData["categories"]))
         categoryVar = StringVar(value=categories)
-        self.mainCategoryBox = Listbox(foodFrame, listvariable=categoryVar)
+        self.mainCategoryBox = ttk.Combobox(
+            foodFrame, textvariable=categoryVar, values=categories
+        )
         # mainCategoryBox.pack(fill=BOTH, expand = True)
         self.mainCategoryBox.grid(column=1, row=2, rowspan=2, sticky=(N, W, E, S))
 
@@ -172,7 +194,7 @@ class DietPlannerList(Page):
         ttk.Label(foodFrame, text="Subcategories").grid(column=2, row=1)
 
         self.subcategoryVar = StringVar()
-        self.subcategoryBox = Listbox(foodFrame, listvariable=self.subcategoryVar)
+        self.subcategoryBox = ttk.Combobox(foodFrame, textvariable=self.subcategoryVar)
         self.subcategoryBox.grid(column=2, row=2, rowspan=2, sticky=(N, W, E, S))
 
         # item display section
@@ -217,13 +239,13 @@ class DietPlannerList(Page):
         )
         removeButton.grid(column=5, row=3, sticky=N)
 
-        allFoodList = ttk.Frame(foodFrame, padding="5")
-        allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
+        # allFoodList = ttk.Frame(foodFrame, padding="5")
+        # allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
 
-        ttk.Label(allFoodList, text="All food items").pack()
+        # ttk.Label(allFoodList, text="All food items").pack()
 
-        for item in foodData["items"]:
-            ttk.Label(allFoodList, text=item["name"]).pack()
+        # for item in foodData["items"]:
+        #     ttk.Label(allFoodList, text=item["name"]).pack()
 
         foodFrame.grid_rowconfigure(0, weight=1)
         foodFrame.grid_columnconfigure(0, weight=1)
@@ -232,9 +254,9 @@ class DietPlannerList(Page):
 
         # listbox selection bindings
 
-        self.mainCategoryBox.bind("<<ListboxSelect>>", self.getSubcategories)
+        self.mainCategoryBox.bind("<<ComboboxSelected>>", self.getSubcategories)
 
-        self.subcategoryBox.bind("<<ListboxSelect>>", self.getItems)
+        self.subcategoryBox.bind("<<ComboboxSelected>>", self.getItems)
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
