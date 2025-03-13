@@ -13,6 +13,12 @@ import dietPlanner, logging
 # getSubcategories - refreshes data and retrieves subcategories for the currently selected category
 
 
+# refreshes the global food database
+def refreshData(*args):
+    global foodData
+    foodData = dietPlanner.getShelve()
+
+
 def getMainCategoriesFromCategories(allCategories):
     mainCategories = []
     for category in allCategories:
@@ -29,12 +35,21 @@ def getSubcategoriesFromCategories(allCategories, mainCategory):
     return subCategories
 
 
+def getAllSubcategoriesFromCategories(allCategories):
+    subCategories = []
+    for category in allCategories:
+        if category["parent_id"] != None:
+            subCategories.append(category["name"])
+    return subCategories
+
+
 class Page(Frame):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
 
     def show(self):
         self.lift()
+        root.update()
 
 
 class Page1(Page):
@@ -54,6 +69,7 @@ class Page2(Page):
 class Page3(Page):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
+        refreshData()
         # label = Label(self, text="This is page 3")
         # label.pack(side="top", fill="both", expand=True)
 
@@ -69,32 +85,45 @@ class Page3(Page):
         foodFrame.grid_columnconfigure(2, weight=1)
         foodFrame.grid_columnconfigure(3, weight=1)
 
-        allFoodList = ttk.Frame(foodFrame, padding="5")
-        allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
+        self.allFoodList = ttk.Frame(foodFrame, padding="5")
+        self.allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
 
-        ttk.Label(allFoodList, text="All food items").pack()
-
+        ttk.Label(self.allFoodList, text="All food items").pack()
+        self.currentLabels = []
         for item in foodData["items"]:
-            ttk.Label(allFoodList, text=item["name"]).pack()
+            label = ttk.Label(self.allFoodList, text=item["name"])
+            label.pack()
+            self.currentLabels.append(label)
 
         foodFrame.grid_rowconfigure(0, weight=1)
         foodFrame.grid_columnconfigure(0, weight=1)
         foodFrame.grid_rowconfigure(4, weight=1)
         foodFrame.grid_columnconfigure(6, weight=1)
 
+    def refresh(self):
+        for label in self.currentLabels:
+            label.pack_forget()
+
+        self.currentLabels = []
+        for item in foodData["items"]:
+            self.currentLabels.append(
+                ttk.Label(self.allFoodList, text=item["name"]).pack()
+            )
+
 
 class DietPlannerList(Page):
     mainCategoryBox: Listbox = None
     subcategoryBox: Listbox = None
     curMainCat: StringVar = None
+    categoryVar: StringVar = None
     subcategoryVar: StringVar = None
     curSubCat: StringVar = None
     itemVar: StringVar = None
 
-    def getSubcategories(self, *args):
+    def getSubcategories(self, *args, mainCategory=None):
 
         logging.debug("\n Get subcategories \n ")
-        self.refreshData()  # refreshes the displayed dictionary
+        refreshData()  # refreshes the displayed dictionary
 
         # if root.focus_get() == mainCategoryBox: # checks wether the correct listbox is in focus
 
@@ -106,6 +135,8 @@ class DietPlannerList(Page):
             nextCategory = self.mainCategoryBox.selection_get()
             # gets the newly selected category
             if nextCategory:
+                if mainCategory:
+                    nextCategory = mainCategory
                 self.curMainCat.set(nextCategory)  # sets the new main chosen category
                 nextCategoryObject = dietPlanner.getCategoryFromName(
                     foodData["categories"], nextCategory
@@ -117,16 +148,11 @@ class DietPlannerList(Page):
                     )
                 )  # freshly sets the subcategory display
                 # clears the preceeding listboxes
-                self.curSubCat.set(0)
+                # self.curSubCat.set(0)
                 # curSubCat.set("")
-                self.itemVar.set(0)
+                # self.itemVar.set(0)
 
                 root.update()
-
-    # refreshes the global food database
-    def refreshData(self, *args):
-        global foodData
-        foodData = dietPlanner.getShelve()
 
     # retrieves the items for the currently selected category and subcategory
     def getItems(self, *args):
@@ -155,7 +181,18 @@ class DietPlannerList(Page):
                         if item["subcategory_id"] == selectedSubCategory["category_id"]
                     )
                     filteredItemNames = [item["name"] for item in filteredItems]
-                    self.itemVar.set(filteredItemNames)
+                    # self.itemVar.set(filteredItemNames)
+
+                    if not self.curMainCat.get():
+                        mainCategoryOfSubcategory = dietPlanner.getCategoryFromId(
+                            foodData["categories"], selectedSubCategory["parent_id"]
+                        )
+
+                        self.curMainCat.set(mainCategoryOfSubcategory["name"])
+                        self.categoryVar.set(self.curMainCat.get())
+
+                        self.getSubcategories(self.categoryVar.get())
+                        # self.subcategoryBox.select_set(self.curMainCat.get())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -175,9 +212,9 @@ class DietPlannerList(Page):
         ttk.Label(foodFrame, text="Main categories").grid(column=1, row=1)
 
         categories = list(getMainCategoriesFromCategories(foodData["categories"]))
-        categoryVar = StringVar(value=categories)
+        self.categoryVar = StringVar()
         self.mainCategoryBox = ttk.Combobox(
-            foodFrame, textvariable=categoryVar, values=categories
+            foodFrame, textvariable=self.categoryVar, values=categories
         )
         # mainCategoryBox.pack(fill=BOTH, expand = True)
         self.mainCategoryBox.grid(column=1, row=2, sticky=(N, W, E, S))
@@ -193,8 +230,11 @@ class DietPlannerList(Page):
         # subcategory selection section
         ttk.Label(foodFrame, text="Subcategories").grid(column=2, row=1)
 
+        subcategories = list(getAllSubcategoriesFromCategories(foodData["categories"]))
         self.subcategoryVar = StringVar()
-        self.subcategoryBox = ttk.Combobox(foodFrame, textvariable=self.subcategoryVar)
+        self.subcategoryBox = ttk.Combobox(
+            foodFrame, textvariable=self.subcategoryVar, values=subcategories
+        )
         self.subcategoryBox.grid(column=2, row=2, sticky=(N, W, E, S))
 
         # item display section
@@ -218,8 +258,8 @@ class DietPlannerList(Page):
                 dietPlanner.modifyShelve(
                     "add", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
                 ),
-                self.refreshData(),
-                self.getItems(),
+                refreshData(),
+                # self.getItems(),
                 root.update(),
             ],
         )
@@ -232,7 +272,7 @@ class DietPlannerList(Page):
                 #                dietPlanner.modifyShelve(
                 #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
                 #                ),
-                self.refreshData(),
+                refreshData(),
                 # self.getItems(),
                 self.update(),
                 self.master.p3.show(),
@@ -289,7 +329,11 @@ class MainView(Frame):
 
         b1 = Button(buttonframe, text="Page 1", command=p1.show)
         b2 = Button(buttonframe, text="Page 2", command=p2.show)
-        b3 = Button(buttonframe, text="Page 3", command=self.p3.show)
+        b3 = Button(
+            buttonframe,
+            text="Page 3",
+            command=lambda: [self.p3.refresh(), self.p3.show()],
+        )
         b4 = Button(buttonframe, text="Diet test", command=dietPlannerListPage.show)
 
         b1.pack(side="left")

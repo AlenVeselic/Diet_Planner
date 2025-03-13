@@ -249,6 +249,12 @@ def getCategoryFromName(allCategories, categoryName):
             return category
 
 
+def getCategoryFromId(allCategories, id):
+    for category in allCategories:
+        if category["category_id"] == id:
+            return category
+
+
 def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList):
 
     # gets all of the currently stored food data
