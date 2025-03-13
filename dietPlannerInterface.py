@@ -180,12 +180,12 @@ class DietPlannerList(Page):
             foodFrame, textvariable=categoryVar, values=categories
         )
         # mainCategoryBox.pack(fill=BOTH, expand = True)
-        self.mainCategoryBox.grid(column=1, row=2, rowspan=2, sticky=(N, W, E, S))
+        self.mainCategoryBox.grid(column=1, row=2, sticky=(N, W, E, S))
 
         # mainCategoryBox["bg"] = "white"
 
         foodFrame.grid_columnconfigure(1, weight=1)
-        foodFrame.grid_rowconfigure(2, weight=1)
+        foodFrame.grid_rowconfigure(2, weight=0)
 
         foodFrame.grid_columnconfigure(2, weight=1)
         foodFrame.grid_columnconfigure(3, weight=1)
@@ -195,25 +195,25 @@ class DietPlannerList(Page):
 
         self.subcategoryVar = StringVar()
         self.subcategoryBox = ttk.Combobox(foodFrame, textvariable=self.subcategoryVar)
-        self.subcategoryBox.grid(column=2, row=2, rowspan=2, sticky=(N, W, E, S))
+        self.subcategoryBox.grid(column=2, row=2, sticky=(N, W, E, S))
 
         # item display section
-        ttk.Label(foodFrame, text="Items").grid(column=3, row=1)
+        # ttk.Label(foodFrame, text="Items").grid(column=3, row=1)
 
-        self.itemVar = StringVar()
-        itemBox = Listbox(foodFrame, listvariable=self.itemVar)
-        itemBox.grid(column=3, row=2, rowspan=2, sticky=(N, W, E, S))
+        # self.itemVar = StringVar()
+        # itemBox = Listbox(foodFrame, listvariable=self.itemVar)
+        # itemBox.grid(column=3, row=2, rowspan=2, sticky=(N, W, E, S))
 
         # item entry section
-        ttk.Label(foodFrame, text="Item name entry").grid(column=4, row=1)
+        ttk.Label(foodFrame, text="Item name entry").grid(column=3, row=1)
         inputVar = StringVar()
         inputEntry = ttk.Entry(foodFrame, textvariable=inputVar)
-        inputEntry.grid(column=4, row=2)
+        inputEntry.grid(column=3, row=2, sticky=(N, W, E, S))
 
         # addition and removal button
         addButton = ttk.Button(
             foodFrame,
-            text="+",
+            text="Add Item",
             command=lambda: [
                 dietPlanner.modifyShelve(
                     "add", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
@@ -223,21 +223,22 @@ class DietPlannerList(Page):
                 root.update(),
             ],
         )
-        addButton.grid(column=5, row=2, sticky=S)
+        addButton.grid(column=3, row=4, sticky=E)
 
         removeButton = ttk.Button(
             foodFrame,
-            text="-",
+            text="Cancel",
             command=lambda: [
-                dietPlanner.modifyShelve(
-                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                ),
+                #                dietPlanner.modifyShelve(
+                #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
+                #                ),
                 self.refreshData(),
-                self.getItems(),
+                # self.getItems(),
                 self.update(),
+                self.master.p3.show(),
             ],
         )
-        removeButton.grid(column=5, row=3, sticky=N)
+        removeButton.grid(column=1, row=4, sticky=W)
 
         # allFoodList = ttk.Frame(foodFrame, padding="5")
         # allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
@@ -273,7 +274,7 @@ class MainView(Frame):
         Frame.__init__(self, *args, **kwargs)
         p1 = Page1(self)
         p2 = Page2(self)
-        p3 = Page3(self)
+        self.p3 = Page3(self)
         dietPlannerListPage = DietPlannerList(self)
 
         buttonframe = Frame(self)
@@ -283,12 +284,12 @@ class MainView(Frame):
 
         p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         b1 = Button(buttonframe, text="Page 1", command=p1.show)
         b2 = Button(buttonframe, text="Page 2", command=p2.show)
-        b3 = Button(buttonframe, text="Page 3", command=p3.show)
+        b3 = Button(buttonframe, text="Page 3", command=self.p3.show)
         b4 = Button(buttonframe, text="Diet test", command=dietPlannerListPage.show)
 
         b1.pack(side="left")
