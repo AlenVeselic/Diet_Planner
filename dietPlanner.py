@@ -387,3 +387,27 @@ def createPlan(length, recipeNum, takeOutNum):
                         takeOutCount += 1  # with the addition of a takeout variant we add a notch to the takeout count
 
     return plan
+
+
+def getMainCategoriesFromCategories(allCategories):
+    mainCategories = []
+    for category in allCategories:
+        if category["parent_id"] == None:
+            mainCategories.append(category["name"])
+    return mainCategories
+
+
+def getSubcategoriesFromCategories(allCategories, mainCategory):
+    subCategories = []
+    for category in allCategories:
+        if category["parent_id"] == mainCategory["category_id"]:
+            subCategories.append(category["name"])
+    return subCategories
+
+
+def getAllSubcategoriesFromCategories(allCategories):
+    subCategories = []
+    for category in allCategories:
+        if category["parent_id"] != None:
+            subCategories.append(category["name"])
+    return subCategories
