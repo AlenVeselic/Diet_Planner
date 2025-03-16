@@ -343,6 +343,10 @@ def createPlan(length, recipeNum, takeOutNum):
     #  TODO: give each item subjective "nutritional" that determines the fullness of a meal
     #  After looping through all the days it returns a dictionary representing a meal plan.
 
+    categories = [
+        category for category in food["categories"] if category["parent_id"] == None
+    ]
+
     for day in range(
         length
     ):  # Day loop, generates a dictionary with the current day's value as its key
@@ -352,38 +356,64 @@ def createPlan(length, recipeNum, takeOutNum):
         ):  # Meal loop, generates a dictionary with the current meal's value, also chooses the meal's food
 
             while True:  # this loop chooses current meal's food category,
-                # if it chooses one of the categories that have expended their appearance numbers it loops again until it chooses an available category
-                category = random.choice(list(food.keys()))
+                # if it chooses one of the categories that have expended their occurence numbers it loops again until it chooses an available category
+                category = random.choice(categories)
                 if (
-                    category.lower() == "takeout"
+                    category["name"].lower() == "takeout"
                     and takeOutCount > takeOutNum
-                    or category.lower() == "recipes"
+                    or category["name"].lower() == "recipes"
                     and recipeCount > recipeNum
                 ):
                     continue
                 else:
                     break
             if (
-                category == "recipes"
+                category["name"] == "recipes"
             ):  # this conditional statement chooses the meal's food item, recipes have a different approach to them adding their attributes to the end
                 plan["Day " + str(day)]["Meal " + str(meal)] = {}
-                foodChoice = random.choice(list(food[category].keys()))
-                plan["Day " + str(day)]["Meal " + str(meal)][foodChoice] = food[
-                    category
-                ][foodChoice]
+
+                categoryFood = [
+                    item
+                    for item in food["items"]
+                    if item["category_id"] == category["category_id"]
+                ]
+
+                foodChoice = random.choice(categoryFood)
+
+                plan["Day " + str(day)]["Meal " + str(meal)][
+                    foodChoice["name"]
+                ] = foodChoice
                 recipeCount += 1  # with the addition of a recipe we add a notch to the recipe count
             else:
-                subcategory = random.choice(list(food[category].keys()))
-                foodChoice = random.choice(list(food[category][subcategory]))
-                if category.lower() == "smallAddition":
+
+                items = []
+
+                while len(items) < 1:
+
+                    subcategories = [
+                        subcategory
+                        for subcategory in food["categories"]
+                        if subcategory["parent_id"] == category["category_id"]
+                    ]
+                    subcategory = random.choice(subcategories)
+
+                    items = [
+                        item
+                        for item in food["items"]
+                        if item["subcategory_id"] == subcategory["category_id"]
+                    ]
+
+                foodChoice = random.choice(items)
+
+                if category["name"].lower() == "smallAddition":
                     plan["Day " + str(day)]["Meal " + str(meal)] = (
-                        category + "\\" + foodChoice
+                        category["name"] + "\\" + foodChoice["name"]
                     )
                 else:
                     plan["Day " + str(day)]["Meal " + str(meal)] = (
-                        subcategory + "\\" + foodChoice
+                        subcategory["name"] + "\\" + foodChoice["name"]
                     )
-                    if category.lower() == "takeout":
+                    if category["name"].lower() == "takeout":
                         takeOutCount += 1  # with the addition of a takeout variant we add a notch to the takeout count
 
     return plan
