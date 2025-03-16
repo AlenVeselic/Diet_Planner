@@ -89,7 +89,7 @@ class DietPlannerList(Page):
                         self.curMainCat.set(mainCategoryOfSubcategory["name"])
                         self.categoryVar.set(self.curMainCat.get())
 
-                        self.getSubcategories(self.categoryVar.get())
+                        self.getSubcategories(mainCategory=self.categoryVar.get())
                         # self.subcategoryBox.select_set(self.curMainCat.get())
 
     def __init__(self, root, *args, **kwargs):
