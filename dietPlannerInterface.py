@@ -46,13 +46,15 @@ class MainView(Frame):
         dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         b1 = Button(buttonframe, text="Page 1", command=p1.show)
-        b2 = Button(buttonframe, text="Page 2", command=p2.show)
+        b2 = Button(buttonframe, text="Create diet plan", command=p2.show)
         b3 = Button(
             buttonframe,
-            text="Page 3",
+            text="Food list",
             command=lambda: [self.p3.refresh(), self.p3.show()],
         )
-        b4 = Button(buttonframe, text="Diet test", command=dietPlannerListPage.show)
+        b4 = Button(
+            buttonframe, text="Create new food", command=dietPlannerListPage.show
+        )
 
         b1.pack(side="left")
         b2.pack(side="left")
