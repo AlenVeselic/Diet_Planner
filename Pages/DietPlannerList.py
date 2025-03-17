@@ -169,7 +169,7 @@ class DietPlannerList(Page):
         )
         addButton.grid(column=3, row=4, sticky=E)
 
-        removeButton = ttk.Button(
+        cancelButton = ttk.Button(
             foodFrame,
             text="Cancel",
             command=lambda: [
@@ -182,7 +182,7 @@ class DietPlannerList(Page):
                 self.root.p3.show(),
             ],
         )
-        removeButton.grid(column=1, row=4, sticky=W)
+        cancelButton.grid(column=1, row=4, sticky=W)
 
         # allFoodList = ttk.Frame(foodFrame, padding="5")
         # allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
