@@ -7,7 +7,7 @@ import dietPlanner
 
 class Page3(Page):
     foodData = None
-    currentLabels = None
+    currentFrames = None
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
@@ -32,11 +32,32 @@ class Page3(Page):
         self.allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
 
         ttk.Label(self.allFoodList, text="All food items").pack()
-        self.currentLabels = []
+        self.currentFrames = []
         for item in self.foodData["items"]:
-            label = ttk.Label(self.allFoodList, text=item["name"])
+
+            itemFrame = ttk.Frame(self.allFoodList)
+            itemFrame.pack()
+
+            label = ttk.Label(itemFrame, text=item["name"])
             label.pack()
-            self.currentLabels.append(label)
+
+            trashButton = ttk.Button(
+                itemFrame,
+                text="trash",
+                command=lambda: [
+                    #                dietPlanner.modifyShelve(
+                    #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
+                    #                ),
+                    self.refresh(),
+                    # self.getItems(),
+                    self.update(),
+                    self.root.p1.show(),
+                    self.root.p1.setItemToDelete(item),
+                ],
+            )
+            trashButton.pack()
+
+            self.currentFrames.append(itemFrame)
 
         foodFrame.grid_rowconfigure(0, weight=1)
         foodFrame.grid_columnconfigure(0, weight=1)
@@ -46,11 +67,32 @@ class Page3(Page):
     def refresh(self):
         self.foodData = dietPlanner.getShelve()
 
-        for label in self.currentLabels:
-            label.pack_forget()
+        for frame in self.currentFrames:
+            frame.pack_forget()
 
-        self.currentLabels = []
+        self.currentFrames = []
         for item in self.foodData["items"]:
-            label = ttk.Label(self.allFoodList, text=item["name"])
+
+            itemFrame = ttk.Frame(self.allFoodList)
+            itemFrame.pack()
+
+            label = ttk.Label(itemFrame, text=item["name"])
             label.pack()
-            self.currentLabels.append(label)
+
+            trashButton = ttk.Button(
+                itemFrame,
+                text="trash",
+                command=lambda: [
+                    #                dietPlanner.modifyShelve(
+                    #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
+                    #                ),
+                    self.refresh(),
+                    # self.getItems(),
+                    self.update(),
+                    self.root.p1.show(),
+                    self.root.p1.setItemToDelete(item),
+                ],
+            )
+            trashButton.pack()
+
+            self.currentFrames.append(itemFrame)

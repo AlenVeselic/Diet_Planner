@@ -8,6 +8,7 @@ import dietPlanner
 class Page1(Page):
     item = None
     label = None
+
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
         self.label = Label(self, text="No item selected for deletion?")
@@ -47,11 +48,8 @@ class Page1(Page):
     def refresh(self):
         self.foodData = dietPlanner.getShelve()
         self.root.update()
-        
+
     def setItemToDelete(self, item):
         self.item = item
 
-        self.label["text"] = f"Are you sure you want to delete {self.item["name"]} ?"
-
-        
-        
+        self.label["text"] = f"Are you sure you want to delete { self.item } ?"
