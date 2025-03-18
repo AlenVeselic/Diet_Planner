@@ -14,8 +14,37 @@ class DietPlannerList(Page):
     subcategoryVar: StringVar = None
     curSubCat: StringVar = None
     itemVar: StringVar = None
+    inputVar: StringVar = None
 
     foodData = None
+
+    item = None
+
+    def setItemToEdit(self, item):
+
+        self.item = item
+
+        subCategory = dietPlanner.getCategoryFromId(
+            self.foodData["categories"], item["subcategory_id"]
+        )
+        # self.subcategoryBox.selection_set(subCategory["name"])
+        # self.curSubCat.set(subCategory)
+        
+        self.curSubCat.set(subCategory["name"])
+        self.subcategoryVar.set(subCategory["name"])
+
+        self.getItems(subCategory=subCategory["name"])
+
+        self.inputVar.set(item["name"])
+
+    def reset(self):
+        self.item = None
+
+        self.curMainCat.set("")
+        self.categoryVar.set("")
+        self.curSubCat.set("")
+        self.subcategoryVar.set("")
+        self.inputVar.set("")
 
     def getSubcategories(self, *args, mainCategory=None):
 
@@ -25,11 +54,14 @@ class DietPlannerList(Page):
         # if root.focus_get() == mainCategoryBox: # checks wether the correct listbox is in focus
 
         # subcategoryVar.set("") # clears the displayed subcategory listbox
-        currentlySelected = (
+        if not mainCategory:
+            currentlySelected = (
             self.mainCategoryBox.selection_get()
         )  # gets the currently selected category
+        else:
+            currentlySelected = mainCategory
         if currentlySelected:
-            nextCategory = self.mainCategoryBox.selection_get()
+            nextCategory = currentlySelected
             # gets the newly selected category
             if nextCategory:
                 if mainCategory:
@@ -52,45 +84,49 @@ class DietPlannerList(Page):
                 self.root.update()
 
     # retrieves the items for the currently selected category and subcategory
-    def getItems(self, *args):
+    def getItems(self, *args, subCategory=None):
 
         logging.debug("\n Get items \n ")
 
-        currentlySelected = self.subcategoryBox.selection_get()
+        if not subCategory:
+            currentlySelected = self.subcategoryBox.selection_get() 
+        else:
+            currentlySelected = subCategory
         if currentlySelected:
-            nextSubCategory = self.subcategoryBox.selection_get()
+            nextSubCategory = currentlySelected
             if nextSubCategory:
                 # sets the newly choosen subcategory
-                if nextSubCategory:
-                    self.curSubCat.set(nextSubCategory)
+                if subCategory:
+                    nextSubCategory = subCategory
+                self.curSubCat.set(nextSubCategory)
 
-                    logging.debug("\n" + str(self.curMainCat.get()) + "\n ")
+                logging.debug("\n" + str(self.curMainCat.get()) + "\n ")
 
-                    logging.debug("\n" + str(self.curSubCat.get()) + "\n")
-                    # sets the items the item listbox needs to display
-                    allItems = self.foodData["items"]
-                    selectedSubCategory = dietPlanner.getCategoryFromName(
-                        self.foodData["categories"], self.curSubCat.get()
+                logging.debug("\n" + str(self.curSubCat.get()) + "\n")
+                # sets the items the item listbox needs to display
+                allItems = self.foodData["items"]
+                selectedSubCategory = dietPlanner.getCategoryFromName(
+                    self.foodData["categories"], self.curSubCat.get()
+                )
+                filteredItems = (
+                    item
+                    for item in allItems
+                    if item["subcategory_id"] == selectedSubCategory["category_id"]
+                )
+                filteredItemNames = [item["name"] for item in filteredItems]
+                # self.itemVar.set(filteredItemNames)
+
+                if not self.curMainCat.get():
+                    mainCategoryOfSubcategory = dietPlanner.getCategoryFromId(
+                        self.foodData["categories"],
+                        selectedSubCategory["parent_id"],
                     )
-                    filteredItems = (
-                        item
-                        for item in allItems
-                        if item["subcategory_id"] == selectedSubCategory["category_id"]
-                    )
-                    filteredItemNames = [item["name"] for item in filteredItems]
-                    # self.itemVar.set(filteredItemNames)
 
-                    if not self.curMainCat.get():
-                        mainCategoryOfSubcategory = dietPlanner.getCategoryFromId(
-                            self.foodData["categories"],
-                            selectedSubCategory["parent_id"],
-                        )
+                    self.curMainCat.set(mainCategoryOfSubcategory["name"])
+                    self.categoryVar.set(self.curMainCat.get())
 
-                        self.curMainCat.set(mainCategoryOfSubcategory["name"])
-                        self.categoryVar.set(self.curMainCat.get())
-
-                        self.getSubcategories(mainCategory=self.categoryVar.get())
-                        # self.subcategoryBox.select_set(self.curMainCat.get())
+                    self.getSubcategories(mainCategory=self.categoryVar.get())
+                    # self.subcategoryBox.select_set(self.curMainCat.get())
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
@@ -150,24 +186,42 @@ class DietPlannerList(Page):
 
         # item entry section
         ttk.Label(foodFrame, text="Item name entry").grid(column=3, row=1)
-        inputVar = StringVar()
-        inputEntry = ttk.Entry(foodFrame, textvariable=inputVar)
+        self.inputVar = StringVar()
+        inputEntry = ttk.Entry(foodFrame, textvariable=self.inputVar)
         inputEntry.grid(column=3, row=2, sticky=(N, W, E, S))
 
-        # addition and removal button
-        addButton = ttk.Button(
-            foodFrame,
-            text="Add Item",
-            command=lambda: [
-                dietPlanner.modifyShelve(
-                    "add", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                ),
-                self.refresh(),
-                # self.getItems(),
-                self.root.update(),
-            ],
-        )
-        addButton.grid(column=3, row=4, sticky=E)
+        if not self.item:
+            # addition button
+            addButton = ttk.Button(
+                foodFrame,
+                text="Add Item",
+                command=lambda: [
+                    dietPlanner.modifyShelve(
+                        "add", self.curMainCat.get(), self.curSubCat.get(), self.inputVar.get()
+                    ),
+                    self.refresh(),
+                    # self.getItems(),
+                    self.root.update(),
+                    self.reset(),
+                ],
+            )
+            addButton.grid(column=3, row=4, sticky=E)
+        else:
+            # edit button
+            editButton = ttk.Button(
+                foodFrame,
+                text="Edit Item",
+                command=lambda: [
+                    dietPlanner.modifyShelve(
+                        "edit", self.curMainCat.get(), self.curSubCat.get(), self.inputVar.get()
+                    ),
+                    self.refresh(),
+                    # self.getItems(),
+                    self.root.update(),
+                    self.reset(),
+                ],
+            )
+            editButton.grid(column=3, row=4, sticky=E)
 
         cancelButton = ttk.Button(
             foodFrame,
@@ -180,6 +234,7 @@ class DietPlannerList(Page):
                 # self.getItems(),
                 self.update(),
                 self.root.p3.show(),
+                self.reset(),
             ],
         )
         cancelButton.grid(column=1, row=4, sticky=W)
@@ -215,3 +270,4 @@ class DietPlannerList(Page):
     def refresh(self):
         self.foodData = dietPlanner.getShelve()
         self.root.update()
+        #self.reset()

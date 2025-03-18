@@ -22,6 +22,19 @@ class ItemFrame(Frame):
         label = ttk.Label(self, text=self.item["name"])
         label.pack()
 
+        editButton = ttk.Button(
+            self,
+            text="edit",
+            command=lambda: [
+                self.page.refresh(),
+                self.update(),
+                self.root.dietPlannerListPage.show(),
+                self.root.dietPlannerListPage.setItemToEdit(item)
+            ]
+        )
+
+        editButton.pack()
+
         trashButton = ttk.Button(
             self,
             text="trash",

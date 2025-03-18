@@ -28,13 +28,14 @@ def refreshData(*args):
 class MainView(Frame):
     p1 = None
     p3 = None
+    dietPlannerListPage = None
 
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
         self.p1 = Page1(self, root)
         p2 = Page2(self, root)
         self.p3 = Page3(self, root)
-        dietPlannerListPage = DietPlannerList(self, root)
+        self.dietPlannerListPage = DietPlannerList(self, root)
 
         buttonframe = Frame(self)
         container = Frame(self)
@@ -44,7 +45,7 @@ class MainView(Frame):
         self.p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         b1 = Button(buttonframe, text="Page 1", command=self.p1.show)
         b2 = Button(buttonframe, text="Create diet plan", command=p2.show)
@@ -54,7 +55,7 @@ class MainView(Frame):
             command=lambda: [self.p3.refresh(), self.p3.show()],
         )
         b4 = Button(
-            buttonframe, text="Create new food", command=dietPlannerListPage.show
+            buttonframe, text="Create new food", command=self.dietPlannerListPage.show
         )
 
         b1.pack(side="left")
