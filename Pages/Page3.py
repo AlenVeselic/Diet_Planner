@@ -5,6 +5,40 @@ from Pages.Page_Class import Page
 import dietPlanner
 
 
+class ItemFrame(Frame):
+    item = None
+    parent = None
+    root = None
+    page = None
+
+    def __init__(self, parent, item, root, page):
+        Frame.__init__(self, parent)
+
+        self.item = item
+        self.parent = parent
+        self.root = root
+        self.page = page
+
+        label = ttk.Label(self, text=self.item["name"])
+        label.pack()
+
+        trashButton = ttk.Button(
+            self,
+            text="trash",
+            command=lambda: [
+                #                dietPlanner.modifyShelve(
+                #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
+                #                ),
+                self.page.refresh(),
+                # self.getItems(),
+                self.update(),
+                self.root.p1.show(),
+                self.root.p1.setItemToDelete(item),
+            ],
+        )
+        trashButton.pack()
+
+
 class Page3(Page):
     foodData = None
     currentFrames = None
@@ -35,27 +69,8 @@ class Page3(Page):
         self.currentFrames = []
         for item in self.foodData["items"]:
 
-            itemFrame = ttk.Frame(self.allFoodList)
+            itemFrame = ItemFrame(self.allFoodList, item, self.root, self)
             itemFrame.pack()
-
-            label = ttk.Label(itemFrame, text=item["name"])
-            label.pack()
-
-            trashButton = ttk.Button(
-                itemFrame,
-                text="trash",
-                command=lambda: [
-                    #                dietPlanner.modifyShelve(
-                    #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                    #                ),
-                    self.refresh(),
-                    # self.getItems(),
-                    self.update(),
-                    self.root.p1.show(),
-                    self.root.p1.setItemToDelete(item),
-                ],
-            )
-            trashButton.pack()
 
             self.currentFrames.append(itemFrame)
 
@@ -73,26 +88,7 @@ class Page3(Page):
         self.currentFrames = []
         for item in self.foodData["items"]:
 
-            itemFrame = ttk.Frame(self.allFoodList)
+            itemFrame = ItemFrame(self.allFoodList, item, self.root, self)
             itemFrame.pack()
-
-            label = ttk.Label(itemFrame, text=item["name"])
-            label.pack()
-
-            trashButton = ttk.Button(
-                itemFrame,
-                text="trash",
-                command=lambda: [
-                    #                dietPlanner.modifyShelve(
-                    #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                    #                ),
-                    self.refresh(),
-                    # self.getItems(),
-                    self.update(),
-                    self.root.p1.show(),
-                    self.root.p1.setItemToDelete(item),
-                ],
-            )
-            trashButton.pack()
 
             self.currentFrames.append(itemFrame)

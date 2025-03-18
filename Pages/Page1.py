@@ -34,13 +34,17 @@ class Page1(Page):
             self,
             text="Delete",
             command=lambda: [
-                #                dietPlanner.modifyShelve(
-                #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                #                ),
+                dietPlanner.modifyShelve(
+                    "del",
+                    self.item["category_id"],
+                    self.item["subcategory_id"],
+                    self.item["name"],
+                ),
                 self.refresh(),
                 # self.getItems(),
                 self.update(),
                 self.root.p3.show(),
+                self.root.p3.refresh(),
             ],
         )
         deleteButton.pack()
@@ -52,4 +56,4 @@ class Page1(Page):
     def setItemToDelete(self, item):
         self.item = item
 
-        self.label["text"] = f"Are you sure you want to delete { self.item } ?"
+        self.label["text"] = f"Are you sure you want to delete { self.item['name'] } ?"
