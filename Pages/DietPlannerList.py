@@ -20,6 +20,9 @@ class DietPlannerList(Page):
 
     item = None
 
+    actionButton = None
+    foodFrame = None
+
     def setItemToEdit(self, item):
 
         self.item = item
@@ -29,13 +32,15 @@ class DietPlannerList(Page):
         )
         # self.subcategoryBox.selection_set(subCategory["name"])
         # self.curSubCat.set(subCategory)
-        
+
         self.curSubCat.set(subCategory["name"])
         self.subcategoryVar.set(subCategory["name"])
 
         self.getItems(subCategory=subCategory["name"])
 
         self.inputVar.set(item["name"])
+
+        self.refresh()
 
     def reset(self):
         self.item = None
@@ -56,8 +61,8 @@ class DietPlannerList(Page):
         # subcategoryVar.set("") # clears the displayed subcategory listbox
         if not mainCategory:
             currentlySelected = (
-            self.mainCategoryBox.selection_get()
-        )  # gets the currently selected category
+                self.mainCategoryBox.selection_get()
+            )  # gets the currently selected category
         else:
             currentlySelected = mainCategory
         if currentlySelected:
@@ -89,7 +94,7 @@ class DietPlannerList(Page):
         logging.debug("\n Get items \n ")
 
         if not subCategory:
-            currentlySelected = self.subcategoryBox.selection_get() 
+            currentlySelected = self.subcategoryBox.selection_get()
         else:
             currentlySelected = subCategory
         if currentlySelected:
@@ -141,39 +146,39 @@ class DietPlannerList(Page):
         test.configure("TestFrame", background="light-gray")
 
         # frame that will hold then food input programs
-        foodFrame = ttk.Frame(self, padding="5")
-        foodFrame.grid(column=1, row=1, sticky=(N, W, E, S))
+        self.foodFrame = ttk.Frame(self, padding="5")
+        self.foodFrame.grid(column=1, row=1, sticky=(N, W, E, S))
 
         # main category select section
-        ttk.Label(foodFrame, text="Main categories").grid(column=1, row=1)
+        ttk.Label(self.foodFrame, text="Main categories").grid(column=1, row=1)
 
         categories = list(
             dietPlanner.getMainCategoriesFromCategories(self.foodData["categories"])
         )
         self.categoryVar = StringVar()
         self.mainCategoryBox = ttk.Combobox(
-            foodFrame, textvariable=self.categoryVar, values=categories
+            self.foodFrame, textvariable=self.categoryVar, values=categories
         )
         # mainCategoryBox.pack(fill=BOTH, expand = True)
         self.mainCategoryBox.grid(column=1, row=2, sticky=(N, W, E, S))
 
         # mainCategoryBox["bg"] = "white"
 
-        foodFrame.grid_columnconfigure(1, weight=1)
-        foodFrame.grid_rowconfigure(2, weight=0)
+        self.foodFrame.grid_columnconfigure(1, weight=1)
+        self.foodFrame.grid_rowconfigure(2, weight=0)
 
-        foodFrame.grid_columnconfigure(2, weight=1)
-        foodFrame.grid_columnconfigure(3, weight=1)
+        self.foodFrame.grid_columnconfigure(2, weight=1)
+        self.foodFrame.grid_columnconfigure(3, weight=1)
 
         # subcategory selection section
-        ttk.Label(foodFrame, text="Subcategories").grid(column=2, row=1)
+        ttk.Label(self.foodFrame, text="Subcategories").grid(column=2, row=1)
 
         subcategories = list(
             dietPlanner.getAllSubcategoriesFromCategories(self.foodData["categories"])
         )
         self.subcategoryVar = StringVar()
         self.subcategoryBox = ttk.Combobox(
-            foodFrame, textvariable=self.subcategoryVar, values=subcategories
+            self.foodFrame, textvariable=self.subcategoryVar, values=subcategories
         )
         self.subcategoryBox.grid(column=2, row=2, sticky=(N, W, E, S))
 
@@ -185,56 +190,62 @@ class DietPlannerList(Page):
         # itemBox.grid(column=3, row=2, rowspan=2, sticky=(N, W, E, S))
 
         # item entry section
-        ttk.Label(foodFrame, text="Item name entry").grid(column=3, row=1)
+        ttk.Label(self.foodFrame, text="Item name entry").grid(column=3, row=1)
         self.inputVar = StringVar()
-        inputEntry = ttk.Entry(foodFrame, textvariable=self.inputVar)
+        inputEntry = ttk.Entry(self.foodFrame, textvariable=self.inputVar)
         inputEntry.grid(column=3, row=2, sticky=(N, W, E, S))
 
         if not self.item:
             # addition button
-            addButton = ttk.Button(
-                foodFrame,
+            self.actionButton = ttk.Button(
+                self.foodFrame,
                 text="Add Item",
                 command=lambda: [
                     dietPlanner.modifyShelve(
-                        "add", self.curMainCat.get(), self.curSubCat.get(), self.inputVar.get()
+                        "add",
+                        self.curMainCat.get(),
+                        self.curSubCat.get(),
+                        self.inputVar.get(),
                     ),
+                    self.reset(),
                     self.refresh(),
                     # self.getItems(),
                     self.root.update(),
-                    self.reset(),
                 ],
             )
-            addButton.grid(column=3, row=4, sticky=E)
+            self.actionButton.grid(column=3, row=4, sticky=E)
         else:
             # edit button
-            editButton = ttk.Button(
-                foodFrame,
+            self.actionButton = ttk.Button(
+                self.foodFrame,
                 text="Edit Item",
                 command=lambda: [
                     dietPlanner.modifyShelve(
-                        "edit", self.curMainCat.get(), self.curSubCat.get(), self.inputVar.get()
+                        "edit",
+                        self.curMainCat.get(),
+                        self.curSubCat.get(),
+                        self.inputVar.get(),
                     ),
+                    self.reset(),
                     self.refresh(),
                     # self.getItems(),
                     self.root.update(),
-                    self.reset(),
                 ],
             )
-            editButton.grid(column=3, row=4, sticky=E)
+            self.actionButton.grid(column=3, row=4, sticky=E)
 
         cancelButton = ttk.Button(
-            foodFrame,
+            self.foodFrame,
             text="Cancel",
             command=lambda: [
                 #                dietPlanner.modifyShelve(
                 #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
                 #                ),
+                self.reset(),
                 self.refresh(),
                 # self.getItems(),
                 self.update(),
                 self.root.p3.show(),
-                self.reset(),
             ],
         )
         cancelButton.grid(column=1, row=4, sticky=W)
@@ -247,10 +258,10 @@ class DietPlannerList(Page):
         # for item in foodData["items"]:
         #     ttk.Label(allFoodList, text=item["name"]).pack()
 
-        foodFrame.grid_rowconfigure(0, weight=1)
-        foodFrame.grid_columnconfigure(0, weight=1)
-        foodFrame.grid_rowconfigure(4, weight=1)
-        foodFrame.grid_columnconfigure(6, weight=1)
+        self.foodFrame.grid_rowconfigure(0, weight=1)
+        self.foodFrame.grid_columnconfigure(0, weight=1)
+        self.foodFrame.grid_rowconfigure(4, weight=1)
+        self.foodFrame.grid_columnconfigure(6, weight=1)
 
         # listbox selection bindings
 
@@ -268,6 +279,48 @@ class DietPlannerList(Page):
         self.grid_columnconfigure(2, weight=1)
 
     def refresh(self):
+
+        self.actionButton.grid_forget()
+
+        if not self.item:
+            # addition button
+            self.actionButton = ttk.Button(
+                self.foodFrame,
+                text="Add Item",
+                command=lambda: [
+                    dietPlanner.modifyShelve(
+                        "add",
+                        self.curMainCat.get(),
+                        self.curSubCat.get(),
+                        self.inputVar.get(),
+                    ),
+                    self.reset(),
+                    self.refresh(),
+                    # self.getItems(),
+                    self.root.update(),
+                ],
+            )
+            self.actionButton.grid(column=3, row=4, sticky=E)
+        else:
+            # edit button
+            self.actionButton = ttk.Button(
+                self.foodFrame,
+                text="Edit Item",
+                command=lambda: [
+                    dietPlanner.modifyShelve(
+                        "edit",
+                        self.curMainCat.get(),
+                        self.curSubCat.get(),
+                        self.inputVar.get(),
+                    ),
+                    self.reset(),
+                    self.refresh(),
+                    # self.getItems(),
+                    self.root.update(),
+                ],
+            )
+            self.actionButton.grid(column=3, row=4, sticky=E)
+
         self.foodData = dietPlanner.getShelve()
         self.root.update()
-        #self.reset()
+        # self.reset()
