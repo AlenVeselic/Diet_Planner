@@ -5,7 +5,7 @@ from Pages.Page_Class import Page
 import dietPlanner
 
 
-class Page2(Page):
+class DietPlanPage(Page):
     label = None
 
     def __init__(self, root, *args, **kwargs):

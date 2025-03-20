@@ -24,7 +24,7 @@ class DeleteItemPage(Page):
                 self.refresh(),
                 # self.getItems(),
                 self.update(),
-                self.root.p3.show(),
+                self.root.foodList.show(),
             ],
         )
 
@@ -43,8 +43,8 @@ class DeleteItemPage(Page):
                 self.refresh(),
                 # self.getItems(),
                 self.update(),
-                self.root.p3.show(),
-                self.root.p3.refresh(),
+                self.root.foodList.show(),
+                self.root.foodList.refresh(),
             ],
         )
         deleteButton.pack()

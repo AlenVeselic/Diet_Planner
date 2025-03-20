@@ -52,7 +52,7 @@ class ItemFrame(Frame):
         trashButton.pack()
 
 
-class Page3(Page):
+class FoodListPage(Page):
     foodData = None
     currentFrames = None
 

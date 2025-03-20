@@ -245,7 +245,7 @@ class DietPlannerList(Page):
                 self.refresh(),
                 # self.getItems(),
                 self.update(),
-                self.root.p3.show(),
+                self.root.foodList.show(),
             ],
         )
         cancelButton.grid(column=1, row=4, sticky=W)

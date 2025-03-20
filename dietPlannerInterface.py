@@ -13,8 +13,8 @@ import logging
 from Pages.Page_Class import Page
 
 from Pages.DeleteItemPage import DeleteItemPage
-from Pages.Page2 import Page2
-from Pages.Page3 import Page3
+from Pages.DietPlan import DietPlanPage
+from Pages.FoodListPage import FoodListPage
 from Pages.DietPlannerList import DietPlannerList
 
 # getSubcategories - refreshes data and retrieves subcategories for the currently selected category
@@ -27,14 +27,14 @@ def refreshData(*args):
 
 class MainView(Frame):
     deleteItemPage = None
-    p3 = None
+    foodList = None
     dietPlannerListPage = None
 
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
         self.deleteItemPage = DeleteItemPage(self, root)
-        p2 = Page2(self, root)
-        self.p3 = Page3(self, root)
+        dietPlan = DietPlanPage(self, root)
+        self.foodList = FoodListPage(self, root)
         self.dietPlannerListPage = DietPlannerList(self, root)
 
         buttonframe = Frame(self)
@@ -43,16 +43,16 @@ class MainView(Frame):
         container.pack(side="top", fill="both", expand=True)
 
         self.deleteItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        self.p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        dietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.foodList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         b1 = Button(buttonframe, text="Delete Item", command=self.deleteItemPage.show)
-        b2 = Button(buttonframe, text="Create diet plan", command=p2.show)
+        b2 = Button(buttonframe, text="Create diet plan", command=dietPlan.show)
         b3 = Button(
             buttonframe,
             text="Food list",
-            command=lambda: [self.p3.refresh(), self.p3.show()],
+            command=lambda: [self.foodList.refresh(), self.foodList.show()],
         )
         b4 = Button(
             buttonframe, text="Create new food", command=self.dietPlannerListPage.show
