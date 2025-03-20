@@ -255,7 +255,8 @@ def getCategoryFromId(allCategories, id):
             return category
 
 
-def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList):
+# TODO: Splinter this into separate functions
+def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList, itemId=None):
 
     # gets all of the currently stored food data
 
@@ -276,6 +277,7 @@ def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList):
 
     items = foods["items"]
     latestItemId = items[-1]["item_id"]
+    
 
     selectedCategory = getCategoryFromName(foods["categories"], selectedCategoryName)
 
@@ -283,9 +285,14 @@ def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList):
         foods["categories"], selectedSubCategoryName
     )
 
-    foundItem = next(
-        (item for item in foods["items"] if item["name"] == itemList), None
-    )
+    if not itemId:
+        foundItem = next(
+            (item for item in foods["items"] if item["name"] == itemList), None
+        )
+    else:
+        foundItem = next(
+            (item for item in foods["items"] if item["item_id"] == itemId), None
+        )
     if mode == "add":
         if foundItem:
             print("Item already exists")
@@ -313,6 +320,14 @@ def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList):
             return
         else:
             foods["items"].remove(foundItem)
+    elif mode == "edit":
+        if not foundItem:
+            print("Item doesn't exist")
+            return
+        else:
+            foundItem["name"] = itemList
+            foundItem["category_id"] = selectedCategory["category_id"]
+            foundItem["subcategory_id"] = selectedSubcategory["category_id"]
 
     # in the end whatever changes have been made are saved to the shelve
     # TODO: check whether any values have actually changed to decide if it's even worth saving
