@@ -256,7 +256,9 @@ def getCategoryFromId(allCategories, id):
 
 
 # TODO: Splinter this into separate functions
-def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList, itemId=None):
+def modifyShelve(
+    mode, selectedCategoryName, selectedSubCategoryName, itemList, itemId=None
+):
 
     # gets all of the currently stored food data
 
@@ -277,7 +279,6 @@ def modifyShelve(mode, selectedCategoryName, selectedSubCategoryName, itemList, 
 
     items = foods["items"]
     latestItemId = items[-1]["item_id"]
-    
 
     selectedCategory = getCategoryFromName(foods["categories"], selectedCategoryName)
 
