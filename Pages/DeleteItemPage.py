@@ -5,7 +5,7 @@ from Pages.Page_Class import Page
 import dietPlanner
 
 
-class Page1(Page):
+class DeleteItemPage(Page):
     item = None
     label = None
 

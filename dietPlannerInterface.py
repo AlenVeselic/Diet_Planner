@@ -12,7 +12,7 @@ import logging
 
 from Pages.Page_Class import Page
 
-from Pages.Page1 import Page1
+from Pages.DeleteItemPage import DeleteItemPage
 from Pages.Page2 import Page2
 from Pages.Page3 import Page3
 from Pages.DietPlannerList import DietPlannerList
@@ -26,13 +26,13 @@ def refreshData(*args):
 
 
 class MainView(Frame):
-    p1 = None
+    deleteItemPage = None
     p3 = None
     dietPlannerListPage = None
 
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
-        self.p1 = Page1(self, root)
+        self.deleteItemPage = DeleteItemPage(self, root)
         p2 = Page2(self, root)
         self.p3 = Page3(self, root)
         self.dietPlannerListPage = DietPlannerList(self, root)
@@ -42,12 +42,12 @@ class MainView(Frame):
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
 
-        self.p1.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.deleteItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
-        b1 = Button(buttonframe, text="Page 1", command=self.p1.show)
+        b1 = Button(buttonframe, text="Delete Item", command=self.deleteItemPage.show)
         b2 = Button(buttonframe, text="Create diet plan", command=p2.show)
         b3 = Button(
             buttonframe,
@@ -65,7 +65,7 @@ class MainView(Frame):
             side="left",
         )
 
-        self.p1.show()
+        self.deleteItemPage.show()
 
 
 # if __name__ == "__main__":

@@ -29,8 +29,8 @@ class ItemFrame(Frame):
                 self.page.refresh(),
                 self.update(),
                 self.root.dietPlannerListPage.show(),
-                self.root.dietPlannerListPage.setItemToEdit(item)
-            ]
+                self.root.dietPlannerListPage.setItemToEdit(item),
+            ],
         )
 
         editButton.pack()
@@ -45,8 +45,8 @@ class ItemFrame(Frame):
                 self.page.refresh(),
                 # self.getItems(),
                 self.update(),
-                self.root.p1.show(),
-                self.root.p1.setItemToDelete(item),
+                self.root.deleteItemPage.show(),
+                self.root.deleteItemPage.setItemToDelete(item),
             ],
         )
         trashButton.pack()
