@@ -269,7 +269,8 @@ def modifyShelve(
     if foods == {}:
         print("no foods in database")
     else:
-        logging.debug(pprint.pformat(dict(foods)))
+        print("Foods found")
+        # logging.debug(pprint.pformat(dict(foods)))
 
     # This part takes every category that has list type items and saves their lowered key values for easier comparation purposes
 
@@ -286,7 +287,7 @@ def modifyShelve(
         foods["categories"], selectedSubCategoryName
     )
 
-    if not itemId:
+    if itemId is None:
         foundItem = next(
             (item for item in foods["items"] if item["name"] == itemList), None
         )

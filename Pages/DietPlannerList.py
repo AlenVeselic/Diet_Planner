@@ -225,7 +225,7 @@ class DietPlannerList(Page):
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
-                        self.item["item_id"],
+                        itemId = self.item["item_id"],
                     ),
                     self.reset(),
                     self.refresh(),
@@ -313,7 +313,8 @@ class DietPlannerList(Page):
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
-                        self.item["item_id"],
+                        itemId = self.item["item_id"],
+
                     ),
                     self.reset(),
                     self.refresh(),
