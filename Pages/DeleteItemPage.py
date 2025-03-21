@@ -28,7 +28,7 @@ class DeleteItemPage(Page):
             ],
         )
 
-        cancelButton.pack()
+        cancelButton.pack(side=LEFT)
 
         deleteButton = ttk.Button(
             self,
@@ -47,7 +47,7 @@ class DeleteItemPage(Page):
                 self.root.foodList.refresh(),
             ],
         )
-        deleteButton.pack()
+        deleteButton.pack(side=RIGHT)
 
     def refresh(self):
         self.foodData = dietPlanner.getShelve()

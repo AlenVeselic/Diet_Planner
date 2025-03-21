@@ -20,7 +20,7 @@ class ItemFrame(Frame):
         self.page = page
 
         label = ttk.Label(self, text=self.item["name"])
-        label.pack()
+        label.pack(side=LEFT)
 
         editButton = ttk.Button(
             self,
@@ -33,7 +33,7 @@ class ItemFrame(Frame):
             ],
         )
 
-        editButton.pack()
+        editButton.pack(side=LEFT)
 
         trashButton = ttk.Button(
             self,
@@ -49,7 +49,7 @@ class ItemFrame(Frame):
                 self.root.deleteItemPage.setItemToDelete(item),
             ],
         )
-        trashButton.pack()
+        trashButton.pack(side=LEFT)
 
 
 class FoodListPage(Page):
