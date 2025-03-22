@@ -25,20 +25,20 @@ def refreshData(*args):
     foodData = dietPlanner.getShelve()
 
 
-class MainView(Frame):
+class MainView(ttk.Frame):
     deleteItemPage = None
     foodList = None
     dietPlannerListPage = None
 
     def __init__(self, *args, **kwargs):
-        Frame.__init__(self, *args, **kwargs)
+        ttk.Frame.__init__(self, *args, **kwargs)
         self.deleteItemPage = DeleteItemPage(self, root)
         dietPlan = DietPlanPage(self, root)
         self.foodList = FoodListPage(self, root)
         self.dietPlannerListPage = DietPlannerList(self, root)
 
-        buttonframe = Frame(self)
-        container = Frame(self)
+        buttonframe = ttk.Frame(self)
+        container = ttk.Frame(self)
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
 

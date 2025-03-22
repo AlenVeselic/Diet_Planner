@@ -1,11 +1,13 @@
 from tkinter import *
 
+import ttkbootstrap as ttk
 
-class Page(Frame):
+
+class Page(ttk.Frame):
     root = None
 
     def __init__(self, root, *args, **kwargs):
-        Frame.__init__(self, *args, **kwargs)
+        ttk.Frame.__init__(self, *args, **kwargs)
         self.root = root
 
     def show(self):

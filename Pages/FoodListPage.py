@@ -33,7 +33,7 @@ class ItemFrame(Frame):
             ],
         )
 
-        editButton.pack(side=LEFT)
+        editButton.pack(side=RIGHT)
 
         trashButton = ttk.Button(
             self,
@@ -49,7 +49,7 @@ class ItemFrame(Frame):
                 self.root.deleteItemPage.setItemToDelete(item),
             ],
         )
-        trashButton.pack(side=LEFT)
+        trashButton.pack(side=RIGHT)
 
 
 class FoodListPage(Page):
@@ -60,37 +60,22 @@ class FoodListPage(Page):
         Page.__init__(self, root, *args, **kwargs)
 
         self.foodData = dietPlanner.getShelve()
-        # label = Label(self, text="This is page 3")
-        # label.pack(side="top", fill="both", expand=True)
 
         foodFrame = ttk.Frame(self, padding="5")
         foodFrame.pack(side="top", fill="both", expand=True)
-        # foodFrame.grid(column=1, row=1, sticky=(N, W, E, S))
-
-        # mainCategoryBox["bg"] = "white"
-
-        foodFrame.grid_columnconfigure(1, weight=1)
-        foodFrame.grid_rowconfigure(2, weight=1)
-
-        foodFrame.grid_columnconfigure(2, weight=1)
-        foodFrame.grid_columnconfigure(3, weight=1)
 
         self.allFoodList = ttk.Frame(foodFrame, padding="5")
-        self.allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
+        self.allFoodList.pack(side="top", fill="both", expand=True)
 
-        ttk.Label(self.allFoodList, text="All food items").pack()
+        label = ttk.Label(self.allFoodList, text="All food items")
+        label.pack(side="top")
         self.currentFrames = []
         for item in self.foodData["items"]:
 
             itemFrame = ItemFrame(self.allFoodList, item, self.root, self)
-            itemFrame.pack()
+            itemFrame.pack(fill="x", expand=True)
 
             self.currentFrames.append(itemFrame)
-
-        foodFrame.grid_rowconfigure(0, weight=1)
-        foodFrame.grid_columnconfigure(0, weight=1)
-        foodFrame.grid_rowconfigure(4, weight=1)
-        foodFrame.grid_columnconfigure(6, weight=1)
 
     def refresh(self):
         self.foodData = dietPlanner.getShelve()
@@ -102,6 +87,6 @@ class FoodListPage(Page):
         for item in self.foodData["items"]:
 
             itemFrame = ItemFrame(self.allFoodList, item, self.root, self)
-            itemFrame.pack()
+            itemFrame.pack(fill="x", expand=True)
 
             self.currentFrames.append(itemFrame)
