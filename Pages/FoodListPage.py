@@ -55,16 +55,36 @@ class ItemFrame(Frame):
 class FoodListPage(Page):
     foodData = None
     currentFrames = None
+    canvas = None
+
+    foodFrame = None
+    verticalScrollBar = None
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
 
         self.foodData = dietPlanner.getShelve()
 
-        foodFrame = ttk.Frame(self, padding="5")
-        foodFrame.pack(side="top", fill="both", expand=True)
+        self.canvas = Canvas(self, borderwidth=0, background="white")
 
-        self.allFoodList = ttk.Frame(foodFrame, padding="5")
+        self.foodFrame = ttk.Frame(self.canvas, padding="5")
+        # self.foodFrame.pack(side="top", fill="both", expand=True)
+
+        self.verticalScrollBar = Scrollbar(
+            self, orient=VERTICAL, command=self.canvas.yview
+        )
+
+        self.canvas.configure(yscrollcommand=self.verticalScrollBar.set)
+
+        self.verticalScrollBar.pack(side=RIGHT, fill=Y)
+        self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
+        self.canvas.create_window(
+            (4, 4), window=self.foodFrame, anchor=NW, tags="self.foodFrame"
+        )
+
+        self.foodFrame.bind("<Configure>", self.onFrameConfigure)
+
+        self.allFoodList = ttk.Frame(self.foodFrame, padding="5")
         self.allFoodList.pack(side="top", fill="both", expand=True)
 
         label = ttk.Label(self.allFoodList, text="All food items")
@@ -76,6 +96,10 @@ class FoodListPage(Page):
             itemFrame.pack(fill="x", expand=True)
 
             self.currentFrames.append(itemFrame)
+
+    def onFrameConfigure(self, event):
+        """Reset the scroll region to encompass the inner frame"""
+        self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
 
     def refresh(self):
         self.foodData = dietPlanner.getShelve()
