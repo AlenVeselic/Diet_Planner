@@ -364,14 +364,17 @@ def createPlan(length, recipeNum, takeOutNum):
         category for category in food["categories"] if category["parent_id"] == None
     ]
 
+    plan["Days"] = []
+
     for day in range(
         length
     ):  # Day loop, generates a dictionary with the current day's value as its key
-        plan["Day " + str(day)] = {}
+        plan["Days"].append([])
+        plan["Days"][day] = {}
+        plan["Days"][day]["Meals"] = []
         for meal in range(
             3
         ):  # Meal loop, generates a dictionary with the current meal's value, also chooses the meal's food
-
             while True:  # this loop chooses current meal's food category,
                 # if it chooses one of the categories that have expended their occurence numbers it loops again until it chooses an available category
                 category = random.choice(categories)
@@ -384,10 +387,10 @@ def createPlan(length, recipeNum, takeOutNum):
                     continue
                 else:
                     break
+            plan["Days"][day]["Meals"].append({})
             if (
                 category["name"] == "recipes"
             ):  # this conditional statement chooses the meal's food item, recipes have a different approach to them adding their attributes to the end
-                plan["Day " + str(day)]["Meal " + str(meal)] = {}
 
                 categoryFood = [
                     item
@@ -397,9 +400,7 @@ def createPlan(length, recipeNum, takeOutNum):
 
                 foodChoice = random.choice(categoryFood)
 
-                plan["Day " + str(day)]["Meal " + str(meal)][
-                    foodChoice["name"]
-                ] = foodChoice
+                plan["Days"][day]["Meals"][meal][foodChoice["name"]] = foodChoice
                 recipeCount += 1  # with the addition of a recipe we add a notch to the recipe count
             else:
 
@@ -423,11 +424,11 @@ def createPlan(length, recipeNum, takeOutNum):
                 foodChoice = random.choice(items)
 
                 if category["name"].lower() == "smallAddition":
-                    plan["Day " + str(day)]["Meal " + str(meal)] = (
+                    plan["Days"][day]["Meals"][meal] = (
                         category["name"] + "\\" + foodChoice["name"]
                     )
                 else:
-                    plan["Day " + str(day)]["Meal " + str(meal)] = (
+                    plan["Days"][day]["Meals"][meal] = (
                         subcategory["name"] + "\\" + foodChoice["name"]
                     )
                     if category["name"].lower() == "takeout":
