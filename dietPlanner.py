@@ -2,50 +2,26 @@
 
 # Diet Planner - A program that generates a diet plan from all your favorite foods!
 
+# TODO:Review the following comments
+
+# The Main Categories give you an example of the categories used in this script:
+#   "takeOut": Subcategories - restaurants, FoodItems - favorite items to order,
+#   "recipes": would hold a person's favorite recipes. For each recipe the following attributes would have to be filled in:
+#           "preparationType", "ingredients", "instructions" and "timeToPrepare".
+#   This is so that the user can be ensured that they will be able to prepare the recipe using only the app.
+#       # TODO: A recipe ingredient can be an item from any other main category, even takeout. This relationship is optional. It can also just be a string.
+#
+#   "readyMade": would hold prepared, usually frozen, instant, or just ready for consumption refrigeratable items that can be bought in stores and prepared in a short amount of time.
+#   Subcategories - Grocery store, Items -
+#               # TODO: Evaluate which foods would really fit in Ready Made and which in recipes.
+#   "smallAddition": are minor additions to a meal, like a fruit, vegetable, dairy products. They can usually be consumed by themselves.
+#   TODO: "ingredient": New category for items that can only be ingredients in food synergies/recipes that cannot be consumed by themselves. For example: herbs and spices, oils, foods that need to be precooked before consumption
+
+
+# TODO: have all items have at least some attributes (prices, timeworth, foodType)? - LATER NOTE: rather than that just have the same attributes for all item types so that there is a consistent structure.
 
 # Import all the necessities. Shelve for data storage, pprint for printing messier strings(dictionaries most of all),
 #  random for choosing foods, logging for debugging
-
-# TODO:Review the following comments
-# the maincategories gives you an example of the categories used in this script:
-#   "takeOut": would hold each restaurant you have ordered from and each item you liked from said restaurant
-#   "recipes": would hold recipes that you can prepare, each recipe its attributes,
-#           these being: "preparationType", "ingredients", "instructions" and "timeToPrepare".
-#           These are subject to change since I haven't gotten any testing done on this yet.
-#           The point of this is to give you all the information you need in order to prepare said recipe.
-#   "readyMade": would hold prepared, usually frozen, instant, or just readily eatable refrigeratable items that can be bought in stores and prepared in a short amount of time.
-#   "smallAddition": are minor additions to a meal, this one is very experimental and subject to change.
-#   TODO: "ingredient": New category for items that can only be ingredients in food synergies/recipes that cannot be eaten by themselves
-
-mainCategories = {
-    "takeOut": ["McDonalds", "Mango", "Astoria", "Takos"],
-    "recipes": [
-        "simple Roast",
-        "Pork, Tallegio and Broccoli Lasagne",
-        "Pork Sarnie",
-        "Hot and Sour Chicken Broth",
-    ],
-    "readyMade": ["Lidl", "Hofer", "Spar", "Tus"],
-    "smallAddition": ["Fruit", "Veggies", "Sauces", "Dairy"],
-}
-
-recipeItemCats = [
-    "preparationType",
-    "ingredients",
-    "instructions",
-    "timeToPrepare",
-]  # a list of attributes for the recipe item dictionaries
-# TODO: have all items have at least some attributes (prices, timeworth, foodType)? - rather just have the same attributes for all item types so that there is a consistent structure.
-
-# Below are the new data structures that will be used to fill out the shelve file replacing mainCategories above
-# After some brainstorming, I've realised that getting all items and configuring then in the GUI would be a hassle, as well as showing all items a list would be a hassle,
-# forcing you to essentially traverse and join all the dictionaries every time you try to work with items separately.
-# Main categories will currently be hardcoded, but in the future they could be added through the GUI
-# A main category is a category with no parent_id, it's the highest level of categorization
-# Main Categories: Take out: time_weight 1, readyMade: time_weight 2, smallAddition: time_weight 1, recipes: time_weight 3
-
-# Generates the structure of the main dictionary, with the recipe category as an exception, because it's not a list
-
 
 import shelve, pprint, random, logging
 from pathlib import Path
@@ -55,6 +31,7 @@ logging.basicConfig(
 )
 logging.debug("Start of program")
 
+
 class Category:
     def __init__(self, category_id, name, parent_id, time_weight):
         self.category_id = category_id
@@ -62,10 +39,29 @@ class Category:
         self.parent_id = parent_id
         self.time_weight = time_weight
 
-category: Category = Category( 0, "", 0, 0)
+
+# Main categories will currently be hardcoded, but in the future they could be added through the GUI
+# A main category is a category with no parent_id, it's the highest level of categorization
+
+
+category: Category = Category(0, "", 0, 0)
+
 
 class FoodItem:
-    def __init__(self, item_id, name, category_id, subcategory_id, preparationType, ingredients, instructions, timeToPrepare, satiation_weight):
+    def __init__(
+        self,
+        item_id,
+        name,
+        category_id,
+        subcategory_id,
+        preparationType,
+        ingredients,
+        instructions,
+        timeToPrepare,
+        # TODO: Implement
+        # satiation_weight, - determines the estimated amount of satiation an item may provide,
+        # url, - optional - provides the url for the food item - this can be the link to the original recipe, article url to buy in an online grocery store or link to the restaurant the item is getting ordered from
+    ):
         self.item_id = item_id
         self.name = name
         self.category_id = category_id
@@ -74,9 +70,12 @@ class FoodItem:
         self.ingredients = ingredients
         self.instructions = instructions
         self.timeToPrepare = timeToPrepare
-        self.satiation_weight = satiation_weight
+        # self.satiation_weight = satiation_weight
+        # self.url = url
 
-itemExample = FoodItem( 0, "",  0,  0, "",  "",  "",  "",  0)
+
+itemExample = FoodItem(0, "", 0, 0, "", "", "", "", 0)
+
 
 # getShelve - Create or open the local shelve holding all foods, categorized in subgroups and return it's contents
 def getShelve():
@@ -99,8 +98,6 @@ def getShelve():
 
 
 # initShelve - Initializes a fresh food data shelve file, with all the needed categories and their respective subcategories
-
-
 def initShelve():
 
     seededDictionary = {}  # reserves the dictionary we are about to fill out
@@ -113,6 +110,7 @@ def initShelve():
     seededDictionary["items"] = items
 
     return seededDictionary
+
 
 def getCategoryFromName(allCategories, categoryName):
     for category in allCategories:
@@ -339,6 +337,7 @@ def getAllSubcategoriesFromCategories(allCategories):
             subCategories.append(category["name"])
     return subCategories
 
+
 def getInitialCategorySeeds():
     return [
         {"category_id": 0, "name": "takeOut", "parent_id": None, "time_weight": 1},
@@ -393,6 +392,7 @@ def getInitialCategorySeeds():
         {"category_id": 19, "name": "Dairy", "parent_id": 3, "time_weight": 1},
         {"category_id": 20, "name": "Bootl's", "parent_id": 0, "time_weight": 1},
     ]
+
 
 def getInitialItemSeeds():
     return [
