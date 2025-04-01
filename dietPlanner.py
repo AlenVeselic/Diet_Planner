@@ -31,7 +31,6 @@ logging.basicConfig(
 )
 logging.debug("Start of program")
 
-
 class Category:
     def __init__(self, category_id, name, parent_id, time_weight):
         self.category_id = category_id
@@ -98,6 +97,8 @@ def getShelve():
 
 
 # initShelve - Initializes a fresh food data shelve file, with all the needed categories and their respective subcategories
+
+
 def initShelve():
 
     seededDictionary = {}  # reserves the dictionary we are about to fill out
@@ -110,7 +111,6 @@ def initShelve():
     seededDictionary["items"] = items
 
     return seededDictionary
-
 
 def getCategoryFromName(allCategories, categoryName):
     for category in allCategories:
@@ -150,8 +150,6 @@ def modifyShelve(
         # logging.debug(pprint.pformat(dict(foods)))
 
     # This part takes every category that has list type items and saves their lowered key values for easier comparation purposes
-
-    listCats = {}
 
     latestItemId = 0
 
@@ -214,6 +212,64 @@ def modifyShelve(
     data = shelve.open("dietData\\dietPlannerData")
     data["foods"] = foods
     data.close()
+
+def addFoodItem(selectedCategoryName, selectedSubCategoryName, itemList):
+    foods = getShelve()
+
+    if foods == {}:
+        print("no foods in database")
+    else:
+        print("Foods found")
+    
+    latestItemId = 0
+
+    items = foods["items"]
+    latestItemId = items[-1]["item_id"]
+
+    selectedCategory = getCategoryFromName(foods["categories"], selectedCategoryName)
+
+    selectedSubcategory = getCategoryFromName(
+        foods["categories"], selectedSubCategoryName
+    )
+
+    foundItem = next(
+        (item for item in foods["items"] if item["name"] == itemList), None
+    )
+
+    if foundItem:
+            print("Item already exists")
+            return
+    else:
+            foods["items"].append(
+                {
+                    "item_id": latestItemId + 1,
+                    "name": itemList,
+                    "category_id": selectedCategory["category_id"],
+                    "subcategory_id": selectedSubcategory["category_id"],
+                    "preparationType": "",
+                    "ingredients": "",
+                    "instructions": "",
+                    "timeToPrepare": "",
+                }
+            )
+    data = shelve.open("dietData\\dietPlannerData")
+    data["foods"] = foods
+    data.close()
+
+def removeItem(itemList):
+    foods = getShelve()
+    if foods == {}:
+        print("no foods in database")
+    else:
+        print("Foods found")
+    return
+def editItem(itemList):
+    foods = getShelve()
+    if foods == {}:
+        print("no foods in database")
+    else:
+        print("Foods found")
+    return
 
 
 # createPlan(length, recipeNum, takeOutNum) - this is the meal plan generation script,
@@ -337,7 +393,6 @@ def getAllSubcategoriesFromCategories(allCategories):
             subCategories.append(category["name"])
     return subCategories
 
-
 def getInitialCategorySeeds():
     return [
         {"category_id": 0, "name": "takeOut", "parent_id": None, "time_weight": 1},
@@ -392,7 +447,6 @@ def getInitialCategorySeeds():
         {"category_id": 19, "name": "Dairy", "parent_id": 3, "time_weight": 1},
         {"category_id": 20, "name": "Bootl's", "parent_id": 0, "time_weight": 1},
     ]
-
 
 def getInitialItemSeeds():
     return [
