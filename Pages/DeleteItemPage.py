@@ -34,8 +34,7 @@ class DeleteItemPage(Page):
             self,
             text="Delete",
             command=lambda: [
-                dietPlanner.modifyShelve(
-                    "del",
+                dietPlanner.removeItem(
                     self.item["category_id"],
                     self.item["subcategory_id"],
                     self.item["name"],

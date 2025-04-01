@@ -31,6 +31,7 @@ logging.basicConfig(
 )
 logging.debug("Start of program")
 
+
 class Category:
     def __init__(self, category_id, name, parent_id, time_weight):
         self.category_id = category_id
@@ -73,7 +74,7 @@ class FoodItem:
         # self.url = url
 
 
-itemExample = FoodItem(0, "", 0, 0, "", "", "", "", 0)
+itemExample = FoodItem(0, "", 0, 0, "", "", "", "")
 
 
 # getShelve - Create or open the local shelve holding all foods, categorized in subgroups and return it's contents
@@ -112,6 +113,7 @@ def initShelve():
 
     return seededDictionary
 
+
 def getCategoryFromName(allCategories, categoryName):
     for category in allCategories:
         if category["name"] == categoryName:
@@ -133,94 +135,16 @@ def getCategoryFromId(allCategories, id):
 #                           itemList - the first value is the items name while the remaining values are the item's attribute values
 #                           )
 # TODO: Splinter this into separate functions
-def modifyShelve(
-    mode, selectedCategoryName, selectedSubCategoryName, itemList, itemId=None
-):
-
-    # gets all of the currently stored food data
-
-    foods = getShelve()
-
-    # Conditional statement which checks wether the shelve contains the structure, if it does not something has gone terribly wrong
-
-    if foods == {}:
-        print("no foods in database")
-    else:
-        print("Foods found")
-        # logging.debug(pprint.pformat(dict(foods)))
-
-    # This part takes every category that has list type items and saves their lowered key values for easier comparation purposes
-
-    latestItemId = 0
-
-    items = foods["items"]
-    latestItemId = items[-1]["item_id"]
-
-    selectedCategory = getCategoryFromName(foods["categories"], selectedCategoryName)
-
-    selectedSubcategory = getCategoryFromName(
-        foods["categories"], selectedSubCategoryName
-    )
-
-    if itemId is None:
-        foundItem = next(
-            (item for item in foods["items"] if item["name"] == itemList), None
-        )
-    else:
-        foundItem = next(
-            (item for item in foods["items"] if item["item_id"] == itemId), None
-        )
-    if mode == "add":
-        if foundItem:
-            print("Item already exists")
-            return
-        else:
-            foods["items"].append(
-                {
-                    "item_id": latestItemId + 1,
-                    "name": itemList,
-                    "category_id": selectedCategory["category_id"],
-                    "subcategory_id": selectedSubcategory["category_id"],
-                    "preparationType": "",
-                    "ingredients": "",
-                    "instructions": "",
-                    "timeToPrepare": "",
-                }
-            )
-
-    elif mode == "del":
-        # deletion goes through the same motions as addition only that instead of adding it deletes the given item
-        # for deletion we only take the item's name
-
-        if not foundItem:
-            print("Item doesn't exist")
-            return
-        else:
-            foods["items"].remove(foundItem)
-    elif mode == "edit":
-        if not foundItem:
-            print("Item doesn't exist")
-            return
-        else:
-            foundItem["name"] = itemList
-            foundItem["category_id"] = selectedCategory["category_id"]
-            foundItem["subcategory_id"] = selectedSubcategory["category_id"]
-
-    # in the end whatever changes have been made are saved to the shelve
-    # TODO: check whether any values have actually changed to decide if it's even worth saving
+def modifyShelve(updatedFoods):
 
     data = shelve.open("dietData\\dietPlannerData")
-    data["foods"] = foods
+    data["foods"] = updatedFoods
     data.close()
+
 
 def addFoodItem(selectedCategoryName, selectedSubCategoryName, itemList):
     foods = getShelve()
 
-    if foods == {}:
-        print("no foods in database")
-    else:
-        print("Foods found")
-    
     latestItemId = 0
 
     items = foods["items"]
@@ -237,38 +161,72 @@ def addFoodItem(selectedCategoryName, selectedSubCategoryName, itemList):
     )
 
     if foundItem:
-            print("Item already exists")
-            return
+        print("Item already exists")
+        return
     else:
-            foods["items"].append(
-                {
-                    "item_id": latestItemId + 1,
-                    "name": itemList,
-                    "category_id": selectedCategory["category_id"],
-                    "subcategory_id": selectedSubcategory["category_id"],
-                    "preparationType": "",
-                    "ingredients": "",
-                    "instructions": "",
-                    "timeToPrepare": "",
-                }
-            )
-    data = shelve.open("dietData\\dietPlannerData")
-    data["foods"] = foods
-    data.close()
+        foods["items"].append(
+            {
+                "item_id": latestItemId + 1,
+                "name": itemList,
+                "category_id": selectedCategory["category_id"],
+                "subcategory_id": selectedSubcategory["category_id"],
+                "preparationType": "",
+                "ingredients": "",
+                "instructions": "",
+                "timeToPrepare": "",
+            }
+        )
+    modifyShelve(foods)
 
-def removeItem(itemList):
+
+def removeItem(selectedCategoryName, selectedSubCategoryName, itemList):
     foods = getShelve()
-    if foods == {}:
-        print("no foods in database")
+
+    foundItem = next(
+        (item for item in foods["items"] if item["name"] == itemList), None
+    )
+    # deletion goes through the same motions as addition only that instead of adding it deletes the given item
+    # for deletion we only take the item's name
+
+    if not foundItem:
+        print("Item doesn't exist")
+        return
     else:
-        print("Foods found")
+        foods["items"].remove(foundItem)
+    # in the end whatever changes have been made are saved to the shelve
+    # TODO: check whether any values have actually changed to decide if it's even worth saving
+
+    modifyShelve(foods)
+
     return
-def editItem(itemList):
+
+
+def editItem(selectedCategoryName, selectedSubCategoryName, itemList, itemId):
     foods = getShelve()
-    if foods == {}:
-        print("no foods in database")
+
+    selectedCategory = getCategoryFromName(foods["categories"], selectedCategoryName)
+
+    selectedSubcategory = getCategoryFromName(
+        foods["categories"], selectedSubCategoryName
+    )
+
+    foundItem = next(
+        (item for item in foods["items"] if item["item_id"] == itemId), None
+    )
+
+    if not foundItem:
+        print("Item doesn't exist")
+        return
     else:
-        print("Foods found")
+        foundItem["name"] = itemList
+        foundItem["category_id"] = selectedCategory["category_id"]
+        foundItem["subcategory_id"] = selectedSubcategory["category_id"]
+
+    # in the end whatever changes have been made are saved to the shelve
+    # TODO: check whether any values have actually changed to decide if it's even worth saving
+
+    modifyShelve(foods)
+
     return
 
 
@@ -393,6 +351,7 @@ def getAllSubcategoriesFromCategories(allCategories):
             subCategories.append(category["name"])
     return subCategories
 
+
 def getInitialCategorySeeds():
     return [
         {"category_id": 0, "name": "takeOut", "parent_id": None, "time_weight": 1},
@@ -447,6 +406,7 @@ def getInitialCategorySeeds():
         {"category_id": 19, "name": "Dairy", "parent_id": 3, "time_weight": 1},
         {"category_id": 20, "name": "Bootl's", "parent_id": 0, "time_weight": 1},
     ]
+
 
 def getInitialItemSeeds():
     return [

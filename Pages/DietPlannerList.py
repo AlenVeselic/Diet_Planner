@@ -201,8 +201,7 @@ class DietPlannerList(Page):
                 self.foodFrame,
                 text="Add Item",
                 command=lambda: [
-                    dietPlanner.modifyShelve(
-                        "add",
+                    dietPlanner.addFoodItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
@@ -220,12 +219,11 @@ class DietPlannerList(Page):
                 self.foodFrame,
                 text="Edit Item",
                 command=lambda: [
-                    dietPlanner.modifyShelve(
-                        "edit",
+                    dietPlanner.editItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
-                        itemId = self.item["item_id"],
+                        itemId=self.item["item_id"],
                     ),
                     self.reset(),
                     self.refresh(),
@@ -289,8 +287,7 @@ class DietPlannerList(Page):
                 self.foodFrame,
                 text="Add Item",
                 command=lambda: [
-                    dietPlanner.modifyShelve(
-                        "add",
+                    dietPlanner.addFoodItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
@@ -308,13 +305,11 @@ class DietPlannerList(Page):
                 self.foodFrame,
                 text="Edit Item",
                 command=lambda: [
-                    dietPlanner.modifyShelve(
-                        "edit",
+                    dietPlanner.editItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
-                        itemId = self.item["item_id"],
-
+                        itemId=self.item["item_id"],
                     ),
                     self.reset(),
                     self.refresh(),
