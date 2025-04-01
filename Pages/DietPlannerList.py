@@ -209,6 +209,8 @@ class DietPlannerList(Page):
                     self.reset(),
                     self.refresh(),
                     # self.getItems(),
+                    self.root.foodList.refresh(),
+                    self.root.foodList.show(),
                     self.root.update(),
                 ],
             )
@@ -228,6 +230,8 @@ class DietPlannerList(Page):
                     self.reset(),
                     self.refresh(),
                     # self.getItems(),
+                    self.root.foodList.refresh(),
+                    self.root.foodList.show(),
                     self.root.update(),
                 ],
             )
@@ -243,8 +247,9 @@ class DietPlannerList(Page):
                 self.reset(),
                 self.refresh(),
                 # self.getItems(),
-                self.update(),
+                self.root.foodList.refresh(),
                 self.root.foodList.show(),
+                self.update(),
             ],
         )
         cancelButton.grid(column=1, row=4, sticky=W)
@@ -295,6 +300,8 @@ class DietPlannerList(Page):
                     self.reset(),
                     self.refresh(),
                     # self.getItems(),
+                    self.root.foodList.refresh(),
+                    self.root.foodList.show(),
                     self.root.update(),
                 ],
             )
@@ -314,6 +321,8 @@ class DietPlannerList(Page):
                     self.reset(),
                     self.refresh(),
                     # self.getItems(),
+                    self.root.foodList.refresh(),
+                    self.root.foodList.show(),
                     self.root.update(),
                 ],
             )
