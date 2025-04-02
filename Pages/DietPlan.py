@@ -49,6 +49,18 @@ class DietPlanPage(Page):
         createDietPlanButton.pack()
         buttonframe.pack(side="top", fill="both", expand=True)
 
+        acceptButton = ttk.Button(
+            buttonframe, text="Accept", command=lambda: self.root.dietPlannerListPage.show()
+        )
+
+        acceptButton.pack(side="right")
+
+        discardButton = ttk.Button(
+            buttonframe, text="Discard", command=lambda: self.root.dietPlannerListPage.show()
+        )
+
+        discardButton.pack(side="left")
+
     def updateLabelWithDietPlanObject(self):
         self.label["text"] = "\n".join(
             "{}\n {}\n".format(k, d)
