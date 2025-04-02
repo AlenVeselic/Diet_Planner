@@ -103,7 +103,23 @@ def getDietPlan():
     print("WIP")
 
 
+def getDietPlans():
+    print("WIP")
+
+
 def getActiveDietPlan():
+    print("WIP")
+
+
+def editDietPlan(id, modifiedDietPlan):
+    print("WIP")
+
+
+def deleteDietPlan(id):
+    print("WIP")
+
+
+def saveDietPlan(plan):
     print("WIP")
 
 
