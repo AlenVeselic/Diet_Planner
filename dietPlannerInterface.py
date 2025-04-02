@@ -18,6 +18,10 @@ from Pages.FoodListPage import FoodListPage
 from Pages.DietPlannerList import DietPlannerList
 from Pages.DietPlanArchive import DietPlanArchive
 from Pages.ActiveDietPlan import ActiveDietPlan
+from Pages.Profile import Profile
+from Pages.Settings import Settings
+from Pages.CategoryList import CategoryList
+from Pages.ModifySubcategoy import ModifySubcategory
 
 # getSubcategories - refreshes data and retrieves subcategories for the currently selected category
 
@@ -40,6 +44,10 @@ class MainView(ttk.Frame):
         self.dietPlannerListPage = DietPlannerList(self, root)
         dietPlanArchive = DietPlanArchive(self, root)
         activeDietPlan = ActiveDietPlan(self, root)
+        profile = Profile(self, root)
+        settings = Settings(self, root)
+        categoryList = CategoryList(self, root)
+        modifySubcategory = ModifySubcategory(self, root)
 
         buttonframe = ttk.Frame(self)
         container = ttk.Frame(self)
@@ -52,6 +60,10 @@ class MainView(ttk.Frame):
         self.dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         dietPlanArchive.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         activeDietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        profile.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        settings.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        categoryList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        modifySubcategory.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         b1 = Button(buttonframe, text="Delete Item", command=self.deleteItemPage.show)
         b2 = Button(buttonframe, text="Create diet plan", command=dietPlan.show)
@@ -70,15 +82,25 @@ class MainView(ttk.Frame):
         activeDietPlanButton = Button(
             buttonframe, text="Active Diet Plan", command=activeDietPlan.show
         )
+        profileButton = Button(buttonframe, text="Profile", command=profile.show)
+        settingsButton = Button(buttonframe, text="Settings", command=settings.show)
+        categoryListButton = Button(
+            buttonframe, text="Category List", command=categoryList.show
+        )
+        modifySubcategoryButton = Button(
+            buttonframe, text="Modify Subcategory", command=modifySubcategory.show
+        )
 
         b1.pack(side="left")
         b2.pack(side="left")
         b3.pack(side="left")
-        b4.pack(
-            side="left",
-        )
+        b4.pack(side="left")
         dietPlanArchiveButton.pack(side=LEFT)
         activeDietPlanButton.pack(side=LEFT)
+        profileButton.pack(side=LEFT)
+        settingsButton.pack(side=LEFT)
+        categoryListButton.pack(side=LEFT)
+        modifySubcategoryButton.pack(side=LEFT)
 
         self.deleteItemPage.show()
 
