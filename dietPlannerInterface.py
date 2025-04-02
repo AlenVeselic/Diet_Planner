@@ -17,6 +17,7 @@ from Pages.DietPlan import DietPlanPage
 from Pages.FoodListPage import FoodListPage
 from Pages.DietPlannerList import DietPlannerList
 from Pages.DietPlanArchive import DietPlanArchive
+from Pages.ActiveDietPlan import ActiveDietPlan
 
 # getSubcategories - refreshes data and retrieves subcategories for the currently selected category
 
@@ -38,6 +39,7 @@ class MainView(ttk.Frame):
         self.foodList = FoodListPage(self, root)
         self.dietPlannerListPage = DietPlannerList(self, root)
         dietPlanArchive = DietPlanArchive(self, root)
+        activeDietPlan = ActiveDietPlan(self, root)
 
         buttonframe = ttk.Frame(self)
         container = ttk.Frame(self)
@@ -49,6 +51,7 @@ class MainView(ttk.Frame):
         self.foodList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         dietPlanArchive.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        activeDietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         b1 = Button(buttonframe, text="Delete Item", command=self.deleteItemPage.show)
         b2 = Button(buttonframe, text="Create diet plan", command=dietPlan.show)
@@ -64,6 +67,10 @@ class MainView(ttk.Frame):
             buttonframe, text="Diet Plan Archive", command=dietPlanArchive.show
         )
 
+        activeDietPlanButton = Button(
+            buttonframe, text="Active Diet Plan", command=activeDietPlan.show
+        )
+
         b1.pack(side="left")
         b2.pack(side="left")
         b3.pack(side="left")
@@ -71,6 +78,7 @@ class MainView(ttk.Frame):
             side="left",
         )
         dietPlanArchiveButton.pack(side=LEFT)
+        activeDietPlanButton.pack(side=LEFT)
 
         self.deleteItemPage.show()
 
