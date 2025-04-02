@@ -107,6 +107,11 @@ def getDietPlans():
     print("WIP")
 
 
+def initDietPlans():
+    # Add to initShelve
+    print("WIP")
+
+
 def getActiveDietPlan():
     print("WIP")
 
