@@ -128,6 +128,22 @@ def saveDietPlan(plan):
     print("WIP")
 
 
+def getCategories():
+    print("WIP")
+
+
+def editCategory(id, modifiedCategory):
+    print("WIP")
+
+
+def removeCategory(id):
+    print("WIP")
+
+
+def addCategory(mainCategoryId, category):
+    print("WIP")
+
+
 # initShelve - Initializes a fresh food data shelve file, with all the needed categories and their respective subcategories
 def initShelve():
 
