@@ -59,6 +59,7 @@ class FoodListPage(Page):
 
     foodFrame = None
     verticalScrollBar = None
+    addFoodButton = None
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
@@ -83,6 +84,14 @@ class FoodListPage(Page):
         )
 
         self.foodFrame.bind("<Configure>", self.onFrameConfigure)
+
+        self.addFoodButton = ttk.Button(
+            self.foodFrame,
+            text="Add food",
+            command=lambda: [self.update(), self.root.dietPlannerListPage.show()],
+        )
+
+        self.addFoodButton.pack(side="top", fill="both", expand=True)
 
         self.allFoodList = ttk.Frame(self.foodFrame, padding="5")
         self.allFoodList.pack(side="top", fill="both", expand=True)
