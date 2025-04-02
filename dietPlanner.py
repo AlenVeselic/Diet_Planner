@@ -77,6 +77,7 @@ class FoodItem:
 itemExample = FoodItem(0, "", 0, 0, "", "", "", "")
 
 
+# TODO: Rename to getFoods
 # getShelve - Create or open the local shelve holding all foods, categorized in subgroups and return it's contents
 def getShelve():
 
@@ -97,9 +98,16 @@ def getShelve():
     return dataVar  # return the data gotten from the shelve
 
 
+# TODO: Implement
+def getDietPlan():
+    print("WIP")
+
+
+def getActiveDietPlan():
+    print("WIP")
+
+
 # initShelve - Initializes a fresh food data shelve file, with all the needed categories and their respective subcategories
-
-
 def initShelve():
 
     seededDictionary = {}  # reserves the dictionary we are about to fill out
