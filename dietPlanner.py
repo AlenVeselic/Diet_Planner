@@ -85,17 +85,17 @@ def getShelve():
         parents=True, exist_ok=True
     )  # Create data directory if it don't exist, if it does, skip this line
 
-    data = shelve.open("dietData\\dietPlannerData")  # Open/Create shelve files
+    shelve = shelve.open("dietData\\dietPlannerData")  # Open/Create shelve files
 
     # try allocating all foods into variable, if that doesn't exist, initialize a fresh shelve with all basic categories and save it into the variable
     try:
-        dataVar = data["foods"]
+        data = shelve["foods"]
     except KeyError:
-        data["foods"] = initShelve()
-        dataVar = data["foods"]
-    data.close()  # close the shelve file, we got from it what we needed
+        shelve["foods"] = initShelve()
+        data = shelve["foods"]
+    shelve.close()  # close the shelve file, we got from it what we needed
 
-    return dataVar  # return the data gotten from the shelve
+    return data  # return the data gotten from the shelve
 
 
 # TODO: Implement
@@ -104,11 +104,27 @@ def getDietPlan():
 
 
 def getDietPlans():
-    print("WIP")
+    
+    Path("dietData").mkdir(
+        parents=True, exist_ok=True
+    )  # Create data directory if it don't exist, if it does, skip this line
+
+    shelve = shelve.open("dietData\\dietPlannerData")  # Open/Create shelve files
+
+    # try allocating all foods into variable, if that doesn't exist, initialize a fresh shelve with all basic categories and save it into the variable
+    try:
+        data = shelve["plans"]
+    except KeyError:
+        shelve["plans"] = {}
+        data = shelve["plans"]
+    shelve.close()  # close the shelve file, we got from it what we needed
+
+    return data  # return the data gotten from the shelve
 
 
 def initDietPlans():
     # Add to initShelve
+
     print("WIP")
 
 
