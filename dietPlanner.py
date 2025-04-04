@@ -129,6 +129,8 @@ def initDietPlans():
 
 
 def getActiveDietPlan():
+    # Get latest diet plan and check when it was created/saved and when it is supposed to expire
+    # If it has expired return nothing
     print("WIP")
 
 
