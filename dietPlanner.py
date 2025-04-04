@@ -301,6 +301,37 @@ def editItem(selectedCategoryName, selectedSubCategoryName, itemList, itemId):
 #       recipeNum - how many of these days can contain recipes
 #       takeOutNum - how many of these days can contain take out
 #   #TODO: Make recipe generation more refined and flexible.
+
+'''
+Diet plan object example
+'''
+
+class DietPlan:
+    CreatedOn = ""
+    Name = ""
+    ActivatedOn = ""
+    Length = 0
+    Days = []
+
+
+# TODO: Consider how reusing diet plans will be handled?
+# Would it be by duplicating diet plans and making them the lastest plan?
+# Would you pull the diet plan to the top and reactivate it with a property?
+
+# Below is the future plan for diet plans
+dietPlan: DietPlan = {
+    "CreatedOn": "",
+    "Name": "",
+    "Length":"",
+    "ActivatedOn": "",
+    "Days": [{
+        "Meals": [
+            {"Name": "Breakfast","Order": 0,  "Items":[FoodItem]},
+            {"Name": "Lunch","Order": 1,  "Items":[FoodItem]},
+            {"Name": "Dinner","Order": 2,  "Items":[FoodItem]}
+        ]},
+    ]
+}
 def createPlan(length, recipeNum, takeOutNum):
     # empty plan creation, food database procurement, recipe and take out counter initialization
     plan = {}
