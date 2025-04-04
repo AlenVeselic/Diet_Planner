@@ -99,12 +99,12 @@ def getShelve():
 
 
 # TODO: Implement
-def getDietPlan():
+def getDietPlan(id):
     print("WIP")
 
 
 def getDietPlans():
-    
+
     Path("dietData").mkdir(
         parents=True, exist_ok=True
     )  # Create data directory if it don't exist, if it does, skip this line
@@ -147,7 +147,8 @@ def saveDietPlan(plan):
 
 
 def getCategories():
-    print("WIP")
+    allData = getShelve()
+    return allData["categories"]
 
 
 def editCategory(id, modifiedCategory):
@@ -302,9 +303,10 @@ def editItem(selectedCategoryName, selectedSubCategoryName, itemList, itemId):
 #       takeOutNum - how many of these days can contain take out
 #   #TODO: Make recipe generation more refined and flexible.
 
-'''
+"""
 Diet plan object example
-'''
+"""
+
 
 class DietPlan:
     CreatedOn = ""
@@ -322,16 +324,20 @@ class DietPlan:
 dietPlan: DietPlan = {
     "CreatedOn": "",
     "Name": "",
-    "Length":"",
+    "Length": "",
     "ActivatedOn": "",
-    "Days": [{
-        "Meals": [
-            {"Name": "Breakfast","Order": 0,  "Items":[FoodItem]},
-            {"Name": "Lunch","Order": 1,  "Items":[FoodItem]},
-            {"Name": "Dinner","Order": 2,  "Items":[FoodItem]}
-        ]},
-    ]
+    "Days": [
+        {
+            "Meals": [
+                {"Name": "Breakfast", "Order": 0, "Items": [FoodItem]},
+                {"Name": "Lunch", "Order": 1, "Items": [FoodItem]},
+                {"Name": "Dinner", "Order": 2, "Items": [FoodItem]},
+            ]
+        },
+    ],
 }
+
+
 def createPlan(length, recipeNum, takeOutNum):
     # empty plan creation, food database procurement, recipe and take out counter initialization
     plan = {}
