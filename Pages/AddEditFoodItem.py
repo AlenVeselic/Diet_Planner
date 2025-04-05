@@ -6,7 +6,7 @@ from Pages.Page_Class import Page
 import dietPlanner
 
 
-class DietPlannerList(Page):
+class AddEditFoodItem(Page):
     mainCategoryBox: Listbox = None
     subcategoryBox: Listbox = None
     curMainCat: StringVar = None

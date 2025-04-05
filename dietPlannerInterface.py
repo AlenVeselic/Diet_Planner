@@ -15,7 +15,7 @@ from Pages.Page_Class import Page
 from Pages.DeleteItemPage import DeleteItemPage
 from Pages.DietPlan import DietPlanPage
 from Pages.FoodListPage import FoodListPage
-from Pages.DietPlannerList import DietPlannerList
+from Pages.AddEditFoodItem import AddEditFoodItem
 from Pages.DietPlanArchive import DietPlanArchive
 from Pages.ActiveDietPlan import ActiveDietPlan
 from Pages.Profile import Profile
@@ -34,14 +34,14 @@ def refreshData(*args):
 class MainView(ttk.Frame):
     deleteItemPage = None
     foodList = None
-    dietPlannerListPage = None
+    addEditFoodItemPage = None
 
     def __init__(self, *args, **kwargs):
         ttk.Frame.__init__(self, *args, **kwargs)
         self.deleteItemPage = DeleteItemPage(self, root)
         dietPlan = DietPlanPage(self, root)
         self.foodList = FoodListPage(self, root)
-        self.dietPlannerListPage = DietPlannerList(self, root)
+        self.addEditFoodItemPage = AddEditFoodItem(self, root)
         dietPlanArchive = DietPlanArchive(self, root)
         activeDietPlan = ActiveDietPlan(self, root)
         profile = Profile(self, root)
@@ -57,7 +57,7 @@ class MainView(ttk.Frame):
         self.deleteItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         dietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.foodList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        self.dietPlannerListPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.addEditFoodItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         dietPlanArchive.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         activeDietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         profile.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
@@ -73,7 +73,7 @@ class MainView(ttk.Frame):
             command=lambda: [self.foodList.refresh(), self.foodList.show()],
         )
         b4 = Button(
-            buttonframe, text="Create new food", command=self.dietPlannerListPage.show
+            buttonframe, text="Create new food", command=self.addEditFoodItemPage.show
         )
         dietPlanArchiveButton = Button(
             buttonframe, text="Diet Plan Archive", command=dietPlanArchive.show

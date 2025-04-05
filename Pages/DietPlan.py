@@ -50,13 +50,17 @@ class DietPlanPage(Page):
         buttonframe.pack(side="top", fill="both", expand=True)
 
         acceptButton = ttk.Button(
-            buttonframe, text="Accept", command=lambda: self.root.dietPlannerListPage.show()
+            buttonframe,
+            text="Accept",
+            command=lambda: self.root.addEditFoodItemPage.show(),
         )
 
         acceptButton.pack(side="right")
 
         discardButton = ttk.Button(
-            buttonframe, text="Discard", command=lambda: self.root.dietPlannerListPage.show()
+            buttonframe,
+            text="Discard",
+            command=lambda: self.root.addEditFoodItemPage.show(),
         )
 
         discardButton.pack(side="left")

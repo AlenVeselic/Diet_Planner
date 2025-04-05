@@ -28,8 +28,8 @@ class ItemFrame(Frame):
             command=lambda: [
                 self.page.refresh(),
                 self.update(),
-                self.root.dietPlannerListPage.show(),
-                self.root.dietPlannerListPage.setItemToEdit(item),
+                self.root.addEditFoodItemPage.show(),
+                self.root.addEditFoodItemPage.setItemToEdit(item),
             ],
         )
 
@@ -88,7 +88,7 @@ class FoodListPage(Page):
         self.addFoodButton = ttk.Button(
             self.foodFrame,
             text="Add food",
-            command=lambda: [self.update(), self.root.dietPlannerListPage.show()],
+            command=lambda: [self.update(), self.root.addEditFoodItemPage.show()],
         )
 
         self.addFoodButton.pack(side="top", fill="both", expand=True)
