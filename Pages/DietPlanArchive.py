@@ -11,9 +11,12 @@ class DietPlanArchive(Page):
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
-        self.label = Label(self, text="WIP: Diet Plan Archive")
-        self.label.pack(side="top", fill="x", expand=True)
-        self.planList = Frame(self)
+        self.frame = ttk.Frame(self)
+        self.frame.pack(side=TOP, fill=BOTH, expand=True)
+
+        self.label = Label(self.frame, text="WIP: Diet Plan Archive")
+        self.label.pack(side="top", fill="x", expand=False)
+        self.planList = Frame(self.frame)
         self.planList.pack(side=TOP, fill=BOTH, expand=True)
 
     def refresh(self):
@@ -24,7 +27,7 @@ class DietPlanArchive(Page):
 
         for plan in self.plans:
             planLabel = Label(self.planList, text=plan["Name"])
-            planLabel.pack(side=TOP, fill="x", expand=True)
+            planLabel.pack(side=TOP, fill="x", expand=False)
             self.planWidgets.append(planLabel)
 
         self.root.update()
