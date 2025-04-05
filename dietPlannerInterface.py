@@ -21,7 +21,7 @@ from Pages.ActiveDietPlan import ActiveDietPlan
 from Pages.Profile import Profile
 from Pages.Settings import Settings
 from Pages.CategoryList import CategoryList
-from Pages.ModifySubcategoy import ModifySubcategory
+from Pages.ModifySubcategory import ModifySubcategory
 
 # getSubcategories - refreshes data and retrieves subcategories for the currently selected category
 
