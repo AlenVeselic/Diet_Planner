@@ -146,7 +146,7 @@ def saveDietPlan(plan: dict):
     latestPlanId = 0
 
     if updatedPlans and len(updatedPlans) > 0:
-        latestPlanId = updatedPlans[-1]["id"]
+        latestPlanId = updatedPlans[-1]["id"] + 1
 
     name = f"Plan #{latestPlanId}"
 
