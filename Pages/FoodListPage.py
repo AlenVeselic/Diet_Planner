@@ -39,14 +39,11 @@ class ItemFrame(Frame):
             self,
             text="trash",
             command=lambda: [
-                #                dietPlanner.modifyShelve(
-                #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                #                ),
                 self.page.refresh(),
-                # self.getItems(),
                 self.update(),
                 self.root.deleteItemPage.show(),
                 self.root.deleteItemPage.setItemToDelete(item),
+                self.root.deleteItemPage.refresh(),
             ],
         )
         trashButton.pack(side=RIGHT)

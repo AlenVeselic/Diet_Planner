@@ -8,27 +8,32 @@ import dietPlanner
 class DeleteItemPage(Page):
     item = None
     label = None
+    actionButtons: list[Widget] = []
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
-        self.label = Label(self, text="No item selected for deletion?")
+        self.label = Label(self, text="No item selected for deletion")
         self.label.pack(side="top", fill="both", expand=True)
 
+        self.removeActionButtons()
+        if self.item:
+            self.generateActionButtons()
+
+    def generateActionButtons(self):
         cancelButton = ttk.Button(
             self,
             text="Cancel",
             command=lambda: [
-                #                dietPlanner.modifyShelve(
-                #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                #                ),
+                self.resetItem(),
                 self.refresh(),
-                # self.getItems(),
                 self.update(),
                 self.root.foodList.show(),
             ],
         )
 
         cancelButton.pack(side=LEFT)
+
+        self.actionButtons.append(cancelButton)
 
         deleteButton = ttk.Button(
             self,
@@ -39,8 +44,8 @@ class DeleteItemPage(Page):
                     self.item["subcategory_id"],
                     self.item["name"],
                 ),
+                self.resetItem(),
                 self.refresh(),
-                # self.getItems(),
                 self.update(),
                 self.root.foodList.show(),
                 self.root.foodList.refresh(),
@@ -48,11 +53,29 @@ class DeleteItemPage(Page):
         )
         deleteButton.pack(side=RIGHT)
 
+        self.actionButtons.append(deleteButton)
+
+    def removeActionButtons(self):
+        for button in self.actionButtons:
+            button.pack_forget()
+        self.actionButtons = []
+
     def refresh(self):
         self.foodData = dietPlanner.getShelve()
+        self.label["text"] = "No item selected for deletion"
+        self.removeActionButtons()
+
+        if self.item:
+            self.label["text"] = (
+                f"Are you sure you want to delete { self.item['name'] } ?"
+            )
+
+            self.generateActionButtons()
+
         self.root.update()
 
     def setItemToDelete(self, item):
         self.item = item
 
-        self.label["text"] = f"Are you sure you want to delete { self.item['name'] } ?"
+    def resetItem(self):
+        self.item = None
