@@ -23,6 +23,7 @@
 # Import all the necessities. Shelve for data storage, pprint for printing messier strings(dictionaries most of all),
 #  random for choosing foods, logging for debugging
 
+import datetime
 import shelve, pprint, random, logging
 from pathlib import Path
 
@@ -126,7 +127,29 @@ def deleteDietPlan(id):
 
 
 def saveDietPlan(plan):
-    print("WIP")
+
+    updatedPlans: list = getDietPlans()
+
+    latestPlanId = updatedPlans[-1]["id"]
+    name = plan["Name"]
+
+    if not name:
+        name = f"Plan #{latestPlanId}"
+
+    updatedPlans.append(
+        {
+            "id": latestPlanId,
+            "Name": name,
+            "Length": plan["Length"],
+            "ActivatedOn": "",
+            "CreatedOn": str(datetime.date().today()),
+            "Days": plan["Days"],
+        }
+    )
+
+    data = shelve.open("dietData\\dietPlannerData")
+    data["foods"]["plans"] = updatedPlans
+    data.close()
 
 
 def getCategories():
@@ -315,9 +338,24 @@ dietPlan: DietPlan = {
     "Days": [
         {
             "Meals": [
-                {"Name": "Breakfast", "Order": 0, "Items": [FoodItem]},
-                {"Name": "Lunch", "Order": 1, "Items": [FoodItem]},
-                {"Name": "Dinner", "Order": 2, "Items": [FoodItem]},
+                {
+                    "Name": "Breakfast",
+                    "Order": 0,
+                    "Items": [FoodItem],
+                    "Satiation_Total": 0,
+                },
+                {
+                    "Name": "Lunch",
+                    "Order": 1,
+                    "Items": [FoodItem],
+                    "Satiation_Total": 0,
+                },
+                {
+                    "Name": "Dinner",
+                    "Order": 2,
+                    "Items": [FoodItem],
+                    "Satiation_Total": 0,
+                },
             ]
         },
     ],
