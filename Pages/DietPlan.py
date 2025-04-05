@@ -1,3 +1,4 @@
+from pprint import pprint
 from tkinter import *
 import ttkbootstrap as ttk
 
@@ -10,6 +11,7 @@ class DietPlanPage(Page):
     canvas = None
     verticalScrollbar = None
     frame = None
+    plan = None
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
@@ -52,7 +54,10 @@ class DietPlanPage(Page):
         acceptButton = ttk.Button(
             buttonframe,
             text="Accept",
-            command=lambda: self.root.addEditFoodItemPage.show(),
+            command=lambda: [
+                self.saveDietPlan(),
+                self.root.dietPlanArchive.show(),
+            ],
         )
 
         acceptButton.pack(side="right")
@@ -60,7 +65,7 @@ class DietPlanPage(Page):
         discardButton = ttk.Button(
             buttonframe,
             text="Discard",
-            command=lambda: self.root.addEditFoodItemPage.show(),
+            command=lambda: self.root.activeDietPlan.show(),
         )
 
         discardButton.pack(side="left")
@@ -72,12 +77,12 @@ class DietPlanPage(Page):
         ).replace(",", ",\n")
 
     def updateLabelWithDietPlan(self):
-        dietPlan = dietPlanner.createPlan(5, 2, 2)
+        self.plan = dietPlanner.createPlan(5, 2, 2)
         self.label["text"] = "Diet plan generated:"
         for widget in self.dietPlanFrame.winfo_children():
             widget.destroy()
 
-        for index, day in enumerate(dietPlan["Days"]):
+        for index, day in enumerate(self.plan["Days"]):
             dayLabel = Label(
                 self.dietPlanFrame, text=f"Day {index + 1}", justify="left", anchor=W
             )
@@ -105,6 +110,11 @@ class DietPlanPage(Page):
                     )
 
                 foodLabel.pack(side="top", fill="x")
+
+    def saveDietPlan(self):
+        dietPlanner.saveDietPlan(self.plan)
+
+        pprint(dietPlanner.getDietPlans())
 
     def onFrameConfigure(self, event):
         """Reset the scroll region to encompass the inner frame"""

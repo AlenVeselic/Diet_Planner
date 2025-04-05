@@ -92,8 +92,22 @@ def getShelve():
     try:
         data = shelveData["foods"]
     except KeyError:
-        shelve["foods"] = initShelve()
+        shelveData["foods"] = initShelve()
         data = shelveData["foods"]
+
+    # Test shelve keys and init if necessary
+    dbInitializationSeeds = {
+        "items": getInitialItemSeeds,
+        "categories": getInitialCategorySeeds,
+        "plans": [],
+    }
+    for key in ["items", "categories", "plans"]:
+        try:
+            test = data[key]
+        except KeyError:
+            data[key] = dbInitializationSeeds[key]
+            shelveData["foods"] = data
+
     shelveData.close()  # close the shelve file, we got from it what we needed
 
     return data  # return the data gotten from the shelve
@@ -126,15 +140,18 @@ def deleteDietPlan(id):
     print("WIP")
 
 
-def saveDietPlan(plan):
+def saveDietPlan(plan: dict):
 
     updatedPlans: list = getDietPlans()
+    latestPlanId = 0
 
-    latestPlanId = updatedPlans[-1]["id"]
-    name = plan["Name"]
+    if updatedPlans and len(updatedPlans) > 0:
+        latestPlanId = updatedPlans[-1]["id"]
 
-    if not name:
-        name = f"Plan #{latestPlanId}"
+    name = f"Plan #{latestPlanId}"
+
+    if "Name" in plan.keys():
+        name = plan["Name"]
 
     updatedPlans.append(
         {
@@ -142,13 +159,16 @@ def saveDietPlan(plan):
             "Name": name,
             "Length": plan["Length"],
             "ActivatedOn": "",
-            "CreatedOn": str(datetime.date().today()),
+            "CreatedOn": str(datetime.datetime.now()),
             "Days": plan["Days"],
         }
     )
 
     data = shelve.open("dietData\\dietPlannerData")
-    data["foods"]["plans"] = updatedPlans
+    updatedFoods = data["foods"]
+
+    updatedFoods["plans"] = updatedPlans
+    data["foods"] = updatedFoods
     data.close()
 
 
@@ -380,6 +400,7 @@ def createPlan(length, recipeNum, takeOutNum):
     ]
 
     plan["Days"] = []
+    plan["Length"] = length
 
     for day in range(
         length

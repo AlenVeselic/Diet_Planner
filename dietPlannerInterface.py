@@ -35,6 +35,8 @@ class MainView(ttk.Frame):
     deleteItemPage = None
     foodList = None
     addEditFoodItemPage = None
+    dietPlanArchive = None
+    activeDietPlan = None
 
     def __init__(self, *args, **kwargs):
         ttk.Frame.__init__(self, *args, **kwargs)
@@ -42,8 +44,8 @@ class MainView(ttk.Frame):
         dietPlan = DietPlanPage(self, root)
         self.foodList = FoodListPage(self, root)
         self.addEditFoodItemPage = AddEditFoodItem(self, root)
-        dietPlanArchive = DietPlanArchive(self, root)
-        activeDietPlan = ActiveDietPlan(self, root)
+        self.dietPlanArchive = DietPlanArchive(self, root)
+        self.activeDietPlan = ActiveDietPlan(self, root)
         profile = Profile(self, root)
         settings = Settings(self, root)
         categoryList = CategoryList(self, root)
@@ -58,8 +60,8 @@ class MainView(ttk.Frame):
         dietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.foodList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         self.addEditFoodItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        dietPlanArchive.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        activeDietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.dietPlanArchive.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        self.activeDietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         profile.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         settings.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         categoryList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
@@ -76,11 +78,11 @@ class MainView(ttk.Frame):
             buttonframe, text="Create new food", command=self.addEditFoodItemPage.show
         )
         dietPlanArchiveButton = Button(
-            buttonframe, text="Diet Plan Archive", command=dietPlanArchive.show
+            buttonframe, text="Diet Plan Archive", command=self.dietPlanArchive.show
         )
 
         activeDietPlanButton = Button(
-            buttonframe, text="Active Diet Plan", command=activeDietPlan.show
+            buttonframe, text="Active Diet Plan", command=self.activeDietPlan.show
         )
         profileButton = Button(buttonframe, text="Profile", command=profile.show)
         settingsButton = Button(buttonframe, text="Settings", command=settings.show)
