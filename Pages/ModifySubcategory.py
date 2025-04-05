@@ -32,3 +32,7 @@ class ModifySubcategory(Page):
 
     def refresh(self):
         self.root.update()
+
+    def onFrameConfigure(self, event):
+        """Reset the scroll region to encompass the inner frame"""
+        self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
