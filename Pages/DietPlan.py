@@ -13,6 +13,8 @@ class DietPlanPage(Page):
     frame = None
     plan = None
 
+    actionButtons: list[Widget] = []
+
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
 
@@ -40,35 +42,8 @@ class DietPlanPage(Page):
         self.dietPlanFrame = ttk.Frame(self.frame)
         self.dietPlanFrame.pack(side="top", fill="both", expand=True)
 
-        buttonframe = ttk.Frame(self.frame)
-
-        createDietPlanButton = ttk.Button(
-            buttonframe,
-            text="Create Diet Plan",
-            command=self.updateLabelWithDietPlan,
-        )
-
-        createDietPlanButton.pack()
-        buttonframe.pack(side="top", fill="both", expand=True)
-
-        acceptButton = ttk.Button(
-            buttonframe,
-            text="Accept",
-            command=lambda: [
-                self.saveDietPlan(),
-                self.root.dietPlanArchive.show(),
-            ],
-        )
-
-        acceptButton.pack(side="right")
-
-        discardButton = ttk.Button(
-            buttonframe,
-            text="Discard",
-            command=lambda: self.root.activeDietPlan.show(),
-        )
-
-        discardButton.pack(side="left")
+        self.removeActionButtons()
+        self.generateActionButtons()
 
     def updateLabelWithDietPlanObject(self):
         self.label["text"] = "\n".join(
@@ -76,45 +51,112 @@ class DietPlanPage(Page):
             for k, d in (dietPlanner.createPlan(5, 2, 2)).items()
         ).replace(",", ",\n")
 
-    def updateLabelWithDietPlan(self):
+    def createDietPlan(self):
         self.plan = dietPlanner.createPlan(5, 2, 2)
-        self.label["text"] = "Diet plan generated:"
-        for widget in self.dietPlanFrame.winfo_children():
-            widget.destroy()
 
-        for index, day in enumerate(self.plan["Days"]):
-            dayLabel = Label(
-                self.dietPlanFrame, text=f"Day {index + 1}", justify="left", anchor=W
-            )
-            dayLabel.pack(side=("top"), fill="x")
-
-            for index, meal in enumerate(day["Meals"]):
-                mealLabel = Label(
-                    self.dietPlanFrame,
-                    text=f" Meal {index + 1}",
-                    justify="left",
-                    anchor=W,
-                )
-                mealLabel.pack(side="top", fill="x")
-
-                if isinstance(meal, dict):
-                    foodLabel = Label(
-                        self.dietPlanFrame,
-                        text=f"  Recipe: {list(meal.keys())[0]}",
-                        justify="left",
-                        anchor=W,
-                    )
-                else:
-                    foodLabel = Label(
-                        self.dietPlanFrame, text=f"  {meal}", justify="left", anchor=W
-                    )
-
-                foodLabel.pack(side="top", fill="x")
+    def discardDietPlan(self):
+        self.plan = None
 
     def saveDietPlan(self):
         dietPlanner.saveDietPlan(self.plan)
 
-        pprint(dietPlanner.getDietPlans())
+        self.plan = None
+
+    def refresh(self):
+        self.label["text"] = "No diet plan generated yet."
+        for widget in self.dietPlanFrame.winfo_children():
+            widget.destroy()
+        self.dietPlanFrame.pack_forget()
+        self.dietPlanFrame = ttk.Frame(self.frame)
+        self.dietPlanFrame.pack(side="top", fill="both", expand=True)
+
+        self.removeActionButtons()
+        self.generateActionButtons()
+
+        if self.plan:
+            self.label["text"] = "Diet plan generated:"
+
+            for index, day in enumerate(self.plan["Days"]):
+                dayLabel = Label(
+                    self.dietPlanFrame,
+                    text=f"Day {index + 1}",
+                    justify="left",
+                    anchor=W,
+                )
+                dayLabel.pack(side=("top"), fill="x")
+
+                for index, meal in enumerate(day["Meals"]):
+                    mealLabel = Label(
+                        self.dietPlanFrame,
+                        text=f" Meal {index + 1}",
+                        justify="left",
+                        anchor=W,
+                    )
+                    mealLabel.pack(side="top", fill="x")
+
+                    if isinstance(meal, dict):
+                        foodLabel = Label(
+                            self.dietPlanFrame,
+                            text=f"  Recipe: {list(meal.keys())[0]}",
+                            justify="left",
+                            anchor=W,
+                        )
+                    else:
+                        foodLabel = Label(
+                            self.dietPlanFrame,
+                            text=f"  {meal}",
+                            justify="left",
+                            anchor=W,
+                        )
+
+                    foodLabel.pack(side="top", fill="x")
+
+    def generateActionButtons(self):
+        buttonframe = ttk.Frame(self.frame)
+
+        if not self.plan:
+            createDietPlanButton = ttk.Button(
+                buttonframe,
+                text="Generate Diet Plan",
+                command=lambda: [self.createDietPlan(), self.refresh()],
+            )
+
+            createDietPlanButton.pack()
+            self.actionButtons.append(createDietPlanButton)
+        else:
+            acceptButton = ttk.Button(
+                buttonframe,
+                text="Accept",
+                command=lambda: [
+                    self.saveDietPlan(),
+                    self.root.dietPlanArchive.show(),
+                ],
+            )
+
+            acceptButton.pack(side="right")
+            self.actionButtons.append(acceptButton)
+
+            discardButton = ttk.Button(
+                buttonframe,
+                text="Discard",
+                command=lambda: [
+                    self.discardDietPlan(),
+                    self.refresh(),
+                    self.root.update(),
+                ],
+            )
+
+            discardButton.pack(side="left")
+            self.actionButtons.append(discardButton)
+
+        buttonframe.pack(side="top", fill="both", expand=True)
+
+        self.actionButtons.append(buttonframe)
+
+    def removeActionButtons(self):
+        for button in self.actionButtons:
+            button.pack_forget()
+        self.actionButtons = []
 
     def onFrameConfigure(self, event):
         """Reset the scroll region to encompass the inner frame"""
