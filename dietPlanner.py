@@ -100,32 +100,15 @@ def getShelve():
 
 # TODO: Implement
 def getDietPlan(id):
+    # TODO: Check that getting single diet plan is necessary
     print("WIP")
 
 
 def getDietPlans():
 
-    Path("dietData").mkdir(
-        parents=True, exist_ok=True
-    )  # Create data directory if it don't exist, if it does, skip this line
+    plans = getShelve()["plans"]
 
-    shelve = shelve.open("dietData\\dietPlannerData")  # Open/Create shelve files
-
-    # try allocating all foods into variable, if that doesn't exist, initialize a fresh shelve with all basic categories and save it into the variable
-    try:
-        data = shelve["plans"]
-    except KeyError:
-        shelve["plans"] = {}
-        data = shelve["plans"]
-    shelve.close()  # close the shelve file, we got from it what we needed
-
-    return data  # return the data gotten from the shelve
-
-
-def initDietPlans():
-    # Add to initShelve
-
-    print("WIP")
+    return plans  # return the diet plans gotten from the shelve
 
 
 def getActiveDietPlan():
@@ -172,8 +155,11 @@ def initShelve():
 
     items = getInitialItemSeeds()
 
+    plans = {}
+
     seededDictionary["categories"] = categories
     seededDictionary["items"] = items
+    seededDictionary["plans"] = plans
 
     return seededDictionary
 
