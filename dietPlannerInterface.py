@@ -78,7 +78,12 @@ class MainView(ttk.Frame):
             buttonframe, text="Create new food", command=self.addEditFoodItemPage.show
         )
         dietPlanArchiveButton = Button(
-            buttonframe, text="Diet Plan Archive", command=self.dietPlanArchive.show
+            buttonframe,
+            text="Diet Plan Archive",
+            command=lambda: [
+                self.dietPlanArchive.show(),
+                self.dietPlanArchive.refresh(),
+            ],
         )
 
         activeDietPlanButton = Button(
