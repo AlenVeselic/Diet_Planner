@@ -87,7 +87,9 @@ class MainView(ttk.Frame):
         profileButton = Button(buttonframe, text="Profile", command=profile.show)
         settingsButton = Button(buttonframe, text="Settings", command=settings.show)
         categoryListButton = Button(
-            buttonframe, text="Category List", command=categoryList.show
+            buttonframe,
+            text="Category List",
+            command=lambda: [categoryList.refresh(), categoryList.show()],
         )
         modifySubcategoryButton = Button(
             buttonframe, text="Modify Subcategory", command=modifySubcategory.show
