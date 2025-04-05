@@ -382,6 +382,10 @@ dietPlan: DietPlan = {
 }
 
 
+def detectFoodSynergy():
+    print("WIP")
+
+
 def createPlan(length, recipeNum, takeOutNum):
     # empty plan creation, food database procurement, recipe and take out counter initialization
     plan = {}
