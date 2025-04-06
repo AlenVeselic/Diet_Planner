@@ -4,7 +4,7 @@ import ttkbootstrap as ttk
 
 
 class Page(ttk.Frame):
-    root = None
+    root: ttk.Window = None
 
     def __init__(self, root, *args, **kwargs):
         ttk.Frame.__init__(self, *args, **kwargs)
