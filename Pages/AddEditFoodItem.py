@@ -136,7 +136,7 @@ class AddEditFoodItem(Page):
         test.configure("TestFrame", background="light-gray")
 
         # frame that will hold then food input programs
-        self.foodFrame = ttk.Frame(self, padding="5")
+        self.foodFrame = ttk.Frame(self.frame, padding="5")
         self.foodFrame.grid(column=1, row=1, sticky=(N, W, E, S))
 
         # main category select section

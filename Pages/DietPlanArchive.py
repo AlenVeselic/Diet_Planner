@@ -11,8 +11,8 @@ class DietPlanArchive(Page):
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
-        self.frame = ttk.Frame(self)
-        self.frame.pack(side=TOP, fill=BOTH, expand=True)
+        # self.frame = ttk.Frame(self)
+        # self.frame.pack(side=TOP, fill=BOTH, expand=True)
 
         self.label = Label(self.frame, text="WIP: Diet Plan Archive")
         self.label.pack(side="top", fill="x", expand=False)
