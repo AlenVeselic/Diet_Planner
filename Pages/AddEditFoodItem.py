@@ -30,8 +30,6 @@ class AddEditFoodItem(Page):
         subCategory = dietPlanner.getCategoryFromId(
             self.foodData["categories"], item["subcategory_id"]
         )
-        # self.subcategoryBox.selection_set(subCategory["name"])
-        # self.curSubCat.set(subCategory)
 
         self.curSubCat.set(subCategory["name"])
         self.subcategoryVar.set(subCategory["name"])
@@ -56,9 +54,6 @@ class AddEditFoodItem(Page):
         logging.debug("\n Get subcategories \n ")
         self.refresh()  # refreshes the displayed dictionary
 
-        # if root.focus_get() == mainCategoryBox: # checks wether the correct listbox is in focus
-
-        # subcategoryVar.set("") # clears the displayed subcategory listbox
         if not mainCategory:
             currentlySelected = (
                 self.mainCategoryBox.selection_get()
@@ -75,16 +70,11 @@ class AddEditFoodItem(Page):
                 nextCategoryObject = dietPlanner.getCategoryFromName(
                     self.foodData["categories"], nextCategory
                 )
-                # subcategoryVar.set(list(foodData[curMainCat.get()].keys())) # freshly sets the subcategory display
                 self.subcategoryBox["values"] = list(
                     dietPlanner.getSubcategoriesFromCategories(
                         self.foodData["categories"], nextCategoryObject
                     )
                 )  # freshly sets the subcategory display
-                # clears the preceeding listboxes
-                # self.curSubCat.set(0)
-                # curSubCat.set("")
-                # self.itemVar.set(0)
 
                 self.root.update()
 
@@ -150,7 +140,7 @@ class AddEditFoodItem(Page):
         self.foodFrame.grid(column=1, row=1, sticky=(N, W, E, S))
 
         # main category select section
-        ttk.Label(self.foodFrame, text="Main categories").grid(column=1, row=1)
+        ttk.Label(self.foodFrame, text="Main category: ").grid(column=1, row=2)
 
         categories = list(
             dietPlanner.getMainCategoriesFromCategories(self.foodData["categories"])
@@ -160,7 +150,7 @@ class AddEditFoodItem(Page):
             self.foodFrame, textvariable=self.categoryVar, values=categories
         )
         # mainCategoryBox.pack(fill=BOTH, expand = True)
-        self.mainCategoryBox.grid(column=1, row=2, sticky=(N, W, E, S))
+        self.mainCategoryBox.grid(column=2, row=2, sticky=(N, W, E, S))
 
         # mainCategoryBox["bg"] = "white"
 
@@ -171,7 +161,7 @@ class AddEditFoodItem(Page):
         self.foodFrame.grid_columnconfigure(3, weight=1)
 
         # subcategory selection section
-        ttk.Label(self.foodFrame, text="Subcategories").grid(column=2, row=1)
+        ttk.Label(self.foodFrame, text="Subcategory: ").grid(column=1, row=3)
 
         subcategories = list(
             dietPlanner.getAllSubcategoriesFromCategories(self.foodData["categories"])
@@ -180,7 +170,7 @@ class AddEditFoodItem(Page):
         self.subcategoryBox = ttk.Combobox(
             self.foodFrame, textvariable=self.subcategoryVar, values=subcategories
         )
-        self.subcategoryBox.grid(column=2, row=2, sticky=(N, W, E, S))
+        self.subcategoryBox.grid(column=2, row=3, sticky=(N, W, E, S))
 
         # item display section
         # ttk.Label(foodFrame, text="Items").grid(column=3, row=1)
@@ -190,10 +180,10 @@ class AddEditFoodItem(Page):
         # itemBox.grid(column=3, row=2, rowspan=2, sticky=(N, W, E, S))
 
         # item entry section
-        ttk.Label(self.foodFrame, text="Item name entry").grid(column=3, row=1)
+        ttk.Label(self.foodFrame, text="Item Name: ").grid(column=1, row=1)
         self.inputVar = StringVar()
         inputEntry = ttk.Entry(self.foodFrame, textvariable=self.inputVar)
-        inputEntry.grid(column=3, row=2, sticky=(N, W, E, S))
+        inputEntry.grid(column=2, row=1, sticky=(N, W, E, S))
 
         if not self.item:
             # addition button
@@ -208,7 +198,6 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    # self.getItems(),
                     self.root.foodList.refresh(),
                     self.root.foodList.show(),
                     self.root.update(),
@@ -229,7 +218,6 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    # self.getItems(),
                     self.root.foodList.refresh(),
                     self.root.foodList.show(),
                     self.root.update(),
@@ -241,12 +229,7 @@ class AddEditFoodItem(Page):
             self.foodFrame,
             text="Cancel",
             command=lambda: [
-                #                dietPlanner.modifyShelve(
-                #                    "del", self.curMainCat.get(), self.curSubCat.get(), inputVar.get()
-                #                ),
                 self.reset(),
-                self.refresh(),
-                # self.getItems(),
                 self.root.foodList.refresh(),
                 self.root.foodList.show(),
                 self.update(),
@@ -254,20 +237,12 @@ class AddEditFoodItem(Page):
         )
         cancelButton.grid(column=1, row=4, sticky=W)
 
-        # allFoodList = ttk.Frame(foodFrame, padding="5")
-        # allFoodList.grid(column=1, row=4, rowspan=4, sticky=(N, W, E, S))
-
-        # ttk.Label(allFoodList, text="All food items").pack()
-
-        # for item in foodData["items"]:
-        #     ttk.Label(allFoodList, text=item["name"]).pack()
-
         self.foodFrame.grid_rowconfigure(0, weight=1)
         self.foodFrame.grid_columnconfigure(0, weight=1)
         self.foodFrame.grid_rowconfigure(4, weight=1)
         self.foodFrame.grid_columnconfigure(6, weight=1)
 
-        # listbox selection bindings
+        # combobox selection bindings
 
         self.mainCategoryBox.bind("<<ComboboxSelected>>", self.getSubcategories)
 
@@ -299,7 +274,6 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    # self.getItems(),
                     self.root.foodList.refresh(),
                     self.root.foodList.show(),
                     self.root.update(),
@@ -320,7 +294,6 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    # self.getItems(),
                     self.root.foodList.refresh(),
                     self.root.foodList.show(),
                     self.root.update(),
