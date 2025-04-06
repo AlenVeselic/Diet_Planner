@@ -12,7 +12,7 @@ class DeleteItemPage(Page):
 
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
-        self.label = Label(self, text="No item selected for deletion")
+        self.label = Label(self.frame, text="No item selected for deletion")
         self.label.pack(side="top", fill="both", expand=True)
 
         self.removeActionButtons()
@@ -21,7 +21,7 @@ class DeleteItemPage(Page):
 
     def generateActionButtons(self):
         cancelButton = ttk.Button(
-            self,
+            self.frame,
             text="Cancel",
             command=lambda: [
                 self.resetItem(),
@@ -36,7 +36,7 @@ class DeleteItemPage(Page):
         self.actionButtons.append(cancelButton)
 
         deleteButton = ttk.Button(
-            self,
+            self.frame,
             text="Delete",
             command=lambda: [
                 dietPlanner.removeItem(
