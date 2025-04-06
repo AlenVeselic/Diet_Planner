@@ -31,11 +31,10 @@ class Page(ttk.Frame):
             tags="self.frame",
         )
 
-        self.canvas.bind("<Configure>", self.onFrameConfigure)
-        # self.frame.pack(side="top", fill="both", expand=True)
+        self.canvas.bind("<Configure>", self.onCanvasConfigure)
         self.canvas.pack(side=TOP, fill=BOTH, expand=True)
 
-    def onFrameConfigure(self, event):
+    def onCanvasConfigure(self, event):
         canvas_frame = self.canvas.nametowidget(
             self.canvas.itemcget("self.frame", "window")
         )
@@ -43,8 +42,7 @@ class Page(ttk.Frame):
         min_height = canvas_frame.winfo_reqheight()
         if min_width < event.width:
             self.canvas.itemconfigure("self.frame", width=event.width)
-        if min_height < event.height:
-            self.canvas.itemconfigure("self.frame", height=event.height)
+
         """Reset the scroll region to encompass the inner frame"""
         self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
 
