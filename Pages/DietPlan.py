@@ -18,24 +18,6 @@ class DietPlanPage(Page):
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
 
-        # self.canvas = Canvas(self, borderwidth=0, background="white")
-
-        # self.frame = ttk.Frame(self)
-
-        # self.verticalScrollBar = Scrollbar(
-        #     self, orient=VERTICAL, command=self.canvas.yview
-        # )
-
-        # self.canvas.configure(yscrollcommand=self.verticalScrollBar.set)
-
-        # self.verticalScrollBar.pack(side=RIGHT, fill=Y)
-        # self.canvas.pack(side=LEFT, fill=BOTH, expand=True)
-        # self.canvas.create_window(
-        #     (4, 4), window=self.frame, anchor=NW, tags="self.foodFrame"
-        # )
-
-        # self.frame.bind("<Configure>", self.onFrameConfigure)
-
         self.label = Label(self.frame, text="No diet plan generated yet.")
         self.label.pack(side="top", fill="both", expand=True)
 
@@ -94,22 +76,32 @@ class DietPlanPage(Page):
                     )
                     mealLabel.pack(side="top", fill="x")
 
+                    foodItemFrame = ttk.Frame(self.dietPlanFrame)
+
                     if isinstance(meal, dict):
                         foodLabel = Label(
-                            self.dietPlanFrame,
+                            foodItemFrame,
                             text=f"  Recipe: {list(meal.keys())[0]}",
                             justify="left",
                             anchor=W,
                         )
                     else:
                         foodLabel = Label(
-                            self.dietPlanFrame,
+                            foodItemFrame,
                             text=f"  {meal}",
                             justify="left",
                             anchor=W,
                         )
 
-                    foodLabel.pack(side="top", fill="x")
+                    foodLabel.pack(side=LEFT)
+
+                    replaceButton = ttk.Button(foodItemFrame, text="Replace", command= lambda: print("test"))
+                    replaceButton.pack(side=RIGHT)
+                    
+                    foodItemFrame.pack(side=TOP, fill=X)
+
+
+
 
     def generateActionButtons(self):
         buttonframe = ttk.Frame(self.frame)
@@ -157,7 +149,3 @@ class DietPlanPage(Page):
         for button in self.actionButtons:
             button.pack_forget()
         self.actionButtons = []
-
-    # def onFrameConfigure(self, event):
-    #     """Reset the scroll region to encompass the inner frame"""
-    #     self.canvas.configure(scrollregion=self.canvas.bbox(ALL))

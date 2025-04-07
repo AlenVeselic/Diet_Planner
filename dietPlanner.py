@@ -446,6 +446,9 @@ def createPlan(length, recipeNum, takeOutNum):
 
                 items = []
 
+                # TODO: Seed readyMade and smallAddition foods, cause they can cause an infinite loop if
+                # none exist
+
                 while len(items) < 1:
 
                     subcategories = [
