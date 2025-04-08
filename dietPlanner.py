@@ -642,6 +642,24 @@ def getInitialItemSeeds():
             "instructions": "Boil the pasta, add meat, sauce and cheese",
             "timeToPrepare": "15",
         },
-        
-
+        {
+            "item_id": 8,
+            "name": "Banana",
+            "category_id": 3,
+            "subcategory_id": 16,
+            "preparationType": "None",
+            "ingredients": "Banana",
+            "instructions": "Just eat it",
+            "timeToPrepare": "0",
+        },
+        {
+            "item_id": 9,
+            "name": "Ham and Cheese Croissant",
+            "category_id": 2,
+            "subcategory_id": 12,
+            "preparationType": "None",
+            "ingredients": "Croissant, Ham, Cheese",
+            "instructions": "Just eat it",
+            "timeToPrepare": "0",
+        },
     ]
