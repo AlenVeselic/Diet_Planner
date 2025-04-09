@@ -54,9 +54,19 @@ class MainView(ttk.Frame):
         settings = Settings(self, root)
         categoryList = CategoryList(self, root)
         modifySubcategory = ModifySubcategory(self, root)
-        
-        self.pages = [self.deleteItemPage, dietPlan, self.foodList, self.addEditFoodItemPage, self.dietPlanArchive, self.activeDietPlan, profile, settings, categoryList, modifySubcategory]
 
+        self.pages = [
+            self.deleteItemPage,
+            dietPlan,
+            self.foodList,
+            self.addEditFoodItemPage,
+            self.dietPlanArchive,
+            self.activeDietPlan,
+            profile,
+            settings,
+            categoryList,
+            modifySubcategory,
+        ]
 
         buttonframe = ttk.Frame(self)
         container = ttk.Frame(self)
@@ -66,29 +76,37 @@ class MainView(ttk.Frame):
         for page in self.pages:
             page.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
-        self.debugNavigationButtons = [{"text": "Delete Item", "command": self.deleteItemPage.show}, {"text": "Create diet plan", "command": dietPlan.show}, {"text": "Food list",
-            "command": lambda: [self.foodList.refresh(), self.foodList.show()]}, 
-            {"text": "Create new food", "command": self.addEditFoodItemPage.show}
-    , 
-            {"text": "Diet Plan Archive",
-            "command": lambda: [
-                self.dietPlanArchive.show(),
-                self.dietPlanArchive.refresh(),
-            ]
+        self.debugNavigationButtons = [
+            {"text": "Delete Item", "command": self.deleteItemPage.show},
+            {"text": "Create diet plan", "command": dietPlan.show},
+            {
+                "text": "Food list",
+                "command": lambda: [self.foodList.refresh(), self.foodList.show()],
             },
-        
-            {"text": "Active Diet Plan", "command": self.activeDietPlan.show}
-        , {"text": "Profile", "command": profile.show}, {"text": "Settings", "command": settings.show}, 
-            {"text": "Category List",
-            "command": lambda: [categoryList.refresh(), categoryList.show()],
+            {"text": "Create new food", "command": self.addEditFoodItemPage.show},
+            {
+                "text": "Diet Plan Archive",
+                "command": lambda: [
+                    self.dietPlanArchive.show(),
+                    self.dietPlanArchive.refresh(),
+                ],
             },
-        
-            {"text": "Modify Subcategory", "command": modifySubcategory.show}
-         
+            {"text": "Active Diet Plan", "command": self.activeDietPlan.show},
+            {"text": "Profile", "command": profile.show},
+            {"text": "Settings", "command": settings.show},
+            {
+                "text": "Category List",
+                "command": lambda: [categoryList.refresh(), categoryList.show()],
+            },
+            {"text": "Modify Subcategory", "command": modifySubcategory.show},
         ]
 
         for buttonDefinition in self.debugNavigationButtons:
-            button = Button(buttonframe, text=buttonDefinition["text"], command=buttonDefinition["command"])
+            button = Button(
+                buttonframe,
+                text=buttonDefinition["text"],
+                command=buttonDefinition["command"],
+            )
             button.pack(side=LEFT)
 
         self.deleteItemPage.show()
