@@ -38,6 +38,10 @@ class MainView(ttk.Frame):
     dietPlanArchive = None
     activeDietPlan = None
 
+    debugNavigationButtons = []
+
+    pages = []
+
     def __init__(self, *args, **kwargs):
         ttk.Frame.__init__(self, *args, **kwargs)
         self.deleteItemPage = DeleteItemPage(self, root)
@@ -50,66 +54,42 @@ class MainView(ttk.Frame):
         settings = Settings(self, root)
         categoryList = CategoryList(self, root)
         modifySubcategory = ModifySubcategory(self, root)
+        
+        self.pages = [self.deleteItemPage, dietPlan, self.foodList, self.addEditFoodItemPage, self.dietPlanArchive, self.activeDietPlan, profile, settings, categoryList, modifySubcategory]
+
 
         buttonframe = ttk.Frame(self)
         container = ttk.Frame(self)
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
 
-        self.deleteItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        dietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        self.foodList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        self.addEditFoodItemPage.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        self.dietPlanArchive.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        self.activeDietPlan.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        profile.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        settings.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        categoryList.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
-        modifySubcategory.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        for page in self.pages:
+            page.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
-        b1 = Button(buttonframe, text="Delete Item", command=self.deleteItemPage.show)
-        b2 = Button(buttonframe, text="Create diet plan", command=dietPlan.show)
-        b3 = Button(
-            buttonframe,
-            text="Food list",
-            command=lambda: [self.foodList.refresh(), self.foodList.show()],
-        )
-        b4 = Button(
-            buttonframe, text="Create new food", command=self.addEditFoodItemPage.show
-        )
-        dietPlanArchiveButton = Button(
-            buttonframe,
-            text="Diet Plan Archive",
-            command=lambda: [
+        self.debugNavigationButtons = [{"text": "Delete Item", "command": self.deleteItemPage.show}, {"text": "Create diet plan", "command": dietPlan.show}, {"text": "Food list",
+            "command": lambda: [self.foodList.refresh(), self.foodList.show()]}, 
+            {"text": "Create new food", "command": self.addEditFoodItemPage.show}
+    , 
+            {"text": "Diet Plan Archive",
+            "command": lambda: [
                 self.dietPlanArchive.show(),
                 self.dietPlanArchive.refresh(),
-            ],
-        )
+            ]
+            },
+        
+            {"text": "Active Diet Plan", "command": self.activeDietPlan.show}
+        , {"text": "Profile", "command": profile.show}, {"text": "Settings", "command": settings.show}, 
+            {"text": "Category List",
+            "command": lambda: [categoryList.refresh(), categoryList.show()],
+            },
+        
+            {"text": "Modify Subcategory", "command": modifySubcategory.show}
+         
+        ]
 
-        activeDietPlanButton = Button(
-            buttonframe, text="Active Diet Plan", command=self.activeDietPlan.show
-        )
-        profileButton = Button(buttonframe, text="Profile", command=profile.show)
-        settingsButton = Button(buttonframe, text="Settings", command=settings.show)
-        categoryListButton = Button(
-            buttonframe,
-            text="Category List",
-            command=lambda: [categoryList.refresh(), categoryList.show()],
-        )
-        modifySubcategoryButton = Button(
-            buttonframe, text="Modify Subcategory", command=modifySubcategory.show
-        )
-
-        b1.pack(side="left")
-        b2.pack(side="left")
-        b3.pack(side="left")
-        b4.pack(side="left")
-        dietPlanArchiveButton.pack(side=LEFT)
-        activeDietPlanButton.pack(side=LEFT)
-        profileButton.pack(side=LEFT)
-        settingsButton.pack(side=LEFT)
-        categoryListButton.pack(side=LEFT)
-        modifySubcategoryButton.pack(side=LEFT)
+        for buttonDefinition in self.debugNavigationButtons:
+            button = Button(buttonframe, text=buttonDefinition["text"], command=buttonDefinition["command"])
+            button.pack(side=LEFT)
 
         self.deleteItemPage.show()
 
