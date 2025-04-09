@@ -27,7 +27,7 @@ class DeleteItemPage(Page):
                 self.resetItem(),
                 self.refresh(),
                 self.update(),
-                self.root.foodList.show(),
+                self.root.pages["FoodList"].show(),
             ],
         )
 
@@ -47,8 +47,8 @@ class DeleteItemPage(Page):
                 self.resetItem(),
                 self.refresh(),
                 self.update(),
-                self.root.foodList.show(),
-                self.root.foodList.refresh(),
+                self.root.pages["FoodList"].show(),
+                self.root.pages["FoodList"].refresh(),
             ],
         )
         deleteButton.pack(side=RIGHT)

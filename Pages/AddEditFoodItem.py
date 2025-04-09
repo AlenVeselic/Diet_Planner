@@ -198,8 +198,8 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    self.root.foodList.refresh(),
-                    self.root.foodList.show(),
+                    self.root.pages["FoodList"].refresh(),
+                    self.root.pages["FoodList"].show(),
                     self.root.update(),
                 ],
             )
@@ -218,8 +218,8 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    self.root.foodList.refresh(),
-                    self.root.foodList.show(),
+                    self.root.pages["FoodList"].refresh(),
+                    self.root.pages["FoodList"].show(),
                     self.root.update(),
                 ],
             )
@@ -230,8 +230,8 @@ class AddEditFoodItem(Page):
             text="Cancel",
             command=lambda: [
                 self.reset(),
-                self.root.foodList.refresh(),
-                self.root.foodList.show(),
+                self.root.pages["FoodList"].refresh(),
+                self.root.pages["FoodList"].show(),
                 self.update(),
             ],
         )
@@ -274,8 +274,8 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    self.root.foodList.refresh(),
-                    self.root.foodList.show(),
+                    self.root.pages["FoodList"].refresh(),
+                    self.root.pages["FoodList"].show(),
                     self.root.update(),
                 ],
             )
@@ -294,8 +294,8 @@ class AddEditFoodItem(Page):
                     ),
                     self.reset(),
                     self.refresh(),
-                    self.root.foodList.refresh(),
-                    self.root.foodList.show(),
+                    self.root.pages["FoodList"].refresh(),
+                    self.root.pages["FoodList"].show(),
                     self.root.update(),
                 ],
             )

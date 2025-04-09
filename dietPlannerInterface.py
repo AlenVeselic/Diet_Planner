@@ -40,7 +40,7 @@ class MainView(ttk.Frame):
 
     debugNavigationButtons = []
 
-    pages = []
+    pages: dict[str, Page] = {}
 
     def __init__(self, *args, **kwargs):
         ttk.Frame.__init__(self, *args, **kwargs)
@@ -55,50 +55,62 @@ class MainView(ttk.Frame):
         categoryList = CategoryList(self, root)
         modifySubcategory = ModifySubcategory(self, root)
 
-        self.pages = [
-            self.deleteItemPage,
-            dietPlan,
-            self.foodList,
-            self.addEditFoodItemPage,
-            self.dietPlanArchive,
-            self.activeDietPlan,
-            profile,
-            settings,
-            categoryList,
-            modifySubcategory,
-        ]
+        pageDefinitions: dict = {
+            "DeleteItem": DeleteItemPage,
+            "DietPlan": DietPlanPage,
+            "FoodList": FoodListPage,
+            "AddEditFood": AddEditFoodItem,
+            "DietPlanArchive": DietPlanArchive,
+            "ActiveDietPlan": ActiveDietPlan,
+            "Profile": Profile,
+            "Settings": Settings,
+            "CategoryList": CategoryList,
+            "ModifySubcategory": ModifySubcategory,
+        }
+
+        for definition in pageDefinitions.keys():
+            self.pages[definition] = pageDefinitions[definition](self, root)
 
         buttonframe = ttk.Frame(self)
         container = ttk.Frame(self)
         buttonframe.pack(side="top", fill="x", expand=False)
         container.pack(side="top", fill="both", expand=True)
 
-        for page in self.pages:
-            page.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        for page in self.pages.keys():
+            self.pages[page].place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         self.debugNavigationButtons = [
-            {"text": "Delete Item", "command": self.deleteItemPage.show},
-            {"text": "Create diet plan", "command": dietPlan.show},
+            {"text": "Delete Item", "command": self.pages["DeleteItem"].show},
+            {"text": "Create diet plan", "command": self.pages["DietPlan"].show},
             {
                 "text": "Food list",
-                "command": lambda: [self.foodList.refresh(), self.foodList.show()],
+                "command": lambda: [
+                    self.pages["FoodList"].refresh(),
+                    self.pages["FoodList"].show(),
+                ],
             },
-            {"text": "Create new food", "command": self.addEditFoodItemPage.show},
+            {"text": "Create new food", "command": self.pages["AddEditFood"].show},
             {
                 "text": "Diet Plan Archive",
                 "command": lambda: [
-                    self.dietPlanArchive.show(),
-                    self.dietPlanArchive.refresh(),
+                    self.pages["DietPlanArchive"].show(),
+                    self.pages["DietPlanArchive"].refresh(),
                 ],
             },
-            {"text": "Active Diet Plan", "command": self.activeDietPlan.show},
-            {"text": "Profile", "command": profile.show},
-            {"text": "Settings", "command": settings.show},
+            {"text": "Active Diet Plan", "command": self.pages["ActiveDietPlan"].show},
+            {"text": "Profile", "command": self.pages["Profile"].show},
+            {"text": "Settings", "command": self.pages["Settings"].show},
             {
                 "text": "Category List",
-                "command": lambda: [categoryList.refresh(), categoryList.show()],
+                "command": lambda: [
+                    self.pages["CategoryList"].refresh(),
+                    self.pages["CategoryList"].show(),
+                ],
             },
-            {"text": "Modify Subcategory", "command": modifySubcategory.show},
+            {
+                "text": "Modify Subcategory",
+                "command": self.pages["ModifySubcategory"].show,
+            },
         ]
 
         for buttonDefinition in self.debugNavigationButtons:
@@ -109,7 +121,7 @@ class MainView(ttk.Frame):
             )
             button.pack(side=LEFT)
 
-        self.deleteItemPage.show()
+        self.pages["DeleteItem"].show()
 
 
 # if __name__ == "__main__":

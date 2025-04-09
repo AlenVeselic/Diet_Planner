@@ -95,13 +95,12 @@ class DietPlanPage(Page):
 
                     foodLabel.pack(side=LEFT)
 
-                    replaceButton = ttk.Button(foodItemFrame, text="Replace", command= lambda: print("test"))
+                    replaceButton = ttk.Button(
+                        foodItemFrame, text="Replace", command=lambda: print("test")
+                    )
                     replaceButton.pack(side=RIGHT)
-                    
+
                     foodItemFrame.pack(side=TOP, fill=X)
-
-
-
 
     def generateActionButtons(self):
         buttonframe = ttk.Frame(self.frame)
@@ -121,7 +120,7 @@ class DietPlanPage(Page):
                 text="Accept",
                 command=lambda: [
                     self.saveDietPlan(),
-                    self.root.dietPlanArchive.show(),
+                    self.root.pages["DietPlanArchive"].show(),
                 ],
             )
 
