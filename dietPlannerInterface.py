@@ -32,11 +32,6 @@ def refreshData(*args):
 
 
 class MainView(ttk.Frame):
-    deleteItemPage = None
-    foodList = None
-    addEditFoodItemPage = None
-    dietPlanArchive = None
-    activeDietPlan = None
 
     debugNavigationButtons = []
 
@@ -44,16 +39,6 @@ class MainView(ttk.Frame):
 
     def __init__(self, *args, **kwargs):
         ttk.Frame.__init__(self, *args, **kwargs)
-        self.deleteItemPage = DeleteItemPage(self, root)
-        dietPlan = DietPlanPage(self, root)
-        self.foodList = FoodListPage(self, root)
-        self.addEditFoodItemPage = AddEditFoodItem(self, root)
-        self.dietPlanArchive = DietPlanArchive(self, root)
-        self.activeDietPlan = ActiveDietPlan(self, root)
-        profile = Profile(self, root)
-        settings = Settings(self, root)
-        categoryList = CategoryList(self, root)
-        modifySubcategory = ModifySubcategory(self, root)
 
         pageDefinitions: dict = {
             "DeleteItem": DeleteItemPage,
@@ -124,13 +109,6 @@ class MainView(ttk.Frame):
         self.pages["DeleteItem"].show()
 
 
-# if __name__ == "__main__":
-
-#     # gui initialization
-
-
-#     #  mainloop initiation
-#     root.mainloop()
 
 if __name__ == "__main__":
     # logging basic configuration initialization
