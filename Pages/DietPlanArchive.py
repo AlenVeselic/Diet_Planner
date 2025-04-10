@@ -12,7 +12,7 @@ class DietPlanArchive(Page):
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
 
-        self.label = Label(self.frame, text="WIP: Diet Plan Archive")
+        self.label = Label(self.frame, text="Accepted Diet Plans")
         self.label.pack(side="top", fill="x", expand=False)
         self.planList = Frame(self.frame)
         self.planList.pack(side=TOP, fill=BOTH, expand=True)
