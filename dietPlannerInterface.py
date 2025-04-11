@@ -82,7 +82,7 @@ class MainView(ttk.Frame):
                     self.pages["DietPlanArchive"].refresh(),
                 ],
             },
-            {"text": "Active Diet Plan", "command": self.pages["ActiveDietPlan"].show},
+            {"text": "Active Diet Plan", "command": lambda: [self.pages["ActiveDietPlan"].show(), self.pages["ActiveDietPlan"].refresh()]},
             {"text": "Profile", "command": self.pages["Profile"].show},
             {"text": "Settings", "command": self.pages["Settings"].show},
             {

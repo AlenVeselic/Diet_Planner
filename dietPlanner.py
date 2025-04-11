@@ -127,9 +127,10 @@ def getDietPlans():
 
 
 def getActiveDietPlan():
-    # Get latest diet plan and check when it was created/saved and when it is supposed to expire
+    # TODO: Get latest diet plan and check when it was created/saved and when it is supposed to expire
     # If it has expired return nothing
-    print("WIP")
+    plans = getDietPlans()
+    return plans[-1]
 
 
 def editDietPlan(id, modifiedDietPlan):
