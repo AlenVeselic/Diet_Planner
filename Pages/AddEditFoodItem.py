@@ -203,7 +203,7 @@ class AddEditFoodItem(Page):
                     self.root.update(),
                 ],
             )
-            self.actionButton.grid(column=3, row=4, sticky=E)
+            self.actionButton.grid(column=2, row=4, sticky=E)
         else:
             # edit button
             self.actionButton = ttk.Button(
@@ -223,7 +223,7 @@ class AddEditFoodItem(Page):
                     self.root.update(),
                 ],
             )
-            self.actionButton.grid(column=3, row=4, sticky=E)
+            self.actionButton.grid(column=2, row=4, sticky=E)
 
         cancelButton = ttk.Button(
             self.foodFrame,
@@ -239,7 +239,7 @@ class AddEditFoodItem(Page):
 
         self.foodFrame.grid_rowconfigure(0, weight=1)
         self.foodFrame.grid_columnconfigure(0, weight=1)
-        self.foodFrame.grid_rowconfigure(4, weight=1)
+        self.foodFrame.grid_rowconfigure(4, weight=1, pad=10)
         self.foodFrame.grid_columnconfigure(6, weight=1)
 
         # combobox selection bindings
@@ -279,7 +279,7 @@ class AddEditFoodItem(Page):
                     self.root.update(),
                 ],
             )
-            self.actionButton.grid(column=3, row=4, sticky=E)
+            self.actionButton.grid(column=2, row=4, sticky=E)
         else:
             # edit button
             self.actionButton = ttk.Button(
@@ -299,7 +299,7 @@ class AddEditFoodItem(Page):
                     self.root.update(),
                 ],
             )
-            self.actionButton.grid(column=3, row=4, sticky=E)
+            self.actionButton.grid(column=2, row=4, sticky=E)
 
         self.foodData = dietPlanner.getShelve()
         self.root.update()
