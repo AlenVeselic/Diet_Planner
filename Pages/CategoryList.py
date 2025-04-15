@@ -5,6 +5,39 @@ import ttkbootstrap as ttk
 from Pages.Page_Class import Page
 import dietPlanner
 
+class CategoryFrame(Frame):
+    category= None
+    parentCategory = None
+    parent = None
+    root = None
+    page = None
+
+    def __init__(self, parent, category, categories, root, page, overrideName=None, overrideParent=None):
+        Frame.__init__(self, parent)
+
+        self.category = category
+        self.parent = parent
+        self.root = root
+        self.page = page
+
+        if overrideName:
+            nameLabel = ttk.Label(self, text=overrideName)
+            nameLabel.pack(side=LEFT)
+        else:
+            nameLabel = ttk.Label(self, text=self.category["name"])
+        
+        nameLabel.pack(side=LEFT)
+        
+        if self.category:
+            self.parentCategory = dietPlanner.getCategoryFromId(categories, self.category["parent_id"])
+        
+        if overrideParent:
+            parentNameLabel = ttk.Label(self, text=overrideParent)
+        elif self.parentCategory:
+            parentNameLabel = ttk.Label(self, text=self.parentCategory["name"])
+        else:
+            parentNameLabel = ttk.Label(self, text="None")
+        parentNameLabel.pack(side=LEFT)
 
 class CategoryList(Page):
 
@@ -29,26 +62,12 @@ class CategoryList(Page):
             noCategoriesLabel.pack(side=TOP, expand=True, fill="x")
             self.categoryWidgets.append(noCategoriesLabel)
         else:
-            categoryHeaderFrame = ttk.Frame(self.categoryListFrame)
-            nameHeaderLabel = Label(categoryHeaderFrame, text="Category Name")
-            nameHeaderLabel.pack(side=LEFT, expand=True)
-            parentHeaderLabel = Label(categoryHeaderFrame, text="Parent Category")
-            parentHeaderLabel.pack(side=LEFT, expand=True)
+            categoryHeaderFrame = CategoryFrame(self.categoryListFrame, None, self.categories, self.root, self, overrideName="Category Name", overrideParent="Parent Category")
             categoryHeaderFrame.pack(side=TOP, expand=True, fill="x")
             self.categoryWidgets.append(categoryHeaderFrame)
 
             for category in self.categories:
-                categoryFrame = ttk.Frame(self.categoryListFrame)
-                categoryLabel = Label(categoryFrame, text=category["name"])
-                categoryLabel.pack(side=LEFT, expand=True)
-                parentCategory = dietPlanner.getCategoryFromId(self.categories,category["parent_id"])
-                if parentCategory:
-                    categoryParentLabel = Label(
-                        categoryFrame, text=parentCategory["name"]
-                    )
-                else:
-                    categoryParentLabel = Label(categoryFrame, text="None")
-                categoryParentLabel.pack(side=LEFT, expand=True)
+                categoryFrame = CategoryFrame(self.categoryListFrame, category, self.categories, self.root, self)
                 categoryFrame.pack(side=TOP, expand=True, fill="x")
                 self.categoryWidgets.append(categoryFrame)
 
@@ -59,25 +78,11 @@ class CategoryList(Page):
             widget.destroy()
 
         self.categoryWidgets = []
-        categoryHeaderFrame = ttk.Frame(self.categoryListFrame)
-        nameHeaderLabel = Label(categoryHeaderFrame, text="Category Name")
-        nameHeaderLabel.pack(side=LEFT, expand=True)
-        parentHeaderLabel = Label(categoryHeaderFrame, text="Parent Category")
-        parentHeaderLabel.pack(side=LEFT, expand=True)
+        categoryHeaderFrame = CategoryFrame(self.categoryListFrame, None, self.categories, self.root, self, overrideName="Category Name", overrideParent="Parent Category")
         categoryHeaderFrame.pack(side=TOP, expand=True, fill="x")
 
         for category in self.categories:
-            categoryFrame = ttk.Frame(self.categoryListFrame)
-            categoryLabel = Label(categoryFrame, text=category["name"])
-            categoryLabel.pack(side=LEFT, expand=True)
-            parentCategory = dietPlanner.getCategoryFromId(self.categories,category["parent_id"])
-            if parentCategory:
-                categoryParentLabel = Label(
-                    categoryFrame, text=parentCategory["name"]
-                )
-            else:
-                categoryParentLabel = Label(categoryFrame, text="None")
-            categoryParentLabel.pack(side=LEFT, expand=True)
+            categoryFrame = CategoryFrame(self.categoryListFrame, category, self.categories, self.root, self)
             categoryFrame.pack(side=TOP, expand=True, fill="x")
             self.categoryWidgets.append(categoryFrame)
 
