@@ -39,6 +39,33 @@ class CategoryFrame(Frame):
             parentNameLabel = ttk.Label(self, text="None")
         parentNameLabel.pack(side=LEFT)
 
+        editButton = ttk.Button(
+            self,
+            text="edit",
+            command=lambda: [
+                self.page.refresh(),
+                self.update(),
+                #self.root.pages["AddEditFood"].show(),
+                #self.root.pages["AddEditFood"].setItemToEdit(item),
+            ],
+        )
+
+        editButton.pack(side=RIGHT)
+
+        if self.parentCategory:
+            trashButton = ttk.Button(
+                self,
+                text="trash",
+                command=lambda: [
+                    self.page.refresh(),
+                    self.update(),
+                    #self.root.pages["DeleteItem"].show(),
+                    #self.root.pages["DeleteItem"].setItemToDelete(item),
+                    #self.root.pages["DeleteItem"].refresh(),
+                ],
+            )
+            trashButton.pack(side=RIGHT)
+
 class CategoryList(Page):
 
     categories = None
