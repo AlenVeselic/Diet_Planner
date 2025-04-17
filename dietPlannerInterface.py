@@ -41,12 +41,12 @@ class MainView(ttk.Frame):
         ttk.Frame.__init__(self, *args, **kwargs)
 
         pageDefinitions: dict = {
-            "DeleteItem": DeleteItemPage,
+            "DeleteItem": DeleteItemPage,  # TODO: Implement delete category, Learn how prompts/dialog windows work and move this funcionality there,
             "DietPlan": DietPlanPage,
             "FoodList": FoodListPage,
-            "AddEditFood": AddEditFoodItem,
+            "AddEditFood": AddEditFoodItem,  # TODO: Add more properties, change edit to view and make editing togglable
             "DietPlanArchive": DietPlanArchive,
-            "ActiveDietPlan": ActiveDietPlan,
+            "ActiveDietPlan": ActiveDietPlan,  # TODO: Replace with food journal, Replace action buttons with confirm, replace and remove
             "Profile": Profile,
             "Settings": Settings,
             "CategoryList": CategoryList,
@@ -82,7 +82,13 @@ class MainView(ttk.Frame):
                     self.pages["DietPlanArchive"].refresh(),
                 ],
             },
-            {"text": "Active Diet Plan", "command": lambda: [self.pages["ActiveDietPlan"].show(), self.pages["ActiveDietPlan"].refresh()]},
+            {
+                "text": "Active Diet Plan",
+                "command": lambda: [
+                    self.pages["ActiveDietPlan"].show(),
+                    self.pages["ActiveDietPlan"].refresh(),
+                ],
+            },
             {"text": "Profile", "command": self.pages["Profile"].show},
             {"text": "Settings", "command": self.pages["Settings"].show},
             {
@@ -107,7 +113,6 @@ class MainView(ttk.Frame):
             button.pack(side=LEFT)
 
         self.pages["DeleteItem"].show()
-
 
 
 if __name__ == "__main__":
