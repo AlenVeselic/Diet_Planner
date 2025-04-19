@@ -1,8 +1,8 @@
 #! python3
 
-# dietPlannerInterface.py - simple tkinter interface made to put the functions in dietPlanner.py to use in a visual manner
+# DietPlannerInterface.py - simple tkinter interface made to put the functions in DietPlanner.py to use in a visual manner
 
-# import all needed things: tkinter for gui generationm, dietPlanner for backend operations, logginf for debug
+# import all needed things: tkinter for gui generation, DietPlanner for backend operations, logginf for debug
 from tkinter import *
 
 import ttkbootstrap as ttk
