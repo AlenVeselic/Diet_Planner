@@ -64,6 +64,11 @@ class ActiveDietPlan(Page):
 
                     foodLabel.pack(side=LEFT)
 
+                    confirmButton = ttk.Button(
+                        foodItemFrame, text="Confirm", command=lambda: print("test")
+                    )
+                    confirmButton.pack(side=RIGHT, padx=5)
+
                     replaceButton = ttk.Button(
                         foodItemFrame, text="Replace", command=lambda: print("test")
                     )
