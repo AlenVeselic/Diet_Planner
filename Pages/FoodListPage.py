@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
@@ -39,14 +40,27 @@ class ItemFrame(Frame):
             self,
             text="trash",
             command=lambda: [
-                self.page.refresh(),
+                self.delete(),
                 self.update(),
-                self.root.pages["DeleteItem"].show(),
-                self.root.pages["DeleteItem"].setItemToDelete(item),
-                self.root.pages["DeleteItem"].refresh(),
+                self.page.refresh(),
             ],
         )
         trashButton.pack(side=RIGHT)
+
+    def delete(self):
+
+        confirmed = messagebox.askyesno(
+            title="Are you sure?",
+            message=f"Are you sure you want to delete {self.item['name']}?",
+        )
+
+        if confirmed:
+
+            DietPlanner.removeItem(
+                self.item["category_id"],
+                self.item["subcategory_id"],
+                self.item["name"],
+            )
 
 
 class FoodListPage(Page):
