@@ -41,7 +41,7 @@ class MainView(ttk.Frame):
         ttk.Frame.__init__(self, *args, **kwargs)
 
         pageDefinitions: dict = {
-            "DeleteItem": DeleteItemPage,  # TODO: Implement delete category, Learn how prompts/dialog windows work and move this funcionality there,
+            # "DeleteItem": DeleteItemPage,
             "DietPlan": DietPlanPage,
             "FoodList": FoodListPage,
             "AddEditFood": AddEditFoodItem,  # TODO: Add more properties, change edit to view and make editing togglable
@@ -65,7 +65,7 @@ class MainView(ttk.Frame):
             self.pages[page].place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
         self.debugNavigationButtons = [
-            {"text": "Delete Item", "command": self.pages["DeleteItem"].show},
+            # {"text": "Delete Item", "command": self.pages["DeleteItem"].show},
             {"text": "Create diet plan", "command": self.pages["DietPlan"].show},
             {
                 "text": "Food list",
@@ -112,7 +112,8 @@ class MainView(ttk.Frame):
             )
             button.pack(side=LEFT)
 
-        self.pages["DeleteItem"].show()
+        self.pages["ActiveDietPlan"].refresh()
+        self.pages["ActiveDietPlan"].show()
 
 
 if __name__ == "__main__":
