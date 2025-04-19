@@ -49,6 +49,4 @@ class Page(ttk.Frame):
     def show(self):
 
         self.lift()
-        self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
         self.root.update()
-        self.update()

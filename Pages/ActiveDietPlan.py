@@ -28,47 +28,49 @@ class ActiveDietPlan(Page):
             self.label["text"] = f"Active diet plan: {self.plan['Name']}"
 
             for index, day in enumerate(self.plan["Days"]):
-                    dayLabel = Label(
+                dayLabel = Label(
+                    self.dietPlanFrame,
+                    text=f"Day {index + 1}",
+                    justify="left",
+                    anchor=W,
+                )
+                dayLabel.pack(side=("top"), fill="x")
+
+                for index, meal in enumerate(day["Meals"]):
+                    mealLabel = Label(
                         self.dietPlanFrame,
-                        text=f"Day {index + 1}",
+                        text=f" Meal {index + 1}",
                         justify="left",
                         anchor=W,
                     )
-                    dayLabel.pack(side=("top"), fill="x")
+                    mealLabel.pack(side="top", fill="x")
 
-                    for index, meal in enumerate(day["Meals"]):
-                        mealLabel = Label(
-                            self.dietPlanFrame,
-                            text=f" Meal {index + 1}",
+                    foodItemFrame = ttk.Frame(self.dietPlanFrame)
+
+                    if isinstance(meal, dict):
+                        foodLabel = Label(
+                            foodItemFrame,
+                            text=f"  Recipe: {list(meal.keys())[0]}",
                             justify="left",
                             anchor=W,
                         )
-                        mealLabel.pack(side="top", fill="x")
-
-                        foodItemFrame = ttk.Frame(self.dietPlanFrame)
-
-                        if isinstance(meal, dict):
-                            foodLabel = Label(
-                                foodItemFrame,
-                                text=f"  Recipe: {list(meal.keys())[0]}",
-                                justify="left",
-                                anchor=W,
-                            )
-                        else:
-                            foodLabel = Label(
-                                foodItemFrame,
-                                text=f"  {meal}",
-                                justify="left",
-                                anchor=W,
-                            )
-
-                        foodLabel.pack(side=LEFT)
-
-                        replaceButton = ttk.Button(
-                            foodItemFrame, text="Replace", command=lambda: print("test")
+                    else:
+                        foodLabel = Label(
+                            foodItemFrame,
+                            text=f"  {meal}",
+                            justify="left",
+                            anchor=W,
                         )
-                        replaceButton.pack(side=RIGHT)
 
-                        foodItemFrame.pack(side=TOP, fill=X)
+                    foodLabel.pack(side=LEFT)
 
+                    replaceButton = ttk.Button(
+                        foodItemFrame, text="Replace", command=lambda: print("test")
+                    )
+                    replaceButton.pack(side=RIGHT)
+
+                    foodItemFrame.pack(side=TOP, fill=X)
+
+        self.verticalScrollBar.update()
+        self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
         self.root.update()
