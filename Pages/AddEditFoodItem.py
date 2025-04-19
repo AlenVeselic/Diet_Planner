@@ -3,7 +3,7 @@ import ttkbootstrap as ttk
 import logging
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
 
 
 class AddEditFoodItem(Page):
@@ -27,7 +27,7 @@ class AddEditFoodItem(Page):
 
         self.item = item
 
-        subCategory = dietPlanner.getCategoryFromId(
+        subCategory = DietPlanner.getCategoryFromId(
             self.foodData["categories"], item["subcategory_id"]
         )
 
@@ -67,11 +67,11 @@ class AddEditFoodItem(Page):
                 if mainCategory:
                     nextCategory = mainCategory
                 self.curMainCat.set(nextCategory)  # sets the new main chosen category
-                nextCategoryObject = dietPlanner.getCategoryFromName(
+                nextCategoryObject = DietPlanner.getCategoryFromName(
                     self.foodData["categories"], nextCategory
                 )
                 self.subcategoryBox["values"] = list(
-                    dietPlanner.getSubcategoriesFromCategories(
+                    DietPlanner.getSubcategoriesFromCategories(
                         self.foodData["categories"], nextCategoryObject
                     )
                 )  # freshly sets the subcategory display
@@ -100,7 +100,7 @@ class AddEditFoodItem(Page):
                 logging.debug("\n" + str(self.curSubCat.get()) + "\n")
                 # sets the items the item listbox needs to display
                 allItems = self.foodData["items"]
-                selectedSubCategory = dietPlanner.getCategoryFromName(
+                selectedSubCategory = DietPlanner.getCategoryFromName(
                     self.foodData["categories"], self.curSubCat.get()
                 )
                 filteredItems = (
@@ -112,7 +112,7 @@ class AddEditFoodItem(Page):
                 # self.itemVar.set(filteredItemNames)
 
                 if not self.curMainCat.get():
-                    mainCategoryOfSubcategory = dietPlanner.getCategoryFromId(
+                    mainCategoryOfSubcategory = DietPlanner.getCategoryFromId(
                         self.foodData["categories"],
                         selectedSubCategory["parent_id"],
                     )
@@ -126,7 +126,7 @@ class AddEditFoodItem(Page):
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
 
-        self.foodData = dietPlanner.getShelve()
+        self.foodData = DietPlanner.getShelve()
 
         # variables which will store the currently selected category and subcategory since listboxes do not save selected items when out of focus
         self.curMainCat = StringVar()
@@ -143,7 +143,7 @@ class AddEditFoodItem(Page):
         ttk.Label(self.foodFrame, text="Main category: ").grid(column=1, row=2)
 
         categories = list(
-            dietPlanner.getMainCategoriesFromCategories(self.foodData["categories"])
+            DietPlanner.getMainCategoriesFromCategories(self.foodData["categories"])
         )
         self.categoryVar = StringVar()
         self.mainCategoryBox = ttk.Combobox(
@@ -164,7 +164,7 @@ class AddEditFoodItem(Page):
         ttk.Label(self.foodFrame, text="Subcategory: ").grid(column=1, row=3)
 
         subcategories = list(
-            dietPlanner.getAllSubcategoriesFromCategories(self.foodData["categories"])
+            DietPlanner.getAllSubcategoriesFromCategories(self.foodData["categories"])
         )
         self.subcategoryVar = StringVar()
         self.subcategoryBox = ttk.Combobox(
@@ -191,7 +191,7 @@ class AddEditFoodItem(Page):
                 self.foodFrame,
                 text="Add Item",
                 command=lambda: [
-                    dietPlanner.addFoodItem(
+                    DietPlanner.addFoodItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
@@ -210,7 +210,7 @@ class AddEditFoodItem(Page):
                 self.foodFrame,
                 text="Edit Item",
                 command=lambda: [
-                    dietPlanner.editItem(
+                    DietPlanner.editItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
@@ -267,7 +267,7 @@ class AddEditFoodItem(Page):
                 self.foodFrame,
                 text="Add Item",
                 command=lambda: [
-                    dietPlanner.addFoodItem(
+                    DietPlanner.addFoodItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
@@ -286,7 +286,7 @@ class AddEditFoodItem(Page):
                 self.foodFrame,
                 text="Edit Item",
                 command=lambda: [
-                    dietPlanner.editItem(
+                    DietPlanner.editItem(
                         self.curMainCat.get(),
                         self.curSubCat.get(),
                         self.inputVar.get(),
@@ -301,6 +301,6 @@ class AddEditFoodItem(Page):
             )
             self.actionButton.grid(column=2, row=4, sticky=E)
 
-        self.foodData = dietPlanner.getShelve()
+        self.foodData = DietPlanner.getShelve()
         self.root.update()
         # self.reset()

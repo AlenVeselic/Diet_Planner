@@ -7,7 +7,7 @@ from tkinter import *
 
 import ttkbootstrap as ttk
 
-import dietPlanner
+import DietPlanner
 import logging
 
 from Pages.Page_Class import Page
@@ -28,7 +28,7 @@ from Pages.ModifySubcategory import ModifySubcategory
 
 # refreshes the global food database
 def refreshData(*args):
-    foodData = dietPlanner.getShelve()
+    foodData = DietPlanner.getShelve()
 
 
 class MainView(ttk.Frame):

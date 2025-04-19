@@ -2,7 +2,7 @@ from tkinter import *
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
 
 
 class ItemFrame(Frame):
@@ -60,7 +60,7 @@ class FoodListPage(Page):
     def __init__(self, root, *args, **kwargs):
         Page.__init__(self, root, *args, **kwargs)
 
-        self.foodData = dietPlanner.getShelve()
+        self.foodData = DietPlanner.getShelve()
 
         self.addFoodButton = ttk.Button(
             self.frame,
@@ -84,7 +84,7 @@ class FoodListPage(Page):
             self.currentFrames.append(itemFrame)
 
     def refresh(self):
-        self.foodData = dietPlanner.getShelve()
+        self.foodData = DietPlanner.getShelve()
 
         for frame in self.currentFrames:
             frame.pack_forget()

@@ -2,7 +2,7 @@ from tkinter import *
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
 
 
 class DeleteItemPage(Page):
@@ -39,7 +39,7 @@ class DeleteItemPage(Page):
             self.frame,
             text="Delete",
             command=lambda: [
-                dietPlanner.removeItem(
+                DietPlanner.removeItem(
                     self.item["category_id"],
                     self.item["subcategory_id"],
                     self.item["name"],
@@ -61,7 +61,7 @@ class DeleteItemPage(Page):
         self.actionButtons = []
 
     def refresh(self):
-        self.foodData = dietPlanner.getShelve()
+        self.foodData = DietPlanner.getShelve()
         self.label["text"] = "No item selected for deletion"
         self.removeActionButtons()
 

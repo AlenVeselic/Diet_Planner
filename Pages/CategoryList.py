@@ -3,16 +3,26 @@ from tkinter import *
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
+
 
 class CategoryFrame(Frame):
-    category= None
+    category = None
     parentCategory = None
     parent = None
     root = None
     page = None
 
-    def __init__(self, parent, category, categories, root, page, overrideName=None, overrideParent=None):
+    def __init__(
+        self,
+        parent,
+        category,
+        categories,
+        root,
+        page,
+        overrideName=None,
+        overrideParent=None,
+    ):
         Frame.__init__(self, parent)
 
         self.category = category
@@ -25,12 +35,14 @@ class CategoryFrame(Frame):
             nameLabel.pack(side=LEFT)
         else:
             nameLabel = ttk.Label(self, text=self.category["name"])
-        
+
         nameLabel.pack(side=LEFT)
-        
+
         if self.category:
-            self.parentCategory = dietPlanner.getCategoryFromId(categories, self.category["parent_id"])
-        
+            self.parentCategory = DietPlanner.getCategoryFromId(
+                categories, self.category["parent_id"]
+            )
+
         if overrideParent:
             parentNameLabel = ttk.Label(self, text=overrideParent)
         elif self.parentCategory:
@@ -45,8 +57,8 @@ class CategoryFrame(Frame):
             command=lambda: [
                 self.page.refresh(),
                 self.update(),
-                #self.root.pages["AddEditFood"].show(),
-                #self.root.pages["AddEditFood"].setItemToEdit(item),
+                # self.root.pages["AddEditFood"].show(),
+                # self.root.pages["AddEditFood"].setItemToEdit(item),
             ],
         )
 
@@ -59,12 +71,13 @@ class CategoryFrame(Frame):
                 command=lambda: [
                     self.page.refresh(),
                     self.update(),
-                    #self.root.pages["DeleteItem"].show(),
-                    #self.root.pages["DeleteItem"].setItemToDelete(item),
-                    #self.root.pages["DeleteItem"].refresh(),
+                    # self.root.pages["DeleteItem"].show(),
+                    # self.root.pages["DeleteItem"].setItemToDelete(item),
+                    # self.root.pages["DeleteItem"].refresh(),
                 ],
             )
             trashButton.pack(side=RIGHT)
+
 
 class CategoryList(Page):
 
@@ -89,27 +102,47 @@ class CategoryList(Page):
             noCategoriesLabel.pack(side=TOP, expand=True, fill="x")
             self.categoryWidgets.append(noCategoriesLabel)
         else:
-            categoryHeaderFrame = CategoryFrame(self.categoryListFrame, None, self.categories, self.root, self, overrideName="Category Name", overrideParent="Parent Category")
+            categoryHeaderFrame = CategoryFrame(
+                self.categoryListFrame,
+                None,
+                self.categories,
+                self.root,
+                self,
+                overrideName="Category Name",
+                overrideParent="Parent Category",
+            )
             categoryHeaderFrame.pack(side=TOP, expand=True, fill="x")
             self.categoryWidgets.append(categoryHeaderFrame)
 
             for category in self.categories:
-                categoryFrame = CategoryFrame(self.categoryListFrame, category, self.categories, self.root, self)
+                categoryFrame = CategoryFrame(
+                    self.categoryListFrame, category, self.categories, self.root, self
+                )
                 categoryFrame.pack(side=TOP, expand=True, fill="x")
                 self.categoryWidgets.append(categoryFrame)
 
     def refresh(self):
-        self.categories = dietPlanner.getCategories()
+        self.categories = DietPlanner.getCategories()
 
         for widget in self.categoryListFrame.winfo_children():
             widget.destroy()
 
         self.categoryWidgets = []
-        categoryHeaderFrame = CategoryFrame(self.categoryListFrame, None, self.categories, self.root, self, overrideName="Category Name", overrideParent="Parent Category")
+        categoryHeaderFrame = CategoryFrame(
+            self.categoryListFrame,
+            None,
+            self.categories,
+            self.root,
+            self,
+            overrideName="Category Name",
+            overrideParent="Parent Category",
+        )
         categoryHeaderFrame.pack(side=TOP, expand=True, fill="x")
 
         for category in self.categories:
-            categoryFrame = CategoryFrame(self.categoryListFrame, category, self.categories, self.root, self)
+            categoryFrame = CategoryFrame(
+                self.categoryListFrame, category, self.categories, self.root, self
+            )
             categoryFrame.pack(side=TOP, expand=True, fill="x")
             self.categoryWidgets.append(categoryFrame)
 

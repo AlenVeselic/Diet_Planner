@@ -2,7 +2,7 @@ from tkinter import *
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
 
 
 class ActiveDietPlan(Page):
@@ -23,7 +23,7 @@ class ActiveDietPlan(Page):
         self.dietPlanFrame = ttk.Frame(self.frame)
         self.dietPlanFrame.pack(side="top", fill="both", expand=True)
         # DietPlanner.getActiveDietPlan
-        self.plan = dietPlanner.getActiveDietPlan()
+        self.plan = DietPlanner.getActiveDietPlan()
         if self.plan:
             self.label["text"] = f"Active diet plan: {self.plan['Name']}"
 

@@ -3,7 +3,7 @@ from tkinter import *
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
 
 
 class DietPlanPage(Page):
@@ -30,17 +30,17 @@ class DietPlanPage(Page):
     def updateLabelWithDietPlanObject(self):
         self.label["text"] = "\n".join(
             "{}\n {}\n".format(k, d)
-            for k, d in (dietPlanner.createPlan(5, 2, 2)).items()
+            for k, d in (DietPlanner.createPlan(5, 2, 2)).items()
         ).replace(",", ",\n")
 
     def createDietPlan(self):
-        self.plan = dietPlanner.createPlan(5, 2, 2)
+        self.plan = DietPlanner.createPlan(5, 2, 2)
 
     def discardDietPlan(self):
         self.plan = None
 
     def saveDietPlan(self):
-        dietPlanner.saveDietPlan(self.plan)
+        DietPlanner.saveDietPlan(self.plan)
 
         self.plan = None
 
@@ -108,7 +108,7 @@ class DietPlanPage(Page):
         if not self.plan:
             settingsLabel = ttk.Label(
                 buttonframe, text="Diet plan settings"
-            )  # TODO: Add ability to set Diet plan parameters from dietPlanner here
+            )  # TODO: Add ability to set Diet plan parameters from DietPlanner here
             settingsLabel.pack()
             createDietPlanButton = ttk.Button(
                 buttonframe,

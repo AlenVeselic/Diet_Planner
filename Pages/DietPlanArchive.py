@@ -2,7 +2,7 @@ from tkinter import *
 import ttkbootstrap as ttk
 
 from Pages.Page_Class import Page
-import dietPlanner
+import DietPlanner
 
 
 class DietPlanArchive(Page):
@@ -19,7 +19,7 @@ class DietPlanArchive(Page):
         self.planList.pack(side=TOP, fill=BOTH, expand=True)
 
     def refresh(self):
-        self.plans = dietPlanner.getDietPlans()
+        self.plans = DietPlanner.getDietPlans()
 
         for widget in self.planWidgets:
             widget.pack_forget()
