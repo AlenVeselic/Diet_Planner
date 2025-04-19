@@ -110,6 +110,12 @@ class DietPlanPage(Page):
                 buttonframe, text="Diet plan settings"
             )  # TODO: Add ability to set Diet plan parameters from DietPlanner here
             settingsLabel.pack()
+            planLengthLabel = ttk.Label(buttonframe, text="Length in days: ")
+            planLengthLabel.pack()
+            recipeAmountLabel = ttk.Label(buttonframe, text="Recipe amount: ")
+            recipeAmountLabel.pack()
+            takeoutAmountLabel = ttk.Label(buttonframe, text="Take Out amount: ")
+            takeoutAmountLabel.pack()
             createDietPlanButton = ttk.Button(
                 buttonframe,
                 text="Generate Diet Plan",
@@ -117,7 +123,15 @@ class DietPlanPage(Page):
             )
 
             createDietPlanButton.pack()
-            self.actionButtons.append([settingsLabel, createDietPlanButton])
+            self.actionButtons.append(
+                [
+                    settingsLabel,
+                    planLengthLabel,
+                    recipeAmountLabel,
+                    takeoutAmountLabel,
+                    createDietPlanButton,
+                ]
+            )
         else:
             acceptButton = ttk.Button(
                 buttonframe,
