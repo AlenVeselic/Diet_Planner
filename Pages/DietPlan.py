@@ -106,6 +106,10 @@ class DietPlanPage(Page):
         buttonframe = ttk.Frame(self.frame)
 
         if not self.plan:
+            settingsLabel = ttk.Label(
+                buttonframe, text="Diet plan settings"
+            )  # TODO: Add ability to set Diet plan parameters from dietPlanner here
+            settingsLabel.pack()
             createDietPlanButton = ttk.Button(
                 buttonframe,
                 text="Generate Diet Plan",
@@ -113,7 +117,7 @@ class DietPlanPage(Page):
             )
 
             createDietPlanButton.pack()
-            self.actionButtons.append(createDietPlanButton)
+            self.actionButtons.append([settingsLabel, createDietPlanButton])
         else:
             acceptButton = ttk.Button(
                 buttonframe,
