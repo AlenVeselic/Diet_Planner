@@ -27,7 +27,7 @@ class Page(ttk.Frame):
         self.canvas.create_window(
             (4, 4),
             window=self.frame,
-            anchor=CENTER,
+            anchor=N,
             tags="self.frame",
         )
 
@@ -49,4 +49,6 @@ class Page(ttk.Frame):
     def show(self):
 
         self.lift()
+        self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
         self.root.update()
+        self.update()
