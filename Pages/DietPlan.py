@@ -12,6 +12,9 @@ class DietPlanPage(Page):
     verticalScrollbar = None
     frame = None
     plan = None
+    planLengthVariable = None
+    recipeAmountVariable = None
+    takeoutAmountVariable = None
 
     actionButtons: list[Widget] = []
 
@@ -34,7 +37,18 @@ class DietPlanPage(Page):
         ).replace(",", ",\n")
 
     def createDietPlan(self):
-        self.plan = DietPlanner.createPlan(5, 2, 2)
+        if (
+            self.planLengthVariable
+            and self.recipeAmountVariable
+            and self.takeoutAmountVariable
+        ):
+            self.plan = DietPlanner.createPlan(
+                self.planLengthVariable.get(),
+                self.recipeAmountVariable.get(),
+                self.takeoutAmountVariable.get(),
+            )
+        else:
+            print("Diet plan settings not set!")
 
     def discardDietPlan(self):
         self.plan = None
@@ -106,29 +120,56 @@ class DietPlanPage(Page):
         buttonframe = ttk.Frame(self.frame)
 
         if not self.plan:
+            settingsFrame = ttk.Frame(buttonframe)
+            settingsFrame.pack(side=TOP)
             settingsLabel = ttk.Label(
-                buttonframe, text="Diet plan settings"
+                settingsFrame, text="Diet plan settings"
             )  # TODO: Add ability to set Diet plan parameters from DietPlanner here
             settingsLabel.pack()
-            planLengthLabel = ttk.Label(buttonframe, text="Length in days: ")
-            planLengthLabel.pack()
-            recipeAmountLabel = ttk.Label(buttonframe, text="Recipe amount: ")
-            recipeAmountLabel.pack()
-            takeoutAmountLabel = ttk.Label(buttonframe, text="Take Out amount: ")
-            takeoutAmountLabel.pack()
+
+            planLengthFrame = ttk.Frame(settingsFrame)
+            planLengthFrame.pack(side=TOP)
+
+            planLengthLabel = ttk.Label(planLengthFrame, text="Length in days: ")
+            planLengthLabel.pack(side=LEFT)
+            self.planLengthVariable = IntVar()
+            planLengthEntry = ttk.Entry(
+                planLengthFrame, textvariable=self.planLengthVariable
+            )
+            planLengthEntry.pack(side=RIGHT)
+
+            recipeAmountFrame = ttk.Frame(settingsFrame)
+            recipeAmountFrame.pack(side=TOP)
+
+            recipeAmountLabel = ttk.Label(recipeAmountFrame, text="Recipe amount: ")
+            recipeAmountLabel.pack(side=LEFT)
+            self.recipeAmountVariable = IntVar()
+            recipeAmountEntry = ttk.Entry(
+                recipeAmountFrame, textvariable=self.recipeAmountVariable
+            )
+            recipeAmountEntry.pack(side=RIGHT)
+
+            takeoutAmountFrame = ttk.Frame(settingsFrame)
+            takeoutAmountFrame.pack(side=TOP)
+
+            takeoutAmountLabel = ttk.Label(takeoutAmountFrame, text="Take Out amount: ")
+            takeoutAmountLabel.pack(side=LEFT)
+            self.takeoutAmountVariable = IntVar()
+            takeoutAmountEntry = ttk.Entry(
+                takeoutAmountFrame, textvariable=self.takeoutAmountVariable
+            )
+            takeoutAmountEntry.pack(side=RIGHT)
+
             createDietPlanButton = ttk.Button(
                 buttonframe,
                 text="Generate Diet Plan",
                 command=lambda: [self.createDietPlan(), self.refresh()],
             )
 
-            createDietPlanButton.pack()
-            self.actionButtons.append(
+            createDietPlanButton.pack(side=BOTTOM)
+            self.actionButtons.extend(
                 [
-                    settingsLabel,
-                    planLengthLabel,
-                    recipeAmountLabel,
-                    takeoutAmountLabel,
+                    settingsFrame,
                     createDietPlanButton,
                 ]
             )
