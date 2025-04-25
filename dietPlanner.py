@@ -133,6 +133,15 @@ def getActiveDietPlan():
     return plans[-1]
 
 
+def activateDietPlan():
+    # TODO: Create separate key/model for holding activated diet plans
+    # TODO: The entities of this separate model will have a confirmed boolean property that will mark the meal item as "eaten"
+    # SUGGESTION: Count food items eaten in profile
+    # SUGGESTION: Count each separate food item eaten in profile - eg. 10 hamburgers eaten
+
+    return True
+
+
 def editDietPlan(id, modifiedDietPlan):
     print("WIP")
 
