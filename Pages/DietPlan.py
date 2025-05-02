@@ -73,20 +73,21 @@ class DietPlanPage(Page):
             self.label["text"] = "Diet plan generated:"
 
             for index, day in enumerate(self.plan["Days"]):
-                dayLabel = Label(
+                dayLabel = ttk.Label(
                     self.dietPlanFrame,
+                    bootstyle="inverse-primary",
                     text=f"Day {index + 1}",
-                    justify=LEFT,
-                    anchor=W,
+                    justify=CENTER,
+                    anchor=CENTER,
                 )
-                dayLabel.pack(side=TOP, fill=X)
+                dayLabel.pack(side=TOP, fill=X, pady=(5, 2))
 
                 for index, meal in enumerate(day["Meals"]):
-                    mealLabel = Label(
+                    mealLabel = ttk.Label(
                         self.dietPlanFrame,
-                        text=f" Meal {index + 1}",
-                        justify=LEFT,
-                        anchor=W,
+                        text=f"Meal {index + 1}",
+                        justify=CENTER,
+                        anchor=CENTER,
                     )
                     mealLabel.pack(side=TOP, fill=X)
 
@@ -95,19 +96,19 @@ class DietPlanPage(Page):
                     if isinstance(meal, dict):
                         foodLabel = Label(
                             foodItemFrame,
-                            text=f"  Recipe: {list(meal.keys())[0]}",
-                            justify=LEFT,
-                            anchor=W,
+                            text=f"Recipe: {list(meal.keys())[0]}",
+                            justify=CENTER,
+                            anchor=CENTER,
                         )
                     else:
                         foodLabel = Label(
                             foodItemFrame,
-                            text=f"  {meal}",
-                            justify=LEFT,
-                            anchor=W,
+                            text=f"{meal}",
+                            justify=CENTER,
+                            anchor=CENTER,
                         )
 
-                    foodLabel.pack(side=LEFT)
+                    foodLabel.pack(side=LEFT, expand=True)
 
                     replaceButton = ttk.Button(
                         foodItemFrame,
@@ -116,9 +117,9 @@ class DietPlanPage(Page):
                             "test"
                         ),  # TODO: Implement food item replacement logic
                     )
-                    replaceButton.pack(side=RIGHT)
+                    replaceButton.pack(side=LEFT)
 
-                    foodItemFrame.pack(side=TOP, fill=X)
+                    foodItemFrame.pack(side=TOP, fill=X, expand=True)
 
     def generateActionButtons(self):
         buttonframe = ttk.Frame(self.frame)
