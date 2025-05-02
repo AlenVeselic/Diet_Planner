@@ -204,7 +204,7 @@ class DietPlanPage(Page):
             discardButton.pack(side=LEFT)
             self.actionButtons.append(discardButton)
 
-        buttonframe.pack(side=TOP, fill=BOTH, expand=True)
+        buttonframe.pack(side=TOP, fill=BOTH, expand=True, pady=10, padx=10)
 
         self.actionButtons.append(buttonframe)
 
