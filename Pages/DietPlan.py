@@ -76,19 +76,19 @@ class DietPlanPage(Page):
                 dayLabel = Label(
                     self.dietPlanFrame,
                     text=f"Day {index + 1}",
-                    justify="left",
+                    justify=LEFT,
                     anchor=W,
                 )
-                dayLabel.pack(side=("top"), fill="x")
+                dayLabel.pack(side=TOP, fill=X)
 
                 for index, meal in enumerate(day["Meals"]):
                     mealLabel = Label(
                         self.dietPlanFrame,
                         text=f" Meal {index + 1}",
-                        justify="left",
+                        justify=LEFT,
                         anchor=W,
                     )
-                    mealLabel.pack(side="top", fill="x")
+                    mealLabel.pack(side=TOP, fill=X)
 
                     foodItemFrame = ttk.Frame(self.dietPlanFrame)
 
@@ -96,21 +96,25 @@ class DietPlanPage(Page):
                         foodLabel = Label(
                             foodItemFrame,
                             text=f"  Recipe: {list(meal.keys())[0]}",
-                            justify="left",
+                            justify=LEFT,
                             anchor=W,
                         )
                     else:
                         foodLabel = Label(
                             foodItemFrame,
                             text=f"  {meal}",
-                            justify="left",
+                            justify=LEFT,
                             anchor=W,
                         )
 
                     foodLabel.pack(side=LEFT)
 
                     replaceButton = ttk.Button(
-                        foodItemFrame, text="Replace", command=lambda: print("test")
+                        foodItemFrame,
+                        text="Replace",
+                        command=lambda: print(
+                            "test"
+                        ),  # TODO: Implement food item replacement logic
                     )
                     replaceButton.pack(side=RIGHT)
 
