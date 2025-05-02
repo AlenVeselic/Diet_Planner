@@ -22,10 +22,10 @@ class DietPlanPage(Page):
         Page.__init__(self, root, *args, **kwargs)
 
         self.label = Label(self.frame, text="No diet plan generated yet.")
-        self.label.pack(side="top", fill="both", expand=True)
+        self.label.pack(side=TOP, fill=BOTH, expand=True)
 
         self.dietPlanFrame = ttk.Frame(self.frame)
-        self.dietPlanFrame.pack(side="top", fill="both", expand=True)
+        self.dietPlanFrame.pack(side=TOP, fill=BOTH, expand=True)
 
         self.removeActionButtons()
         self.generateActionButtons()
@@ -41,6 +41,9 @@ class DietPlanPage(Page):
             self.planLengthVariable
             and self.recipeAmountVariable
             and self.takeoutAmountVariable
+            and not self.planLengthVariable.get() <= 0
+            and not self.recipeAmountVariable.get() > self.planLengthVariable.get()
+            and not self.takeoutAmountVariable.get() > self.planLengthVariable.get()
         ):
             self.plan = DietPlanner.createPlan(
                 self.planLengthVariable.get(),
@@ -48,7 +51,7 @@ class DietPlanPage(Page):
                 self.takeoutAmountVariable.get(),
             )
         else:
-            print("Diet plan settings not set!")
+            print("Diet plan settings invalid or not set!")
 
     def discardDietPlan(self):
         self.plan = None
@@ -62,9 +65,6 @@ class DietPlanPage(Page):
         self.label["text"] = "No diet plan generated yet."
         for widget in self.dietPlanFrame.winfo_children():
             widget.destroy()
-        self.dietPlanFrame.pack_forget()
-        self.dietPlanFrame = ttk.Frame(self.frame)
-        self.dietPlanFrame.pack(side="top", fill="both", expand=True)
 
         self.removeActionButtons()
         self.generateActionButtons()
@@ -163,7 +163,12 @@ class DietPlanPage(Page):
             createDietPlanButton = ttk.Button(
                 buttonframe,
                 text="Generate Diet Plan",
-                command=lambda: [self.createDietPlan(), self.refresh()],
+                command=lambda: [
+                    self.createDietPlan(),
+                    self.refresh(),
+                    self.update(),
+                    self.canvas.configure(scrollregion=self.canvas.bbox(ALL)),
+                ],
             )
 
             createDietPlanButton.pack(side=BOTTOM)
@@ -183,7 +188,7 @@ class DietPlanPage(Page):
                 ],
             )
 
-            acceptButton.pack(side="right")
+            acceptButton.pack(side=RIGHT)
             self.actionButtons.append(acceptButton)
 
             discardButton = ttk.Button(
@@ -196,10 +201,10 @@ class DietPlanPage(Page):
                 ],
             )
 
-            discardButton.pack(side="left")
+            discardButton.pack(side=LEFT)
             self.actionButtons.append(discardButton)
 
-        buttonframe.pack(side="top", fill="both", expand=True)
+        buttonframe.pack(side=TOP, fill=BOTH, expand=True)
 
         self.actionButtons.append(buttonframe)
 
