@@ -13,7 +13,7 @@ class Page(ttk.Frame):
 
         self.canvas = Canvas(self, borderwidth=0, background="white")
 
-        self.frame = ttk.Frame(self.canvas, padding="5")
+        self.frame = ttk.Frame(self.canvas, padding=5)
 
         self.verticalScrollBar = Scrollbar(
             self, orient=VERTICAL, command=self.canvas.yview
@@ -34,10 +34,11 @@ class Page(ttk.Frame):
         self.canvas.bind("<Configure>", self.onCanvasConfigure)
         self.bind("<Enter>", self.boundToMouseWheel)
         self.bind("<Leave>", self.unboundToMouseWheel)
+
         self.canvas.pack(side=TOP, fill=BOTH, expand=True)
 
-    def onCanvasConfigure(self, event):
-        canvas_frame = self.canvas.nametowidget(
+    def onCanvasConfigure(self, event: Event):
+        canvas_frame: Widget = self.canvas.nametowidget(
             self.canvas.itemcget("self.frame", "window")
         )
         min_width = canvas_frame.winfo_reqwidth()
@@ -48,7 +49,7 @@ class Page(ttk.Frame):
         """Reset the scroll region to encompass the inner frame"""
         self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
 
-    def onMouseWheel(self, event):
+    def onMouseWheel(self, event: Event):
 
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
