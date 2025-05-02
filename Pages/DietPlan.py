@@ -121,44 +121,44 @@ class DietPlanPage(Page):
 
         if not self.plan:
             settingsFrame = ttk.Frame(buttonframe)
-            settingsFrame.pack(side=TOP)
+            settingsFrame.pack(side=TOP, pady=5)
             settingsLabel = ttk.Label(
                 settingsFrame, text="Diet plan settings"
             )  # TODO: Add ability to set Diet plan parameters from DietPlanner here
-            settingsLabel.pack()
+            settingsLabel.pack(pady=(5, 0))
 
             planLengthFrame = ttk.Frame(settingsFrame)
-            planLengthFrame.pack(side=TOP)
+            planLengthFrame.pack(side=TOP, pady=2)
 
-            planLengthLabel = ttk.Label(planLengthFrame, text="Length in days: ")
-            planLengthLabel.pack(side=LEFT)
+            planLengthLabel = ttk.Label(planLengthFrame, text="Length in days")
+            planLengthLabel.pack(side=TOP)
             self.planLengthVariable = IntVar()
             planLengthEntry = ttk.Entry(
                 planLengthFrame, textvariable=self.planLengthVariable
             )
-            planLengthEntry.pack(side=RIGHT)
+            planLengthEntry.pack(side=TOP)
 
             recipeAmountFrame = ttk.Frame(settingsFrame)
-            recipeAmountFrame.pack(side=TOP)
+            recipeAmountFrame.pack(side=TOP, pady=2)
 
-            recipeAmountLabel = ttk.Label(recipeAmountFrame, text="Recipe amount: ")
-            recipeAmountLabel.pack(side=LEFT)
+            recipeAmountLabel = ttk.Label(recipeAmountFrame, text="Recipe amount")
+            recipeAmountLabel.pack(side=TOP)
             self.recipeAmountVariable = IntVar()
             recipeAmountEntry = ttk.Entry(
                 recipeAmountFrame, textvariable=self.recipeAmountVariable
             )
-            recipeAmountEntry.pack(side=RIGHT)
+            recipeAmountEntry.pack(side=TOP)
 
             takeoutAmountFrame = ttk.Frame(settingsFrame)
-            takeoutAmountFrame.pack(side=TOP)
+            takeoutAmountFrame.pack(side=TOP, pady=2)
 
-            takeoutAmountLabel = ttk.Label(takeoutAmountFrame, text="Take Out amount: ")
-            takeoutAmountLabel.pack(side=LEFT)
+            takeoutAmountLabel = ttk.Label(takeoutAmountFrame, text="Take Out amount")
+            takeoutAmountLabel.pack(side=TOP)
             self.takeoutAmountVariable = IntVar()
             takeoutAmountEntry = ttk.Entry(
                 takeoutAmountFrame, textvariable=self.takeoutAmountVariable
             )
-            takeoutAmountEntry.pack(side=RIGHT)
+            takeoutAmountEntry.pack(side=TOP)
 
             createDietPlanButton = ttk.Button(
                 buttonframe,
