@@ -32,6 +32,8 @@ class Page(ttk.Frame):
         )
 
         self.canvas.bind("<Configure>", self.onCanvasConfigure)
+        self.bind("<Enter>", self.boundToMouseWheel)
+        self.bind("<Leave>", self.unboundToMouseWheel)
         self.canvas.pack(side=TOP, fill=BOTH, expand=True)
 
     def onCanvasConfigure(self, event):
@@ -45,6 +47,18 @@ class Page(ttk.Frame):
 
         """Reset the scroll region to encompass the inner frame"""
         self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
+
+    def onMouseWheel(self, event):
+
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def boundToMouseWheel(self, event):
+
+        self.bind_all("<MouseWheel>", self.onMouseWheel)
+
+    def unboundToMouseWheel(self, event):
+
+        self.unbind_all("<MouseWheel>")
 
     def show(self):
 
